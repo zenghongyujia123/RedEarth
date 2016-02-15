@@ -1,37 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height: 100%;">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <link rel="stylesheet" href="../libraries/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="homepage/index.css">
   <script src="../libraries/jquery/dist/jquery.min.js"></script>
+  <script src="homepage/index.js"></script>
 </head>
-<body>
-<input class="username" type="text" placeholder="请输入用户名" value="13472423583">
-<input class="password" type="password" placeholder="请输入密码" value="111111">
-<button class="signin">登录</button>
+<body style="height: 100%;">
+<div class="sign-body">
+  <div class="sign-header">RED EARTH 订单管理系统</div>
+  <div class="sign-container">
+    <div class="sign-title">欢迎您</div>
+    <input class="input username" type="text" placeholder="请输入用户名" value="13472423583">
+    <input class="input password" type="password" placeholder="请输入密码" value="111111">
+    <div class="singin-btn">登录</div>
+  </div>
+</div>
 <script>
-  $(function () {
-    $('.signin').click(function () {
-      $.ajax({
-        method:'post',
-        url: '/webapp/signin',
-        data: {
-          username: $('.username').val(),
-          password: $('.password').val()
-        },
-        success: function (data) {
-          if(!data.err){
-            window.location = '/webapp/index'
-          }
-          console.log(data);
-        },
-        error: function (err) {
-          console.log(err);
-        }
-      });
-    });
-  });
-
 </script>
 </body>
 </html>

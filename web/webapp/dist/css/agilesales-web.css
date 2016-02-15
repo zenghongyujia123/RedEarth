@@ -134,65 +134,6 @@ body {
   font-size: 16px;
   color: #666;
 }
-.ag-table {
-  font-size: 13px;
-  color: #333;
-  overflow-x: scroll;
-  position: relative;
-}
-.ag-table .ag-table-header {
-  border-bottom: 1px solid #d2d2d2;
-  height: 61px;
-  overflow: hidden;
-  background-color: white;
-  position: absolute;
-  color: #999;
-  min-width: 100%;
-  z-index: 10;
-}
-.ag-table .ag-table-header .ag-table-col {
-  float: left;
-  line-height: 60px;
-  height: 60px;
-  width: 140px;
-  padding: 0px 20px;
-}
-.ag-table .ag-table-header .ag-btn.gray {
-  float: left;
-  margin-top: 12px;
-  margin-left: 10px;
-}
-.ag-table .ag-table-body {
-  top: 60px;
-  bottom: 0px;
-  position: absolute;
-  overflow-y: auto;
-  font-size: 13px;
-  min-width: 100%;
-}
-.ag-table .ag-table-body .ag-table-row {
-  border-bottom: 1px solid #e4e4e4;
-  height: 36px;
-  overflow: hidden;
-  min-width: 100%;
-}
-.ag-table .ag-table-body .ag-table-row .ag-table-col {
-  float: left;
-  line-height: 36px;
-  width: 140px;
-  color: #666;
-  padding: 0px 20px;
-}
-.ag-table .ag-table-body .ag-table-row .ag-table-col.btn {
-  cursor: pointer;
-  color: #999;
-}
-.ag-table .ag-table-body .ag-table-row .ag-table-col.btn:hover {
-  color: #037dff;
-}
-.ag-table .ag-table-body .ag-table-row:nth-child(odd) {
-  background-color: #f8fcfe;
-}
 .ag-dialog {
   position: fixed;
   left: 0px;

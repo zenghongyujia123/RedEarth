@@ -15,11 +15,6 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'templates/home.client.view.html',
         controller: "HomeCtrl"
       })
-      .state('order_suggest', {
-        url: '/order_suggest',
-        templateUrl: 'templates/order_suggest.client.view.html',
-        controller: "OrderSuggestCtrl"
-      })
       .state('order_query', {
         url: '/order_query',
         templateUrl: 'templates/order_query.client.view.html',
@@ -44,6 +39,16 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
         url: '/dashboard_query',
         templateUrl: 'templates/dashboard_query.client.view.html',
         controller: "DashboardQueryCtrl"
+      })
+      .state('order_suggest', {
+        url: '/order_suggest',
+        templateUrl: 'templates/order_suggest.client.view.html',
+        controller: "OrderSuggestCtrl"
+      })
+      .state('order_suggest.suggest_area_last_month', {
+        url: '/suggest_area_last_month',
+        templateUrl: 'templates/suggest_area_last_month.client.view.html',
+        controller: "SuggestAreaLastMonthCtrl"
       })
     ;
     $urlRouterProvider.otherwise('/');
@@ -96,41 +101,41 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
 
   .run(['$rootScope', '$state', '$window', 'AuthService', 'UserService',
     function ($rootScope, $state, $window, AuthService, UserService) {
-     /* $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-        var to = document.getElementById('error3').getAttribute('data-value');
-        if (to !== "") {
-          AuthService.setToken(to);
-        }
-        else {
-          if (AuthService.getToken() == "") {
-            event.preventDefault();
-            window.location = '/';
-          }
-        }
-        //判断用户数据是否存在
-        if (!AuthService.isLoggedIn()) {
-          event.preventDefault();
-          //没有用户数据，需要重新获取用户，页面可能需要被重定向
-          UserService.getMe()
-            .then(function (data) {
-                if (data.err) {
-                  //return window.location = '/webapp/index';
-                }
-                AuthService.setUser(data);
-                var obj = AuthService.getLatestUrl();
-                var state = 'home';
-                var params = '';
-                if (obj && obj != '^' && obj.state) {
-                  state = obj.state;
-                  params = obj.params;
-                }
-                return $state.go(state, params);
-              },
-              function (err) {
-                alert('系统错误' + JSON.stringify(err));
-              });
-        }
-      });*/
+      /* $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+       var to = document.getElementById('error3').getAttribute('data-value');
+       if (to !== "") {
+       AuthService.setToken(to);
+       }
+       else {
+       if (AuthService.getToken() == "") {
+       event.preventDefault();
+       window.location = '/';
+       }
+       }
+       //判断用户数据是否存在
+       if (!AuthService.isLoggedIn()) {
+       event.preventDefault();
+       //没有用户数据，需要重新获取用户，页面可能需要被重定向
+       UserService.getMe()
+       .then(function (data) {
+       if (data.err) {
+       //return window.location = '/webapp/index';
+       }
+       AuthService.setUser(data);
+       var obj = AuthService.getLatestUrl();
+       var state = 'home';
+       var params = '';
+       if (obj && obj != '^' && obj.state) {
+       state = obj.state;
+       params = obj.params;
+       }
+       return $state.go(state, params);
+       },
+       function (err) {
+       alert('系统错误' + JSON.stringify(err));
+       });
+       }
+       });*/
 
       var windowElement = angular.element($window);
       windowElement.on('beforeunload', function (event) {
@@ -258,67 +263,6 @@ angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', funct
 /**
  * Created by zenghong on 16/1/18.
  */
-angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', function ($rootScope) {
-  return {
-    restrict: 'AE',
-    templateUrl: 'directives/dialog_select/dialog_select.client.view.html',
-    replace: true,
-    scope: {},
-    link: function ($scope, $element, $attrs) {
-      $scope.options = [];
-      $scope.info = {
-        title: '',
-        contents: [{
-          key: '请输入拜访卡名称',
-          value: '点击输入名称'
-        }],
-        color: 'blue'
-      };
-
-      $scope.show = function () {
-        $element.addClass('show');
-      };
-      $scope.hide = function () {
-        $element.removeClass('show');
-      };
-      $scope.submit = function () {
-        $element.removeClass('show');
-        $scope.info.callback($scope.info);
-      };
-      $scope.toggleOptions = function (index) {
-        if ($element.find('.ag-row-option-container').eq(index).hasClass('show')) {
-          $scope.hideOptions(index);
-        }
-        else {
-          $scope.showOptions(index);
-        }
-      };
-
-      $scope.selectOption = function (content, option) {
-        content.value = option;
-      };
-
-      $rootScope.$on('show.dialogSelect', function (event, data) {
-        setTheme(data);
-        $scope.show();
-      });
-      function setTheme(info) {
-        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
-        $scope.info = info;
-      }
-
-      $scope.showOptions = function (index) {
-        $element.find('.ag-row-option-container').eq(index).addClass('show');
-      };
-      $scope.hideOptions = function (index) {
-        $element.find('.ag-row-option-container').eq(index).removeClass('show');
-      }
-    }
-  }
-}]);
-/**
- * Created by zenghong on 16/1/18.
- */
 angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'ExcelReaderService', function ($rootScope, ExcelReaderService) {
   return {
     restrict: 'AE',
@@ -376,6 +320,67 @@ angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'Exc
       function setTheme(info) {
         $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
         $scope.info = info;
+      }
+    }
+  }
+}]);
+/**
+ * Created by zenghong on 16/1/18.
+ */
+angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', function ($rootScope) {
+  return {
+    restrict: 'AE',
+    templateUrl: 'directives/dialog_select/dialog_select.client.view.html',
+    replace: true,
+    scope: {},
+    link: function ($scope, $element, $attrs) {
+      $scope.options = [];
+      $scope.info = {
+        title: '',
+        contents: [{
+          key: '请输入拜访卡名称',
+          value: '点击输入名称'
+        }],
+        color: 'blue'
+      };
+
+      $scope.show = function () {
+        $element.addClass('show');
+      };
+      $scope.hide = function () {
+        $element.removeClass('show');
+      };
+      $scope.submit = function () {
+        $element.removeClass('show');
+        $scope.info.callback($scope.info);
+      };
+      $scope.toggleOptions = function (index) {
+        if ($element.find('.ag-row-option-container').eq(index).hasClass('show')) {
+          $scope.hideOptions(index);
+        }
+        else {
+          $scope.showOptions(index);
+        }
+      };
+
+      $scope.selectOption = function (content, option) {
+        content.value = option;
+      };
+
+      $rootScope.$on('show.dialogSelect', function (event, data) {
+        setTheme(data);
+        $scope.show();
+      });
+      function setTheme(info) {
+        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
+        $scope.info = info;
+      }
+
+      $scope.showOptions = function (index) {
+        $element.find('.ag-row-option-container').eq(index).addClass('show');
+      };
+      $scope.hideOptions = function (index) {
+        $element.find('.ag-row-option-container').eq(index).removeClass('show');
       }
     }
   }
@@ -787,6 +792,66 @@ angular.module('agilesales-web').controller('OrderHistoryCtrl', function () {
  * Created by zenghong on 16/1/15.
  */
 angular.module('agilesales-web').controller('OrderQueryCtrl', function () {
+
+});
+/**
+ * Created by zenghong on 16/1/15.
+ */
+angular.module('agilesales-web').controller('OrderSuggestCtrl', function () {
+
+});
+/**
+ * Created by zenghong on 16/1/15.
+ */
+angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', function () {
+
+});
+/**
+ * Created by zenghong on 16/1/15.
+ */
+angular.module('agilesales-web').controller('OrderSuggestCtrl', function () {
+
+});
+/**
+ * Created by zenghong on 16/1/15.
+ */
+angular.module('agilesales-web').controller('OrderSuggestCtrl', function () {
+
+});
+/**
+ * Created by zenghong on 16/1/15.
+ */
+angular.module('agilesales-web').controller('OrderSuggestCtrl', function () {
+
+});
+/**
+ * Created by zenghong on 16/1/15.
+ */
+angular.module('agilesales-web').controller('OrderSuggestCtrl', function () {
+
+});
+/**
+ * Created by zenghong on 16/1/15.
+ */
+angular.module('agilesales-web').controller('OrderSuggestCtrl', function () {
+
+});
+/**
+ * Created by zenghong on 16/1/15.
+ */
+angular.module('agilesales-web').controller('OrderSuggestCtrl', function () {
+
+});
+/**
+ * Created by zenghong on 16/1/15.
+ */
+angular.module('agilesales-web').controller('OrderSuggestCtrl', function () {
+
+});
+/**
+ * Created by zenghong on 16/1/15.
+ */
+angular.module('agilesales-web').controller('OrderSuggestCtrl', function () {
 
 });
 /**

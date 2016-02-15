@@ -17,6 +17,9 @@ input:-webkit-autofill {
   font-size: 16px;
   color: white;
 }
+.sign-header .sign-icon {
+  margin-right: 10px;
+}
 .sign-container {
   width: 300px;
   height: 200px;

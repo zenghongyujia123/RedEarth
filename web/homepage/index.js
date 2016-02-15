@@ -2,7 +2,7 @@
  * Created by zenghong on 16/2/15.
  */
 $(function () {
-  $('.signin').click(function () {
+  $('.singin-btn').click(function () {
     $.ajax({
       method:'post',
       url: '/webapp/signin',

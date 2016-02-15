@@ -15,55 +15,35 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'templates/home.client.view.html',
         controller: "HomeCtrl"
       })
-      .state('basedata_home', {
-        url: '/basedata_home',
-        templateUrl: 'templates/basedata_home.client.view.html',
-        controller: "BasedataHomeCtrl"
+      .state('order_suggest_home', {
+        url: '/order_suggest_home',
+        templateUrl: 'templates/order_suggest_home.client.view.html',
+        controller: "OrderSuggestHomeCtrl"
       })
-      .state('basedata_home.basedata_area', {
-        url: '/basedata_area',
-        templateUrl: 'templates/basedata_area.client.view.html',
-        controller: "BasedataAreaCtrl"
+      .state('order_query', {
+        url: '/order_query',
+        templateUrl: 'templates/order_query.client.view.html',
+        controller: "OrderQueryCtrl"
       })
-      .state('basedata_home.basedata_customer', {
-        url: '/basedata_customer',
-        templateUrl: 'templates/basedata_customer.client.view.html',
-        controller: "BasedataCustomerCtrl"
+      .state('order_detail', {
+        url: '/order_detail',
+        templateUrl: 'templates/order_detail.client.view.html',
+        controller: "OrderDetailCtrl"
       })
-      .state('basedata_home.basedata_people', {
-        url: '/basedata_people',
-        templateUrl: 'templates/basedata_people.client.view.html',
-        controller: "BasedataPeopleCtrl"
+      .state('order_history', {
+        url: '/order_history',
+        templateUrl: 'templates/order_history.client.view.html',
+        controller: "OrderHistoryCtrl"
       })
-      .state('basedata_home.basedata_shop', {
-        url: '/basedata_shop',
-        templateUrl: 'templates/basedata_shop.client.view.html',
-        controller: "BasedataShopCtrl"
+      .state('system_setting', {
+        url: '/system_setting',
+        templateUrl: 'templates/system_setting.client.view.html',
+        controller: "SystemSettingCtrl"
       })
-      .state('basedata_home.basedata_sku', {
-        url: '/basedata_sku',
-        templateUrl: 'templates/basedata_sku.client.view.html',
-        controller: "BasedataSkuCtrl"
-      })
-      .state('card_home', {
-        url: '/card_home',
-        templateUrl: 'templates/card_home.client.view.html',
-        controller: "CardHomeCtrl"
-      })
-      .state('card_edit', {
-        url: '/card_edit/:card_id',
-        templateUrl: 'templates/card_edit.client.view.html',
-        controller: "CardEditCtrl"
-      })
-      .state('card_edit.card_config', {
-        url: '/card_config/:card_id',
-        templateUrl: 'templates/card_config.client.view.html',
-        controller: "CardConfigCtrl"
-      })
-      .state('card_edit.card_preview', {
-        url: '/card_preview/:card_id/:paper_id',
-        templateUrl: 'templates/card_preview.client.view.html',
-        controller: "CardPreviewCtrl"
+      .state('dashboard_query', {
+        url: '/dashboard_query',
+        templateUrl: 'templates/dashboard_query.client.view.html',
+        controller: "DashboardQueryCtrl"
       })
     ;
     $urlRouterProvider.otherwise('/');
@@ -116,7 +96,7 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
 
   .run(['$rootScope', '$state', '$window', 'AuthService', 'UserService',
     function ($rootScope, $state, $window, AuthService, UserService) {
-      $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+     /* $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
         var to = document.getElementById('error3').getAttribute('data-value');
         if (to !== "") {
           AuthService.setToken(to);
@@ -124,7 +104,7 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
         else {
           if (AuthService.getToken() == "") {
             event.preventDefault();
-            window.location = '/webapp/signin';
+            window.location = '/';
           }
         }
         //判断用户数据是否存在
@@ -134,7 +114,7 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
           UserService.getMe()
             .then(function (data) {
                 if (data.err) {
-                  return window.location = config.login;
+                  //return window.location = '/webapp/index';
                 }
                 AuthService.setUser(data);
                 var obj = AuthService.getLatestUrl();
@@ -150,7 +130,7 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
                 alert('系统错误' + JSON.stringify(err));
               });
         }
-      });
+      });*/
 
       var windowElement = angular.element($window);
       windowElement.on('beforeunload', function (event) {

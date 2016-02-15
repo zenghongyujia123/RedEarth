@@ -1,0 +1,58 @@
+<div class="ag-question-true-false">
+  <div class="ag-question-edit" ng-show="status==='edit'">
+    <div class="ag-question-row">
+      <div class="ag-question-left">题目类型</div>
+      <div class="ag-question-right title">是非题</div>
+    </div>
+    <div class="ag-question-row">
+      <div class="ag-question-left">题目标题</div>
+      <input class="ag-question-right value" placeholder="请输入题目标题" ng-model="question.content.title">
+    </div>
+    <div class="ag-question-row">
+      <div class="ag-question-left">是否需要拍照</div>
+      <div class="ag-question-right true-false">
+        <div class="true">是</div>
+        <div class="slider" ng-click="togglePhoto()" ng-class="{true:question.content.is_need_photo===true}">
+          <div class="slide"></div>
+        </div>
+        <div class="false">否</div>
+      </div>
+    </div>
+    <div class="ag-question-row">
+      <div class="ag-question-left">是否需要描述</div>
+      <div class="ag-question-right true-false">
+        <div class="true">是</div>
+        <div class="slider" ng-click="toggleDescription()"
+             ng-class="{true:question.content.is_need_description===true}">
+          <div class="slide"></div>
+        </div>
+        <div class="false">否</div>
+      </div>
+    </div>
+    <div class="ag-question-footer">
+      <div class="ag-btn blue ag-question-finish" ng-click="submitQuestion()">完成</div>
+      <div class="ag-btn blue ag-question-remove">删除</div>
+    </div>
+
+  </div>
+  <div class="ag-question-preview" ng-show="status==='preview'" ng-click="status='edit'">
+    <div class="ag-question-row preview has-bottom">
+      <div class="ag-question-left title">{{question.content.title}}</div>
+      <div class="ag-question-right true-false">
+        <div class="true">是</div>
+        <div class="slider true">
+          <div class="slide"></div>
+        </div>
+        <div class="false">否</div>
+      </div>
+    </div>
+    <div class="ag-question-row preview has-bottom" ng-show="question.content.is_need_photo===true">
+      <div class="ag-question-left">拍照</div>
+      <div class="ag-question-right"></div>
+    </div>
+    <div class="ag-question-row preview" ng-show="question.content.is_need_description===true">
+      <div class="ag-question-left">描述</div>
+      <div class="ag-question-right has-left"></div>
+    </div>
+  </div>
+</div>

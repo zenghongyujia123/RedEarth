@@ -1,0 +1,20 @@
+<div class="ag-dialog">
+  <div class="ag-mask">
+  </div>
+  <div class="ag-dialog-panel">
+    <div class="ag-dialog-header">{{info.title}}</div>
+    <div class="ag-dialog-row" ng-repeat="content in info.contents">
+      <div class="ag-row-left">{{content.key}}</div>
+      <div class="ag-row-right">{{content.tip}}
+        <input type="file" style="opacity: 0"
+               id="ag-upload-input"
+               class="ag-upload-input"
+               onchange="angular.element(this).scope().handleFile(this)">
+      </div>
+    </div>
+    <div class="ag-dialog-footer">
+      <div class="ag-footer-right" ng-click="submit()">确定</div>
+      <div class="ag-footer-left" ng-click="hide()">取消</div>
+    </div>
+  </div>
+</div>

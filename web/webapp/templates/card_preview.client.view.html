@@ -1,0 +1,28 @@
+<div class="ag-card-preview-page">
+  <div class="ag-question-container" ng-repeat="question in paper.questions">
+    <ag-question-single
+        ng-if="question.type==='single'"
+        get-question="question"></ag-question-single>
+    <ag-question-multi
+        ng-if="question.type==='multi'"
+        get-question="question"></ag-question-multi>
+    <ag-question-blank
+        ng-if="question.type==='blank'"
+        get-question="question"></ag-question-blank>
+    <ag-question-true-false
+        ng-if="question.type==='trueorfalse'"
+        get-question="question"></ag-question-true-false>
+    <ag-question-camera
+        ng-if="question.type==='camera'"
+        get-question="question"></ag-question-true-false>
+    </ag-question-camera>
+    <ag-question-table
+        ng-if="question.type==='table'"
+        get-question="question"></ag-question-table>
+  </div>
+  <div class="ag-question-container">
+    <div class="ag-question-footer">
+      <div class="ag-btn blue ag-question-add" ng-click="showAddQuestion()">添加题目</div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,37 @@
+<div class="ag-basedata-home-page animated bounceInDown">
+  <div class="header">
+    <div class="ag-btn left back" ng-click="toggleMenu()"><i class="fa fa-bars"></i></div>
+    <div class="ag-btn blue" ng-click="showUpload()">批量导入{{getDataType()}}</div>
+    <div class="center-title">{{getDataType()}}</div>
+    <div class="ag-btn blue">添加单个{{getDataType()}}</div>
+  </div>
+
+  <div class="center-area" ng-class="{'close-menu':isMenuClose===true}">
+    <div class="left">
+      <div class="left-header ">基础数据</div>
+      <div class="left-item" ui-sref="basedata_home.basedata_area"
+           ng-class="{select:location.hash==='#/basedata_home/basedata_area'}">
+        <img src="images/location.png" class="left-item-icon">地区
+      </div>
+      <div class="left-item" ui-sref="basedata_home.basedata_people"
+           ng-class="{select:location.hash==='#/basedata_home/basedata_people'}">
+        <img src="images/user.png" class="left-item-icon">人员
+      </div>
+      <div class="left-item" ui-sref="basedata_home.basedata_shop"
+           ng-class="{select:location.hash==='#/basedata_home/basedata_shop'}">
+        <img src="images/store.png" class="left-item-icon">门店
+      </div>
+      <div class="left-item" ui-sref="basedata_home.basedata_customer"
+           ng-class="{select:location.hash==='#/basedata_home/basedata_customer'}">
+        <img src="images/customer.png" class="left-item-icon">客户经销商
+      </div>
+      <div class="left-item" ui-sref="basedata_home.basedata_sku"
+           ng-class="{select:location.hash==='#/basedata_home/basedata_sku'}">
+        <img src="images/sku.png" class="left-item-icon">sku
+      </div>
+    </div>
+    <div class="right">
+      <ui-view class="ag-basedata-home-view"></ui-view>
+    </div>
+  </div>
+</div>

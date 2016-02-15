@@ -1,0 +1,22 @@
+<div class="ag-dialog ag-dialog-select">
+  <div class="ag-mask">
+  </div>
+  <div class="ag-dialog-panel">
+    <div class="ag-dialog-header">{{info.title}}</div>
+    <div class="ag-dialog-row" ng-repeat="content in info.contents">
+      <div class="ag-row-left">{{content.key}}</div>
+      <div class="ag-row-right" ng-click="toggleOptions($index)">{{content.value}}
+        <div class="ag-row-option-container"
+             ng-style="{height:((content.options.length>8?8:content.options.length)*41)+'px'}">
+          <div class="ag-row-option" ng-repeat="option in content.options" ng-click="selectOption(content,option)">
+            {{option}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ag-dialog-footer">
+      <div class="ag-footer-right" ng-click="submit()">确定</div>
+      <div class="ag-footer-left" ng-click="hide()">取消</div>
+    </div>
+  </div>
+</div>

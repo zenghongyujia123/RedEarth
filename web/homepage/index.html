@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="../libraries/jquery/dist/jquery.min.js"></script>
+</head>
+<body>
+<input class="username" type="text" placeholder="请输入用户名" value="13472423583">
+<input class="password" type="password" placeholder="请输入密码" value="111111">
+<button class="signin">登录</button>
+<script>
+  $(function () {
+    $('.signin').click(function () {
+      $.ajax({
+        method:'post',
+        url: '/webapp/signin',
+        data: {
+          username: $('.username').val(),
+          password: $('.password').val()
+        },
+        success: function (data) {
+          if(!data.err){
+            window.location = '/webapp/index'
+          }
+          console.log(data);
+        },
+        error: function (err) {
+          console.log(err);
+        }
+      });
+    });
+  });
+
+</script>
+</body>
+</html>

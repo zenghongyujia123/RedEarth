@@ -1,0 +1,74 @@
+html, body {
+  height: 100%;
+  background-color: #eeeeee;
+  font-family: PingHei, 'PingFang SC', 'Helvetica Neue', Helvetica, STHeitiSC-Light, Arial, sans-serif, '微软雅黑';
+}
+
+.ag-first-layer-view {
+  margin-top: 50px;
+  height: 100%;
+  position: relative;
+}
+
+.ag-btn {
+  border-radius: 3px;
+  padding: 0px 20px;
+  line-height: 36px;
+  cursor: pointer;
+  &.blue {
+    color: white;
+    background-color: #037dff;
+  }
+
+  &.gray {
+    background-color: #f0f0f0;
+  }
+
+  &.white{
+    background-color: white;
+    color:#666;
+    border:1px solid #d2d2d2;
+  }
+
+  &.back{
+    background-color: white;
+    color:#666;
+    padding:0px;
+    border:1px solid #d2d2d2;
+    width:36px ;
+    text-align: center;
+    font-size: 18px;
+    transition: color .5s;
+    -moz-transition: color .5s; /* Firefox 4 */
+    -webkit-transition: color .5s; /* Safari 和 Chrome */
+    -o-transition: color .5s; /* Opera */
+
+    &:hover {
+      color: #037dff;
+    }
+  }
+
+  &.left{
+    float: left;
+  }
+}
+
+@import "header.client.style.less";
+@import "home.client.style.less";
+@import "table.client.style.less";
+@import "card_home.client.style.less";
+@import "card_edit.client.style.less";
+@import "card_config.client.style.less";
+@import "card_preview.client.style.less";
+@import "basedata_home.client.style.less";
+@import "basedata_area.client.style.less";
+@import "basedata_people.client.style.less";
+@import "question.client.style.less";
+@import "dialog.client.style.less";
+@import "../directives/question_single/question_single.client.style.less";
+@import "../directives/question_blank/question_blank.client.style.less";
+@import "../directives/question_true_false/question_true_false.client.style.less";
+@import "../directives/question_table/question_table.client.style.less";
+@import "../directives/dialog_confirm/dialog_confirm.client.style.less";
+@import "../directives/dialog_input/dialog_input.client.style.less";
+@import "../directives/dialog_select/dialog_select.client.style.less";

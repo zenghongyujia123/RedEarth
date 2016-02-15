@@ -1,0 +1,14 @@
+<div class="ag-question-blank">
+  <div class="ag-question-row">
+    <div class="ag-question-left">列{{index+2}}题型</div>
+    <div class="ag-question-right title">填空题</div>
+  </div>
+  <div class="ag-question-row">
+    <div class="ag-question-left">列{{index+2}}标题</div>
+    <input class="ag-question-right value" placeholder="请输入列{{index+1}}标题" ng-model="question.content.title">
+  </div>
+  <div class="ag-question-row">
+    <div class="ag-question-left">请选择输入方式</div>
+    <div class="ag-question-right value" ng-click="showInputType()">{{question.content.input_type_text}}</div>
+  </div>
+</div>

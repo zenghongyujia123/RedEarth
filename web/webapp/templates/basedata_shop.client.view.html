@@ -1,0 +1,31 @@
+<div class="basedata-child-page basedata_shop_page">
+  <div class="ag-table">
+    <div class="ag-table-header" ng-style="{width:((headers.length+1)*141)+'px'}">
+      <div class="ag-table-col" ng-repeat="h in headers">{{h}}</div>
+    </div>
+    <div class="ag-table-body animated bounceInDown" ng-style="{width:((headers.length+1)*141)+'px'}">
+      <div class="ag-table-row" ng-repeat="s in shops">
+        <div class="ag-table-col">{{s.number||'未知'}}</div>
+        <div class="ag-table-col">{{s.name||'未知'}}</div>
+        <div class="ag-table-col">{{s.level||'未知'}}</div>
+        <div class="ag-table-col">{{s.area||'未知'}}</div>
+        <div class="ag-table-col">{{s.city||'未知'}}</div>
+        <div class="ag-table-col">{{s.address||'未知'}}</div>
+        <div class="ag-table-col">{{s.channel_type||'未知'}}</div>
+        <div class="ag-table-col">{{s.shop_type||'未知'}}</div>
+        <div class="ag-table-col">{{s.channel||'未知'}}</div>
+        <div class="ag-table-col">{{s.customer||'未知'}}</div>
+        <div class="ag-table-col">{{s.salesman_name||'未知'}}</div>
+        <div class="ag-table-col">{{s.salesman_number||'未知'}}</div>
+        <div class="ag-table-col">{{s.promotions_number||'未知'}}</div>
+        <div class="ag-table-col">{{s.promotions_name||'未知'}}</div>
+        <div class="ag-table-col">{{s.call_count||'未知'}}</div>
+        <div class="ag-table-col">{{s.status||'未知'}}</div>
+        <div class="ag-table-col">{{s.brand||'未知'}}</div>
+        <div class="ag-table-col">{{s.lng||'未知'}}</div>
+        <div class="ag-table-col">{{s.lat||'未知'}}</div>
+        <div class="ag-table-col">删除</div>
+      </div>
+    </div>
+  </div>
+</div>

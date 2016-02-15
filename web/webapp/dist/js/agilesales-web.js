@@ -15,10 +15,10 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'templates/home.client.view.html',
         controller: "HomeCtrl"
       })
-      .state('order_suggest_home', {
-        url: '/order_suggest_home',
-        templateUrl: 'templates/order_suggest_home.client.view.html',
-        controller: "OrderSuggestHomeCtrl"
+      .state('order_suggest', {
+        url: '/order_suggest',
+        templateUrl: 'templates/order_suggest.client.view.html',
+        controller: "OrderSuggestCtrl"
       })
       .state('order_query', {
         url: '/order_query',
@@ -792,7 +792,7 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', function () {
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderSuggestHomeCtrl', function () {
+angular.module('agilesales-web').controller('OrderSuggestCtrl', function () {
 
 });
 /**

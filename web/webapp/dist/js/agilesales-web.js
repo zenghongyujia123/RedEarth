@@ -194,17 +194,26 @@ angular.module('agilesales-web').directive('agHoverShake', [function () {
 /**
  * Created by zenghong on 16/1/18.
  */
-angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',function ($rootScope) {
+angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'ExcelReaderService', function ($rootScope, ExcelReaderService) {
   return {
     restrict: 'AE',
-    templateUrl: 'directives/dialog_confirm/dialog_confirm.client.view.html',
+    templateUrl: 'directives/dialog_upload/dialog_upload.client.view.html',
     replace: true,
     scope: {},
     link: function ($scope, $element, $attrs) {
       $scope.info = {
         title: '',
-        content:'',
-        color: 'blue'
+        contents: [{
+          key: '请输入拜访卡名称',
+          value: '点击输入名称'
+        }],
+        color: 'blue',
+        type: 'execel',
+        headers: [
+          {key: 'A1', value: '大区'},
+          {key: 'B1', value: '省区'},
+          {key: 'C1', value: '办事处'}
+        ]
       };
 
       $scope.show = function () {
@@ -215,14 +224,29 @@ angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',func
       };
       $scope.submit = function () {
         $element.removeClass('show');
-        if ($scope.info.callback) {
-          $scope.info.callback($scope.info);
-        }
       };
-      $rootScope.$on('show.dialogConfirm', function (event, data) {
+      $rootScope.$on('show.dialogUpload', function (event, data) {
         setTheme(data);
         $scope.show();
       });
+
+      $scope.handleFile = function (ele) {
+        var excelReader = ExcelReaderService.getReader();
+
+        excelReader.getWorkSheet(ele, function (err, excelSheet) {
+          excelReader.checkHeader(excelSheet, $scope.info.headers, function (isOurTemplate) {
+            if (!isOurTemplate) {
+              var a = isOurTemplate;
+            }
+            excelReader.getSheetData(excelSheet, $scope.info.headers, function (err, sheetData) {
+              if ($scope.info.callback) {
+                $scope.info.callback(sheetData);
+              }
+              $scope.hide();
+            });
+          });
+        });
+      };
 
       function setTheme(info) {
         $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
@@ -339,26 +363,17 @@ angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', func
 /**
  * Created by zenghong on 16/1/18.
  */
-angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'ExcelReaderService', function ($rootScope, ExcelReaderService) {
+angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',function ($rootScope) {
   return {
     restrict: 'AE',
-    templateUrl: 'directives/dialog_upload/dialog_upload.client.view.html',
+    templateUrl: 'directives/dialog_confirm/dialog_confirm.client.view.html',
     replace: true,
     scope: {},
     link: function ($scope, $element, $attrs) {
       $scope.info = {
         title: '',
-        contents: [{
-          key: '请输入拜访卡名称',
-          value: '点击输入名称'
-        }],
-        color: 'blue',
-        type: 'execel',
-        headers: [
-          {key: 'A1', value: '大区'},
-          {key: 'B1', value: '省区'},
-          {key: 'C1', value: '办事处'}
-        ]
+        content:'',
+        color: 'blue'
       };
 
       $scope.show = function () {
@@ -369,29 +384,14 @@ angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'Exc
       };
       $scope.submit = function () {
         $element.removeClass('show');
+        if ($scope.info.callback) {
+          $scope.info.callback($scope.info);
+        }
       };
-      $rootScope.$on('show.dialogUpload', function (event, data) {
+      $rootScope.$on('show.dialogConfirm', function (event, data) {
         setTheme(data);
         $scope.show();
       });
-
-      $scope.handleFile = function (ele) {
-        var excelReader = ExcelReaderService.getReader();
-
-        excelReader.getWorkSheet(ele, function (err, excelSheet) {
-          excelReader.checkHeader(excelSheet, $scope.info.headers, function (isOurTemplate) {
-            if (!isOurTemplate) {
-              var a = isOurTemplate;
-            }
-            excelReader.getSheetData(excelSheet, $scope.info.headers, function (err, sheetData) {
-              if ($scope.info.callback) {
-                $scope.info.callback(sheetData);
-              }
-              $scope.hide();
-            });
-          });
-        });
-      };
 
       function setTheme(info) {
         $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
@@ -488,47 +488,6 @@ angular.module('agilesales-web').directive('agQuestionBlank', ['$rootScope', fun
     }
   }
 }]);
-/**
- * Created by zenghong on 16/1/18.
- */
-angular.module('agilesales-web').directive('agQuestionCamera', function () {
-  return {
-    restrict: 'AE',
-    templateUrl: 'directives/question_camera/camera.client.view.html',
-    replace: true,
-    scope: {getQuestion: '&'},
-    link: function ($scope, $element, $attrs) {
-      $scope.question = $scope.getQuestion();
-      $scope.status = 'preview';
-      if (!$scope.question.content)
-        $scope.question.content = {};
-
-      if (!$scope.question.content.type)
-        $scope.question.content.type = 'camera';
-
-      if (!$scope.question.content.title)
-        $scope.question.content.title = '';
-
-      if (!$scope.question.content.type_text)
-        $scope.question.content.type_text = '拍照题';
-
-      if ($scope.question.content.is_need_description !== 'true' && $scope.question.content.is_need_description !== true) {
-        $scope.question.content.is_need_description = false;
-      }
-      else {
-        $scope.question.content.is_need_description = true;
-      }
-      $scope.toggleDescription = function () {
-        $scope.question.content.is_need_description = !$scope.question.content.is_need_description;
-      };
-      $scope.submitQuestion = function () {
-        $scope.question.type = $scope.question.content.type;
-        $scope.question.title = $scope.question.content.title;
-        $scope.$emit('onQuestionUpdated', {question: $scope.question});
-      };
-    }
-  }
-});
 /**
  * Created by zenghong on 16/1/18.
  */
@@ -710,6 +669,57 @@ angular.module('agilesales-web').directive('agQuestionSingle', function () {
 /**
  * Created by zenghong on 16/1/18.
  */
+angular.module('agilesales-web').directive('agQuestionTrueFalse', function () {
+  return {
+    restrict: 'AE',
+    templateUrl: 'directives/question_true_false/question_true_false.client.view.html',
+    replace: true,
+    scope: {getQuestion: '&'},
+    link: function ($scope, $element, $attrs) {
+      $scope.status = 'preview';
+      $scope.question = $scope.getQuestion();
+      if (!$scope.question.content)
+        $scope.question.content = {};
+
+      if (!$scope.question.content.type)
+        $scope.question.content.type = 'trueorfalse';
+
+      if (!$scope.question.content.title)
+        $scope.question.content.title = '';
+
+      if (!$scope.question.content.type_text)
+        $scope.question.content.type_text = '是非题';
+
+      if ($scope.question.content.is_need_photo !== 'true' && $scope.question.content.is_need_photo !== true) {
+        $scope.question.content.is_need_photo = false;
+      }
+      else {
+        $scope.question.content.is_need_photo = true;
+      }
+
+      if ($scope.question.content.is_need_description !== 'true' && $scope.question.content.is_need_description !== true) {
+        $scope.question.content.is_need_description = false;
+      }
+      else {
+        $scope.question.content.is_need_description = true;
+      }
+      $scope.togglePhoto = function () {
+        $scope.question.content.is_need_photo = !$scope.question.content.is_need_photo;
+      };
+      $scope.toggleDescription = function () {
+        $scope.question.content.is_need_description = !$scope.question.content.is_need_description;
+      };
+      $scope.submitQuestion = function () {
+        $scope.question.type = $scope.question.content.type;
+        $scope.question.title = $scope.question.content.title;
+        $scope.$emit('onQuestionUpdated', {question: $scope.question});
+      };
+    }
+  }
+});
+/**
+ * Created by zenghong on 16/1/18.
+ */
 angular.module('agilesales-web').directive('agQuestionTable', ['$rootScope', 'AuthService', function ($rootScope, AuthService) {
   return {
     restrict: 'AE',
@@ -871,33 +881,26 @@ angular.module('agilesales-web').directive('agQuestionTable', ['$rootScope', 'Au
 /**
  * Created by zenghong on 16/1/18.
  */
-angular.module('agilesales-web').directive('agQuestionTrueFalse', function () {
+angular.module('agilesales-web').directive('agQuestionCamera', function () {
   return {
     restrict: 'AE',
-    templateUrl: 'directives/question_true_false/question_true_false.client.view.html',
+    templateUrl: 'directives/question_camera/camera.client.view.html',
     replace: true,
     scope: {getQuestion: '&'},
     link: function ($scope, $element, $attrs) {
-      $scope.status = 'preview';
       $scope.question = $scope.getQuestion();
+      $scope.status = 'preview';
       if (!$scope.question.content)
         $scope.question.content = {};
 
       if (!$scope.question.content.type)
-        $scope.question.content.type = 'trueorfalse';
+        $scope.question.content.type = 'camera';
 
       if (!$scope.question.content.title)
         $scope.question.content.title = '';
 
       if (!$scope.question.content.type_text)
-        $scope.question.content.type_text = '是非题';
-
-      if ($scope.question.content.is_need_photo !== 'true' && $scope.question.content.is_need_photo !== true) {
-        $scope.question.content.is_need_photo = false;
-      }
-      else {
-        $scope.question.content.is_need_photo = true;
-      }
+        $scope.question.content.type_text = '拍照题';
 
       if ($scope.question.content.is_need_description !== 'true' && $scope.question.content.is_need_description !== true) {
         $scope.question.content.is_need_description = false;
@@ -905,9 +908,6 @@ angular.module('agilesales-web').directive('agQuestionTrueFalse', function () {
       else {
         $scope.question.content.is_need_description = true;
       }
-      $scope.togglePhoto = function () {
-        $scope.question.content.is_need_photo = !$scope.question.content.is_need_photo;
-      };
       $scope.toggleDescription = function () {
         $scope.question.content.is_need_description = !$scope.question.content.is_need_description;
       };

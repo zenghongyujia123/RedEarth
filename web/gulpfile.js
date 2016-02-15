@@ -29,6 +29,15 @@ gulp.task('less-concat', function () {
     .pipe(gulp.dest('webapp/dist/css'));
 });
 
+gulp.task('homepage-less', function () {
+  return gulp.src('homepage/index.less')
+    .pipe(less())
+    .pipe(rename(function (path) {
+      path.basename = 'index';
+    }))
+    .pipe(gulp.dest('homepage'));
+});
+
 //gulp.task('template-concat', function () {
 //  return gulp.src([
 //      'www/templates/*.html'
@@ -38,6 +47,6 @@ gulp.task('less-concat', function () {
 //    .pipe(gulp.dest('www/dist/js'));
 //});
 
-gulp.task('web', ['js-concat','less-concat']);
+gulp.task('web', ['js-concat', 'less-concat','homepage-less']);
 
 

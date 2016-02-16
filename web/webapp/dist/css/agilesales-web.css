@@ -456,6 +456,10 @@ body {
   text-align: center;
   cursor: pointer;
 }
+.re-suggest-right-select-panel .row .select-item:hover {
+  color: white;
+  background-color: #333;
+}
 .re-suggest-right-select-panel .row .select-item.select {
   color: white;
   background-color: #333;

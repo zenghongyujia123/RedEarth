@@ -351,3 +351,28 @@ body {
   font-size: 16px;
   color: #666;
 }
+.re-table {
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+}
+.re-table .re-table-header {
+  overflow: hidden;
+}
+.re-table .re-table-header .header-col {
+  line-height: 60px;
+  float: left;
+  width: 200px;
+}
+.re-table .re-table-body {
+  overflow-y: auto;
+}
+.re-table .re-table-body .body-col {
+  line-height: 40px;
+  float: left;
+  width: 200px;
+}
+.re-table .re-table-row {
+  overflow: hidden;
+  border-bottom: 1px solid #cdcdcd;
+}

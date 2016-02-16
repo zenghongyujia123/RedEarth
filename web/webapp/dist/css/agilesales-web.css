@@ -407,6 +407,7 @@ body {
   line-height: 40px;
   border: 1px solid #333;
   text-align: center;
+  cursor: pointer;
 }
 .re-suggest-right-select-panel .row .select-item.select {
   color: white;

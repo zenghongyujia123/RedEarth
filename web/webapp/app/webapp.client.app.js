@@ -92,7 +92,7 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
       })
       .state('order_suggest.suggest_hq_wholesaler', {
         url: '/suggest_hq_wholesaler',
-        templateUrl: 'templates/suggest_hq_suggest_result.client.view.html',
+        templateUrl: 'templates/suggest_hq_wholesaler.client.view.html',
         controller: "SuggestHqWholeSalerCtrl"
       });
 

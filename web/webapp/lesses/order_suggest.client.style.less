@@ -34,13 +34,19 @@
       }
     }
     .re-suggest-right {
-      width: 100%;
-      height: 100%;
+      position: absolute;
+      left: 300px;
+      right: 0px;
+      top: 0px;
+      bottom: 0px;
     }
     &.is-home {
       padding-left: 0px;
       .re-suggest-left {
         display: none;
+      }
+      .re-suggest-right{
+        left: 0px;
       }
     }
   }

@@ -305,14 +305,20 @@ body {
   color: white;
 }
 .re-suggest-page .re-suggest-body .re-suggest-right {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  left: 300px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
 }
 .re-suggest-page .re-suggest-body.is-home {
   padding-left: 0px;
 }
 .re-suggest-page .re-suggest-body.is-home .re-suggest-left {
   display: none;
+}
+.re-suggest-page .re-suggest-body.is-home .re-suggest-right {
+  left: 0px;
 }
 .re-suggest-home-page {
   overflow: hidden;
@@ -354,7 +360,10 @@ body {
 .re-table {
   padding: 20px;
   width: 100%;
-  height: 100%;
+  overflow-y: auto;
+  top: 0px;
+  bottom: 0px;
+  position: absolute;
 }
 .re-table .re-table-header {
   overflow: hidden;
@@ -365,7 +374,10 @@ body {
   width: 200px;
 }
 .re-table .re-table-body {
+  position: absolute;
   overflow-y: auto;
+  top: 80px;
+  bottom: 0px;
 }
 .re-table .re-table-body .body-col {
   line-height: 40px;
@@ -375,4 +387,28 @@ body {
 .re-table .re-table-row {
   overflow: hidden;
   border-bottom: 1px solid #cdcdcd;
+}
+.re-table.has-top {
+  top: 170px;
+}
+.re-suggest-right-select-panel .select-title {
+  margin-top: 40px;
+  margin-bottom: 20px;
+  line-height: 50px;
+  font-size: 20px;
+  text-align: center;
+}
+.re-suggest-right-select-panel .row {
+  width: 80%;
+  margin: auto;
+}
+.re-suggest-right-select-panel .row .select-item {
+  color: #333;
+  line-height: 40px;
+  border: 1px solid #333;
+  text-align: center;
+}
+.re-suggest-right-select-panel .row .select-item.select {
+  color: white;
+  background-color: #333;
 }

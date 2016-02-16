@@ -44,6 +44,10 @@ module.exports = function (appDb) {
     //备注
     remark: {
       type: String
+    },
+    account_type: {
+      type:String,
+      enum:['地区分公司','地区总部','澳妆供应链']
     }
   });
 

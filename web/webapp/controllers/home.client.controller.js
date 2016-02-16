@@ -6,5 +6,4 @@ angular.module('agilesales-web').controller('HomeCtrl', ['$scope', 'AuthService'
   AuthService.onUserUpdated('AuthService', function (user) {
     $scope.user = user;
   });
-
 }]);

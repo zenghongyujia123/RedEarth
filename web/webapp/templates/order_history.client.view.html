@@ -1,6 +1,9 @@
 <div class="re-suggest-page">
   <div class="re-suggest-header">
-    <i class="fa fa-angle-left"></i>建议订单
+    <span ui-sref="home">
+      <i class="fa fa-angle-left"></i>
+      历史数据
+    </span>
   </div>
   <div class="re-suggest-body" ng-class="{'is-home':location.hash==='#/order_history/history_home'}">
     <div class="re-suggest-left">
@@ -16,12 +19,14 @@
       </div>
       <div class="suggest-left-item"
            ng-class="{'select':location.hash==='#/order_history/history_product'}"
-           ui-sref="order_history.history_product">
+           ui-sref="order_history.history_product"
+           ng-show="user.account_type==='澳妆供应链'">
         产品资料
       </div>
       <div class="suggest-left-item"
            ng-class="{'select':location.hash==='#/order_history/history_desk'}"
-           ui-sref="order_history.history_desk">
+           ui-sref="order_history.history_desk"
+           ng-show="user.account_type==='澳妆供应链'">
         柜台资料
       </div>
     </div>

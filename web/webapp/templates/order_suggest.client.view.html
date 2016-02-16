@@ -54,6 +54,12 @@
         总部导入茂姿订单
       </div>
       <div class="suggest-left-item"
+           ng-class="{'select':location.hash==='#/order_suggest/suggest_hq_display'}"
+           ui-sref="order_suggest.suggest_hq_display"
+           ng-show="user.account_type==='地区总部'">
+        总部导入陈列订单
+      </div>
+      <div class="suggest-left-item"
            ng-class="{'select':location.hash==='#/order_suggest/suggest_hq_suggest_result'}"
            ui-sref="order_suggest.suggest_hq_suggest_result"
            ng-show="user.account_type==='地区总部'">

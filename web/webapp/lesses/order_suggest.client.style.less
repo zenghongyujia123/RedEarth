@@ -7,9 +7,12 @@
   .re-suggest-body {
     border-top: 1px solid #cdcdcd;
     padding-left: 300px;
-    position: relative;
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    top:60px;
+
     background-color: white;
     .re-suggest-left {
       height: 100%;
@@ -52,8 +55,10 @@
   }
 }
 
-.re-suggest-home-page {
-  overflow: hidden;
+.re-suggest-home-page ,.re-system-setting-page {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
   .tip-title {
     font-size: 24px;
     text-align: center;

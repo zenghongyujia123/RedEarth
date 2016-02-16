@@ -5,9 +5,11 @@ body {
   font-family: PingHei, 'PingFang SC', 'Helvetica Neue', Helvetica, STHeitiSC-Light, Arial, sans-serif, '微软雅黑';
 }
 .ag-first-layer-view {
-  margin-top: 50px;
-  height: 100%;
-  position: relative;
+  top: 50px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  position: absolute;
 }
 .ag-btn {
   border-radius: 3px;
@@ -32,7 +34,7 @@ body {
   color: #666;
   padding: 0px;
   border: 1px solid #d2d2d2;
-  width: 36px ;
+  width: 36px;
   text-align: center;
   font-size: 18px;
   transition: color .5s;
@@ -277,9 +279,11 @@ body {
 .re-suggest-page .re-suggest-body {
   border-top: 1px solid #cdcdcd;
   padding-left: 300px;
-  position: relative;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  top: 60px;
   background-color: white;
 }
 .re-suggest-page .re-suggest-body .re-suggest-left {
@@ -320,34 +324,43 @@ body {
 .re-suggest-page .re-suggest-body.is-home .re-suggest-right {
   left: 0px;
 }
-.re-suggest-home-page {
-  overflow: hidden;
+.re-suggest-home-page,
+.re-system-setting-page {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
 }
-.re-suggest-home-page .tip-title {
+.re-suggest-home-page .tip-title,
+.re-system-setting-page .tip-title {
   font-size: 24px;
   text-align: center;
   margin-top: 80px;
 }
-.re-suggest-home-page .tip-content {
+.re-suggest-home-page .tip-content,
+.re-system-setting-page .tip-content {
   font-size: 13px;
   text-align: center;
   margin-top: 20px;
   color: #999;
 }
-.re-suggest-home-page .row {
+.re-suggest-home-page .row,
+.re-system-setting-page .row {
   margin-bottom: 80px;
 }
-.re-suggest-home-page .row .home-item-panel {
+.re-suggest-home-page .row .home-item-panel,
+.re-system-setting-page .row .home-item-panel {
   cursor: pointer;
   text-align: center;
   margin-top: 80px;
 }
-.re-suggest-home-page .row .home-item-panel .icon {
+.re-suggest-home-page .row .home-item-panel .icon,
+.re-system-setting-page .row .home-item-panel .icon {
   height: 128px;
   margin: auto;
   margin-bottom: 20px;
 }
-.re-suggest-home-page .row .home-item-panel .name {
+.re-suggest-home-page .row .home-item-panel .name,
+.re-system-setting-page .row .home-item-panel .name {
   border: 1px solid #666;
   margin: auto;
   text-align: center;
@@ -377,6 +390,7 @@ body {
   position: absolute;
   overflow-y: auto;
   top: 80px;
+  min-width: 100%;
   bottom: 0px;
 }
 .re-table .re-table-body .body-col {
@@ -412,4 +426,15 @@ body {
 .re-suggest-right-select-panel .row .select-item.select {
   color: white;
   background-color: #333;
+}
+.re-child-header {
+  height: 60px;
+}
+.re-child-body {
+  position: absolute;
+  top: 60px;
+  width: 100%;
+  bottom: 0px;
+  background-color: white;
+  border-top: 1px solid #cdcdcd;
 }

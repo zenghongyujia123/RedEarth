@@ -5,9 +5,11 @@ html, body {
 }
 
 .ag-first-layer-view {
-  margin-top: 50px;
-  height: 100%;
-  position: relative;
+  top:50px;
+  left: 0px;
+  right:0px;
+  bottom: 0px;
+  position: absolute;
 }
 
 .ag-btn {
@@ -24,18 +26,18 @@ html, body {
     background-color: #f0f0f0;
   }
 
-  &.white{
+  &.white {
     background-color: white;
-    color:#666;
-    border:1px solid #d2d2d2;
+    color: #666;
+    border: 1px solid #d2d2d2;
   }
 
-  &.back{
+  &.back {
     background-color: white;
-    color:#666;
-    padding:0px;
-    border:1px solid #d2d2d2;
-    width:36px ;
+    color: #666;
+    padding: 0px;
+    border: 1px solid #d2d2d2;
+    width: 36px;
     text-align: center;
     font-size: 18px;
     transition: color .5s;
@@ -48,7 +50,7 @@ html, body {
     }
   }
 
-  &.left{
+  &.left {
     float: left;
   }
 }
@@ -58,6 +60,7 @@ html, body {
 @import "dialog.client.style.less";
 @import "order_suggest.client.style.less";
 @import "table.client.style.less";
+@import "order_query.client.style.less";
 @import "../directives/dialog_confirm/dialog_confirm.client.style.less";
 @import "../directives/dialog_input/dialog_input.client.style.less";
 @import "../directives/dialog_select/dialog_select.client.style.less";

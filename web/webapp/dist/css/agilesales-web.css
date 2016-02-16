@@ -125,7 +125,7 @@ body {
   margin-top: 80px;
 }
 .ag-home-page .row .home-item-panel:hover .name {
-  background-color: #666;
+  background-color: #242122;
   color: white;
 }
 .ag-home-page .row .home-item-panel .icon {
@@ -134,14 +134,14 @@ body {
   margin-bottom: 20px;
 }
 .ag-home-page .row .home-item-panel .name {
-  border: 1px solid #666;
+  border: 1px solid #242122;
   margin: auto;
   text-align: center;
   width: 120px;
   height: 40px;
   line-height: 40px;
   font-size: 16px;
-  color: #666;
+  color: #242122;
 }
 .ag-dialog {
   position: fixed;

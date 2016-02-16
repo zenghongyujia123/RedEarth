@@ -912,8 +912,12 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', function () {
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderSuggestCtrl', ['$scope', '$state', function ($scope, $state) {
+angular.module('agilesales-web').controller('OrderSuggestCtrl', ['$scope', '$state', '$rootScope', function ($scope, $state, $rootScope) {
   $scope.location = window.location;
+  $scope.importBtns = [];
+  $rootScope.$on('suggest.import.changed', function (event, data) {
+    $scope.importBtns = data;
+  });
 }]);
 /**
  * Created by zenghong on 16/1/15.
@@ -936,21 +940,39 @@ angular.module('agilesales-web').controller('SettingPasswordCtrl', function () {
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', function () {
-
-});
+angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope', '$rootScope', function ($scope, rootScope) {
+  $scope.$emit('suggest.import.changed',[
+    {
+      text:'导入上月销售,库存,在途'
+    }
+  ])
+}]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaOtherOrderCtrl', function () {
-
-});
+angular.module('agilesales-web').controller('SuggestAreaOtherOrderCtrl', ['$scope', '$rootScope', function ($scope, rootScope) {
+  $scope.$emit('suggest.import.changed',[
+    {
+      text:'上传批发订单'
+    },
+    {
+      text:'上传试用订单'
+    },
+    {
+      text:'上传陈列订单'
+    }
+  ])
+}]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', function () {
-
-});
+angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$scope', '$rootScope', function ($scope, rootScope) {
+  $scope.$emit('suggest.import.changed', [
+    {
+      text: '提交'
+    }
+  ]);
+}]);
 /**
  * Created by zenghong on 16/1/15.
  */
@@ -960,39 +982,63 @@ angular.module('agilesales-web').controller('SuggestHomeCtrl', function () {
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', function () {
-
-});
+angular.module('agilesales-web').controller('SuggestHqAgencyCtrl',['$scope', '$rootScope', function ($scope, rootScope) {
+  $scope.$emit('suggest.import.changed',[
+    {
+      text:'导入批发商订单'
+    }
+  ])
+}]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', function () {
-
-});
+angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope', '$rootScope', function ($scope, rootScope) {
+  $scope.$emit('suggest.import.changed',[
+    {
+      text:'导入当前库存'
+    }
+  ])
+}]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', function () {
-
-});
+angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl',['$scope', '$rootScope', function ($scope, rootScope) {
+  $scope.$emit('suggest.import.changed',[
+    {
+      text:'导入当前订单'
+    }
+  ])
+}]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqMaoziCtrl', function () {
-
-});
+angular.module('agilesales-web').controller('SuggestHqMaoziCtrl',['$scope', '$rootScope', function ($scope, rootScope) {
+  $scope.$emit('suggest.import.changed',[
+    {
+      text:'导入茂姿订单'
+    }
+  ])
+}]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', function () {
-
-});
+angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl',['$scope', '$rootScope', function ($scope, rootScope) {
+  $scope.$emit('suggest.import.changed',[
+    {
+      text:'提交'
+    }
+  ])
+}]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqWholeSalerCtrl', function () {
-
-});
+angular.module('agilesales-web').controller('SuggestHqWholeSalerCtrl', ['$scope', '$rootScope', function ($scope, rootScope) {
+  $scope.$emit('suggest.import.changed',[
+    {
+      text:'导入经销商订单'
+    }
+  ])
+}]);
 /**
  * Created by zenghong on 16/1/15.
  */

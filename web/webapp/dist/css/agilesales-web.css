@@ -278,8 +278,32 @@ body {
   height: 100%;
 }
 .re-suggest-page .re-suggest-header {
+  width: 100%;
+  overflow: hidden;
+  padding: 10px 20px;
   height: 60px;
-  line-height: 60px;
+  line-height: 40px;
+  font-size: 16px;
+  float: left;
+}
+.re-suggest-page .re-suggest-header .fa {
+  font-size: 20px;
+  margin-right: 10px;
+}
+.re-suggest-page .re-suggest-header .import-btn {
+  font-size: 14px;
+  margin-top: 5px;
+  padding: 0px 10px;
+  cursor: pointer;
+  line-height: 30px;
+  float: right;
+  border: 1px solid #242122;
+  color: #242122;
+  margin-right: 10px;
+}
+.re-suggest-page .re-suggest-header .import-btn:hover {
+  background-color: #242122;
+  color: white;
 }
 .re-suggest-page .re-suggest-body {
   border-top: 1px solid #cdcdcd;
@@ -306,11 +330,11 @@ body {
   border-bottom: 1px solid #cdcdcd;
 }
 .re-suggest-page .re-suggest-body .re-suggest-left .suggest-left-item:hover {
-  background-color: black;
+  background-color: #242122;
   color: white;
 }
 .re-suggest-page .re-suggest-body .re-suggest-left .suggest-left-item.select {
-  background-color: black;
+  background-color: #242122;
   color: white;
 }
 .re-suggest-page .re-suggest-body .re-suggest-right {
@@ -366,19 +390,19 @@ body {
 }
 .re-suggest-home-page .row .home-item-panel:hover .name,
 .re-system-setting-page .row .home-item-panel:hover .name {
-  background-color: #666;
+  background-color: #242122;
   color: white;
 }
 .re-suggest-home-page .row .home-item-panel .name,
 .re-system-setting-page .row .home-item-panel .name {
-  border: 1px solid #666;
+  border: 1px solid #242122;
   margin: auto;
   text-align: center;
-  width: 120px;
+  width: 140px;
   height: 40px;
   line-height: 40px;
   font-size: 16px;
-  color: #666;
+  color: #242122;
 }
 .re-table {
   padding: 20px;

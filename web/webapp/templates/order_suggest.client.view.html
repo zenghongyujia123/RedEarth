@@ -1,6 +1,7 @@
 <div class="re-suggest-page">
   <div class="re-suggest-header">
-    '<'建议订单
+    <i class="fa fa-angle-left"></i>建议订单
+    <div class="import-btn" ng-repeat="b in importBtns">{{b.text}}</div>
   </div>
   <div class="re-suggest-body" ng-class="{'is-home':location.hash==='#/order_suggest/suggest_home'}">
     <div class="re-suggest-left">

@@ -50,7 +50,52 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'templates/suggest_area_last_month.client.view.html',
         controller: "SuggestAreaLastMonthCtrl"
       })
-    ;
+      .state('order_suggest.suggest_area_other_order', {
+        url: '/suggest_area_other_order',
+        templateUrl: 'templates/suggest_area_other_order.client.view.html',
+        controller: "SuggestAreaOtherOrderCtrl"
+      })
+      .state('order_suggest.suggest_area_suggest_result', {
+        url: '/suggest_area_suggest_result',
+        templateUrl: 'templates/suggest_area_suggest_result.client.view.html',
+        controller: "SuggestAreaSuggestResultCtrl"
+      })
+      .state('order_suggest.suggest_home', {
+        url: '/suggest_home',
+        templateUrl: 'templates/suggest_home.client.view.html',
+        controller: "SuggestHomeCtrl"
+      })
+      .state('order_suggest.suggest_hq_agency', {
+        url: '/suggest_hq_agency',
+        templateUrl: 'templates/suggest_hq_agency.client.view.html',
+        controller: "SuggestHqAgencyCtrl"
+      })
+      .state('order_suggest.suggest_hq_current', {
+        url: '/suggest_hq_current',
+        templateUrl: 'templates/suggest_hq_current.client.view.html',
+        controller: "SuggestHqCurrentCtrl"
+      })
+      .state('order_suggest.suggest_hq_e_commerce', {
+        url: '/suggest_hq_e_commerce',
+        templateUrl: 'templates/suggest_hq_e_commerce.client.view.html',
+        controller: "SuggestHqEcommerceCtrl"
+      })
+      .state('order_suggest.suggest_hq_maozi', {
+        url: '/suggest_hq_maozi',
+        templateUrl: 'templates/suggest_hq_maozi.client.view.html',
+        controller: "SuggestHqMaoziCtrl"
+      })
+      .state('order_suggest.suggest_hq_suggest_result', {
+        url: '/suggest_hq_suggest_result',
+        templateUrl: 'templates/suggest_hq_suggest_result.client.view.html',
+        controller: "SuggestHqSuggestResultCtrl"
+      })
+      .state('order_suggest.suggest_hq_wholesaler', {
+        url: '/suggest_hq_wholesaler',
+        templateUrl: 'templates/suggest_hq_suggest_result.client.view.html',
+        controller: "SuggestHqWholeSalerCtrl"
+      });
+
     $urlRouterProvider.otherwise('/');
   }])
   .config(['localStorageServiceProvider', function (localStorageServiceProvider) {
@@ -263,6 +308,67 @@ angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', funct
 /**
  * Created by zenghong on 16/1/18.
  */
+angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', function ($rootScope) {
+  return {
+    restrict: 'AE',
+    templateUrl: 'directives/dialog_select/dialog_select.client.view.html',
+    replace: true,
+    scope: {},
+    link: function ($scope, $element, $attrs) {
+      $scope.options = [];
+      $scope.info = {
+        title: '',
+        contents: [{
+          key: '请输入拜访卡名称',
+          value: '点击输入名称'
+        }],
+        color: 'blue'
+      };
+
+      $scope.show = function () {
+        $element.addClass('show');
+      };
+      $scope.hide = function () {
+        $element.removeClass('show');
+      };
+      $scope.submit = function () {
+        $element.removeClass('show');
+        $scope.info.callback($scope.info);
+      };
+      $scope.toggleOptions = function (index) {
+        if ($element.find('.ag-row-option-container').eq(index).hasClass('show')) {
+          $scope.hideOptions(index);
+        }
+        else {
+          $scope.showOptions(index);
+        }
+      };
+
+      $scope.selectOption = function (content, option) {
+        content.value = option;
+      };
+
+      $rootScope.$on('show.dialogSelect', function (event, data) {
+        setTheme(data);
+        $scope.show();
+      });
+      function setTheme(info) {
+        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
+        $scope.info = info;
+      }
+
+      $scope.showOptions = function (index) {
+        $element.find('.ag-row-option-container').eq(index).addClass('show');
+      };
+      $scope.hideOptions = function (index) {
+        $element.find('.ag-row-option-container').eq(index).removeClass('show');
+      }
+    }
+  }
+}]);
+/**
+ * Created by zenghong on 16/1/18.
+ */
 angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'ExcelReaderService', function ($rootScope, ExcelReaderService) {
   return {
     restrict: 'AE',
@@ -320,67 +426,6 @@ angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'Exc
       function setTheme(info) {
         $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
         $scope.info = info;
-      }
-    }
-  }
-}]);
-/**
- * Created by zenghong on 16/1/18.
- */
-angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', function ($rootScope) {
-  return {
-    restrict: 'AE',
-    templateUrl: 'directives/dialog_select/dialog_select.client.view.html',
-    replace: true,
-    scope: {},
-    link: function ($scope, $element, $attrs) {
-      $scope.options = [];
-      $scope.info = {
-        title: '',
-        contents: [{
-          key: '请输入拜访卡名称',
-          value: '点击输入名称'
-        }],
-        color: 'blue'
-      };
-
-      $scope.show = function () {
-        $element.addClass('show');
-      };
-      $scope.hide = function () {
-        $element.removeClass('show');
-      };
-      $scope.submit = function () {
-        $element.removeClass('show');
-        $scope.info.callback($scope.info);
-      };
-      $scope.toggleOptions = function (index) {
-        if ($element.find('.ag-row-option-container').eq(index).hasClass('show')) {
-          $scope.hideOptions(index);
-        }
-        else {
-          $scope.showOptions(index);
-        }
-      };
-
-      $scope.selectOption = function (content, option) {
-        content.value = option;
-      };
-
-      $rootScope.$on('show.dialogSelect', function (event, data) {
-        setTheme(data);
-        $scope.show();
-      });
-      function setTheme(info) {
-        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
-        $scope.info = info;
-      }
-
-      $scope.showOptions = function (index) {
-        $element.find('.ag-row-option-container').eq(index).addClass('show');
-      };
-      $scope.hideOptions = function (index) {
-        $element.find('.ag-row-option-container').eq(index).removeClass('show');
       }
     }
   }
@@ -797,9 +842,9 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', function () {
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderSuggestCtrl', function () {
-
-});
+angular.module('agilesales-web').controller('OrderSuggestCtrl',['$scope','$state', function ($scope,$state) {
+  $state.go('order_suggest.suggest_home');
+}]);
 /**
  * Created by zenghong on 16/1/15.
  */
@@ -809,55 +854,55 @@ angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', function
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderSuggestCtrl', function () {
+angular.module('agilesales-web').controller('SuggestAreaOtherOrderCtrl', function () {
 
 });
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderSuggestCtrl', function () {
+angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', function () {
 
 });
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderSuggestCtrl', function () {
+angular.module('agilesales-web').controller('SuggestHomeCtrl', function () {
 
 });
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderSuggestCtrl', function () {
+angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', function () {
 
 });
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderSuggestCtrl', function () {
+angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', function () {
 
 });
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderSuggestCtrl', function () {
+angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', function () {
 
 });
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderSuggestCtrl', function () {
+angular.module('agilesales-web').controller('SuggestHqMaoziCtrl', function () {
 
 });
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderSuggestCtrl', function () {
+angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', function () {
 
 });
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderSuggestCtrl', function () {
+angular.module('agilesales-web').controller('SuggestHqWholeSalerCtrl', function () {
 
 });
 /**

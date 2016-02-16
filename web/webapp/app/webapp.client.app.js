@@ -50,7 +50,52 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'templates/suggest_area_last_month.client.view.html',
         controller: "SuggestAreaLastMonthCtrl"
       })
-    ;
+      .state('order_suggest.suggest_area_other_order', {
+        url: '/suggest_area_other_order',
+        templateUrl: 'templates/suggest_area_other_order.client.view.html',
+        controller: "SuggestAreaOtherOrderCtrl"
+      })
+      .state('order_suggest.suggest_area_suggest_result', {
+        url: '/suggest_area_suggest_result',
+        templateUrl: 'templates/suggest_area_suggest_result.client.view.html',
+        controller: "SuggestAreaSuggestResultCtrl"
+      })
+      .state('order_suggest.suggest_home', {
+        url: '/suggest_home',
+        templateUrl: 'templates/suggest_home.client.view.html',
+        controller: "SuggestHomeCtrl"
+      })
+      .state('order_suggest.suggest_hq_agency', {
+        url: '/suggest_hq_agency',
+        templateUrl: 'templates/suggest_hq_agency.client.view.html',
+        controller: "SuggestHqAgencyCtrl"
+      })
+      .state('order_suggest.suggest_hq_current', {
+        url: '/suggest_hq_current',
+        templateUrl: 'templates/suggest_hq_current.client.view.html',
+        controller: "SuggestHqCurrentCtrl"
+      })
+      .state('order_suggest.suggest_hq_e_commerce', {
+        url: '/suggest_hq_e_commerce',
+        templateUrl: 'templates/suggest_hq_e_commerce.client.view.html',
+        controller: "SuggestHqEcommerceCtrl"
+      })
+      .state('order_suggest.suggest_hq_maozi', {
+        url: '/suggest_hq_maozi',
+        templateUrl: 'templates/suggest_hq_maozi.client.view.html',
+        controller: "SuggestHqMaoziCtrl"
+      })
+      .state('order_suggest.suggest_hq_suggest_result', {
+        url: '/suggest_hq_suggest_result',
+        templateUrl: 'templates/suggest_hq_suggest_result.client.view.html',
+        controller: "SuggestHqSuggestResultCtrl"
+      })
+      .state('order_suggest.suggest_hq_wholesaler', {
+        url: '/suggest_hq_wholesaler',
+        templateUrl: 'templates/suggest_hq_suggest_result.client.view.html',
+        controller: "SuggestHqWholeSalerCtrl"
+      });
+
     $urlRouterProvider.otherwise('/');
   }])
   .config(['localStorageServiceProvider', function (localStorageServiceProvider) {

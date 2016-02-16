@@ -1,6 +1,6 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqCurrent', function () {
+angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', function () {
 
 });

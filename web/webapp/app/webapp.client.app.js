@@ -35,17 +35,17 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'templates/system_setting.client.view.html',
         controller: "SystemSettingCtrl"
       })
-      .state('setting_home', {
+      .state('system_setting.setting_home', {
         url: '/setting_home',
         templateUrl: 'templates/setting_home.client.view.html',
         controller: "SettingHomeCtrl"
       })
-      .state('setting_password', {
+      .state('system_setting.setting_password', {
         url: '/setting_password',
         templateUrl: 'templates/setting_password.client.view.html',
         controller: "SettingPasswordCtrl"
       })
-      .state('setting_history', {
+      .state('system_setting.setting_history', {
         url: '/setting_history',
         templateUrl: 'templates/setting_history.client.view.html',
         controller: "SettingHistoryCtrl"

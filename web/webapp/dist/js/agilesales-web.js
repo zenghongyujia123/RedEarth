@@ -35,17 +35,17 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'templates/system_setting.client.view.html',
         controller: "SystemSettingCtrl"
       })
-      .state('setting_home', {
+      .state('system_setting.setting_home', {
         url: '/setting_home',
         templateUrl: 'templates/setting_home.client.view.html',
         controller: "SettingHomeCtrl"
       })
-      .state('setting_password', {
+      .state('system_setting.setting_password', {
         url: '/setting_password',
         templateUrl: 'templates/setting_password.client.view.html',
         controller: "SettingPasswordCtrl"
       })
-      .state('setting_history', {
+      .state('system_setting.setting_history', {
         url: '/setting_history',
         templateUrl: 'templates/setting_history.client.view.html',
         controller: "SettingHistoryCtrl"
@@ -323,67 +323,6 @@ angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', funct
 /**
  * Created by zenghong on 16/1/18.
  */
-angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', function ($rootScope) {
-  return {
-    restrict: 'AE',
-    templateUrl: 'directives/dialog_select/dialog_select.client.view.html',
-    replace: true,
-    scope: {},
-    link: function ($scope, $element, $attrs) {
-      $scope.options = [];
-      $scope.info = {
-        title: '',
-        contents: [{
-          key: '请输入拜访卡名称',
-          value: '点击输入名称'
-        }],
-        color: 'blue'
-      };
-
-      $scope.show = function () {
-        $element.addClass('show');
-      };
-      $scope.hide = function () {
-        $element.removeClass('show');
-      };
-      $scope.submit = function () {
-        $element.removeClass('show');
-        $scope.info.callback($scope.info);
-      };
-      $scope.toggleOptions = function (index) {
-        if ($element.find('.ag-row-option-container').eq(index).hasClass('show')) {
-          $scope.hideOptions(index);
-        }
-        else {
-          $scope.showOptions(index);
-        }
-      };
-
-      $scope.selectOption = function (content, option) {
-        content.value = option;
-      };
-
-      $rootScope.$on('show.dialogSelect', function (event, data) {
-        setTheme(data);
-        $scope.show();
-      });
-      function setTheme(info) {
-        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
-        $scope.info = info;
-      }
-
-      $scope.showOptions = function (index) {
-        $element.find('.ag-row-option-container').eq(index).addClass('show');
-      };
-      $scope.hideOptions = function (index) {
-        $element.find('.ag-row-option-container').eq(index).removeClass('show');
-      }
-    }
-  }
-}]);
-/**
- * Created by zenghong on 16/1/18.
- */
 angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'ExcelReaderService', function ($rootScope, ExcelReaderService) {
   return {
     restrict: 'AE',
@@ -441,6 +380,67 @@ angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'Exc
       function setTheme(info) {
         $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
         $scope.info = info;
+      }
+    }
+  }
+}]);
+/**
+ * Created by zenghong on 16/1/18.
+ */
+angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', function ($rootScope) {
+  return {
+    restrict: 'AE',
+    templateUrl: 'directives/dialog_select/dialog_select.client.view.html',
+    replace: true,
+    scope: {},
+    link: function ($scope, $element, $attrs) {
+      $scope.options = [];
+      $scope.info = {
+        title: '',
+        contents: [{
+          key: '请输入拜访卡名称',
+          value: '点击输入名称'
+        }],
+        color: 'blue'
+      };
+
+      $scope.show = function () {
+        $element.addClass('show');
+      };
+      $scope.hide = function () {
+        $element.removeClass('show');
+      };
+      $scope.submit = function () {
+        $element.removeClass('show');
+        $scope.info.callback($scope.info);
+      };
+      $scope.toggleOptions = function (index) {
+        if ($element.find('.ag-row-option-container').eq(index).hasClass('show')) {
+          $scope.hideOptions(index);
+        }
+        else {
+          $scope.showOptions(index);
+        }
+      };
+
+      $scope.selectOption = function (content, option) {
+        content.value = option;
+      };
+
+      $rootScope.$on('show.dialogSelect', function (event, data) {
+        setTheme(data);
+        $scope.show();
+      });
+      function setTheme(info) {
+        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
+        $scope.info = info;
+      }
+
+      $scope.showOptions = function (index) {
+        $element.find('.ag-row-option-container').eq(index).addClass('show');
+      };
+      $scope.hideOptions = function (index) {
+        $element.find('.ag-row-option-container').eq(index).removeClass('show');
       }
     }
   }

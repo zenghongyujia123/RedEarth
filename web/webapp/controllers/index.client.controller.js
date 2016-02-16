@@ -1,8 +1,17 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('IndexCtrl', ['$scope', function ($scope) {
+angular.module('agilesales-web').controller('IndexCtrl', ['$scope', 'AuthService', function ($scope, AuthService) {
   $scope.location = window.location;
+  $scope.user = AuthService.getUser() || {};
+  $scope.signOut = function () {
+    AuthService.signOut();
+  };
+
+  AuthService.onUserUpdated('IndexCtrl', function (user) {
+    $scope.user = user;
+  });
+
   $scope.headers = [
     {
       text: '建议订单'

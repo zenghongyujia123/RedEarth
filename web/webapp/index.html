@@ -30,8 +30,13 @@
 <div class="ag-header">
   <div class="ag-center-area">
     <img class="header-img" src="images/redearth.png" ui-sref="home">
+
     <div class="header-nav" ng-class="{select:location.hash==='#/'}" ui-sref="home"></div>
-    <div class="header-nav" ng-class="{select:location.hash==='#/'}" ui-sref="home" ng-repeat="h in headers">{{h.text}}</div>
+    <div class="header-nav" ng-class="{select:location.hash==='#/'}" ui-sref="home" ng-repeat="h in headers">
+      {{h.text}}
+    </div>
+    <div class="header-nav right" ng-click="signOut()">退出</div>
+    <div class="header-nav right">{{user.username}}</div>
   </div>
 </div>
 <div ui-view class="ag-first-layer-view"></div>

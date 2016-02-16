@@ -1,31 +1,37 @@
 <div class="ag-home-page">
   <div class="ag-home-area">
     <div class="row">
-      <div class="tip-title">欢迎您 , hardy</div>
+      <div class="tip-title">欢迎您 , {{user.username}}</div>
       <div class="tip-content">请点击下列快捷入口进行操作</div>
 
       <div class="col col-sm-6 col-xs-12 col-md-3 col-lg-3 home-item-panel" ui-sref="order_suggest.suggest_home">
         <img src="images/entrance_history.png" class="icon">
+
         <div class="name">建议订单</div>
       </div>
       <div class="col col-sm-6 col-xs-12 col-md-3 col-lg-3 home-item-panel" ui-sref="order_query">
         <img src="images/entrance_history.png" class="icon">
+
         <div class="name">查看订单</div>
       </div>
       <div class="col col-sm-6 col-xs-12 col-md-3 col-lg-3 home-item-panel" ui-sref="order_history.history_home">
         <img src="images/entrance_history.png" class="icon">
+
         <div class="name">历史数据</div>
       </div>
       <div class="col col-sm-6 col-xs-12 col-md-3 col-lg-3 home-item-panel" ui-sref="system_setting.setting_home">
         <img src="images/entrance_setting.png" class="icon">
+
         <div class="name">系统设置</div>
       </div>
-      <div class="col col-sm-6 col-xs-12 col-md-3 col-lg-3 home-item-panel" ui-sref="order_detail">
-        <img src="images/entrance_setting.png" class="icon">
-        <div class="name">订单详情</div>
-      </div>
-      <div class="col-sm-6 col-xs-12 col-md-3 col-lg-3 home-item-panel" ui-sref="dashboard_query">
+      <!--<div class="col col-sm-6 col-xs-12 col-md-3 col-lg-3 home-item-panel" ui-sref="order_detail">-->
+      <!--<img src="images/entrance_setting.png" class="icon">-->
+      <!--<div class="name">订单详情</div>-->
+      <!--</div>-->
+      <div class="col-sm-6 col-xs-12 col-md-3 col-lg-3 home-item-panel" ui-sref="dashboard_query"
+           ng-show="user.account_type==='澳妆供应链'">
         <img src="images/entrance_dashboard.png" class="icon">
+
         <div class="name">查看报表</div>
       </div>
     </div>

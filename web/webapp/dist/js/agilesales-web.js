@@ -348,67 +348,6 @@ angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', funct
 /**
  * Created by zenghong on 16/1/18.
  */
-angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', function ($rootScope) {
-  return {
-    restrict: 'AE',
-    templateUrl: 'directives/dialog_select/dialog_select.client.view.html',
-    replace: true,
-    scope: {},
-    link: function ($scope, $element, $attrs) {
-      $scope.options = [];
-      $scope.info = {
-        title: '',
-        contents: [{
-          key: '请输入拜访卡名称',
-          value: '点击输入名称'
-        }],
-        color: 'blue'
-      };
-
-      $scope.show = function () {
-        $element.addClass('show');
-      };
-      $scope.hide = function () {
-        $element.removeClass('show');
-      };
-      $scope.submit = function () {
-        $element.removeClass('show');
-        $scope.info.callback($scope.info);
-      };
-      $scope.toggleOptions = function (index) {
-        if ($element.find('.ag-row-option-container').eq(index).hasClass('show')) {
-          $scope.hideOptions(index);
-        }
-        else {
-          $scope.showOptions(index);
-        }
-      };
-
-      $scope.selectOption = function (content, option) {
-        content.value = option;
-      };
-
-      $rootScope.$on('show.dialogSelect', function (event, data) {
-        setTheme(data);
-        $scope.show();
-      });
-      function setTheme(info) {
-        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
-        $scope.info = info;
-      }
-
-      $scope.showOptions = function (index) {
-        $element.find('.ag-row-option-container').eq(index).addClass('show');
-      };
-      $scope.hideOptions = function (index) {
-        $element.find('.ag-row-option-container').eq(index).removeClass('show');
-      }
-    }
-  }
-}]);
-/**
- * Created by zenghong on 16/1/18.
- */
 angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'ExcelReaderService', function ($rootScope, ExcelReaderService) {
   return {
     restrict: 'AE',
@@ -470,6 +409,67 @@ angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'Exc
     }
   }
 }]);
+/**
+ * Created by zenghong on 16/1/18.
+ */
+angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', function ($rootScope) {
+  return {
+    restrict: 'AE',
+    templateUrl: 'directives/dialog_select/dialog_select.client.view.html',
+    replace: true,
+    scope: {},
+    link: function ($scope, $element, $attrs) {
+      $scope.options = [];
+      $scope.info = {
+        title: '',
+        contents: [{
+          key: '请输入拜访卡名称',
+          value: '点击输入名称'
+        }],
+        color: 'blue'
+      };
+
+      $scope.show = function () {
+        $element.addClass('show');
+      };
+      $scope.hide = function () {
+        $element.removeClass('show');
+      };
+      $scope.submit = function () {
+        $element.removeClass('show');
+        $scope.info.callback($scope.info);
+      };
+      $scope.toggleOptions = function (index) {
+        if ($element.find('.ag-row-option-container').eq(index).hasClass('show')) {
+          $scope.hideOptions(index);
+        }
+        else {
+          $scope.showOptions(index);
+        }
+      };
+
+      $scope.selectOption = function (content, option) {
+        content.value = option;
+      };
+
+      $rootScope.$on('show.dialogSelect', function (event, data) {
+        setTheme(data);
+        $scope.show();
+      });
+      function setTheme(info) {
+        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
+        $scope.info = info;
+      }
+
+      $scope.showOptions = function (index) {
+        $element.find('.ag-row-option-container').eq(index).addClass('show');
+      };
+      $scope.hideOptions = function (index) {
+        $element.find('.ag-row-option-container').eq(index).removeClass('show');
+      }
+    }
+  }
+}]);
 angular.module('agilesales-web').factory('PublicInterceptor', ['AuthService', function (AuthService) {
   return {
     'request': function (req) {
@@ -524,44 +524,8 @@ angular.module('agilesales-web').factory('AuthService', ['localStorageService', 
     setUser: function (u) {
       user = u;
       console.log(u);
+      this.userUpdated();
       $rootScope.$broadcast('onUserReset');
-    },
-    getCompany: function () {
-      return user.company;
-    },
-    getCardTemplates: function () {
-      return user.company.card_templates;
-    },
-    getCardTemplateById: function (id) {
-      var result = {};
-      user.company.card_templates.forEach(function (item) {
-        if (item._id === id) {
-          result = item;
-        }
-      });
-      return result;
-    },
-    getPaperById: function (cardId, paperId) {
-      var card = this.getCardTemplateById(cardId);
-      var result = {};
-      card.papers.forEach(function (item) {
-        if (item._id === paperId) {
-          result = item;
-        }
-      });
-      return result;
-    },
-    getTables: function () {
-      return user.company.tables;
-    },
-    getFieldsByTable: function (tableName) {
-      var result = [];
-      user.company.tables.forEach(function (table) {
-        if (table.table_name === tableName) {
-          result = table.fields
-        }
-      });
-      return result;
     },
     isLoggedIn: function () {
       return user ? true : false;
@@ -593,6 +557,12 @@ angular.module('agilesales-web').factory('AuthService', ['localStorageService', 
       if (user) {
         localStorageService.set(user.username + 'state', {'state': state, 'params': params});
       }
+    },
+    signOut: function () {
+      user = null;
+      access_token = '';
+      this.setToken('');
+      window.location = '/';
     }
   };
 }]);
@@ -882,14 +852,27 @@ angular.module('agilesales-web').controller('HistoryStockCtrl', function () {
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HomeCtrl', function () {
+angular.module('agilesales-web').controller('HomeCtrl', ['$scope', 'AuthService', function ($scope, AuthService) {
+  $scope.user = AuthService.getUser() || {};
+  AuthService.onUserUpdated('AuthService', function (user) {
+    $scope.user = user;
+  });
 
-});
+}]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('IndexCtrl', ['$scope', function ($scope) {
+angular.module('agilesales-web').controller('IndexCtrl', ['$scope', 'AuthService', function ($scope, AuthService) {
   $scope.location = window.location;
+  $scope.user = AuthService.getUser() || {};
+  $scope.signOut = function () {
+    AuthService.signOut();
+  };
+
+  AuthService.onUserUpdated('IndexCtrl', function (user) {
+    $scope.user = user;
+  });
+
   $scope.headers = [
     {
       text: '建议订单'
@@ -932,13 +915,18 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', function () {
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderSuggestCtrl', ['$scope', '$state', '$rootScope', function ($scope, $state, $rootScope) {
+angular.module('agilesales-web').controller('OrderSuggestCtrl', ['$scope', '$state', '$rootScope', 'AuthService',function ($scope, $state, $rootScope,AuthService) {
   $scope.location = window.location;
   $scope.importBtns = [];
   $rootScope.$on('suggest.import.changed', function (event, data) {
     $scope.importBtns = data.btns;
     $scope.title = data.title;
   });
+  $scope.user = AuthService.getUser() || {};
+  $scope.signOut = function () {
+    AuthService.signOut();
+  };
+
 }]);
 /**
  * Created by zenghong on 16/1/15.
@@ -1006,11 +994,15 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHomeCtrl', ['$scope', function ($scope) {
+angular.module('agilesales-web').controller('SuggestHomeCtrl', ['$scope', 'AuthService',function ($scope,AuthService) {
   $scope.$emit('suggest.import.changed', {
     title: '建议订单',
     btns: []
   });
+  $scope.user = AuthService.getUser() || {};
+  $scope.signOut = function () {
+    AuthService.signOut();
+  };
 
 }]);
 /**

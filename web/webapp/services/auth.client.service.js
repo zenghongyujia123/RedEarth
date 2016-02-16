@@ -29,44 +29,8 @@ angular.module('agilesales-web').factory('AuthService', ['localStorageService', 
     setUser: function (u) {
       user = u;
       console.log(u);
+      this.userUpdated();
       $rootScope.$broadcast('onUserReset');
-    },
-    getCompany: function () {
-      return user.company;
-    },
-    getCardTemplates: function () {
-      return user.company.card_templates;
-    },
-    getCardTemplateById: function (id) {
-      var result = {};
-      user.company.card_templates.forEach(function (item) {
-        if (item._id === id) {
-          result = item;
-        }
-      });
-      return result;
-    },
-    getPaperById: function (cardId, paperId) {
-      var card = this.getCardTemplateById(cardId);
-      var result = {};
-      card.papers.forEach(function (item) {
-        if (item._id === paperId) {
-          result = item;
-        }
-      });
-      return result;
-    },
-    getTables: function () {
-      return user.company.tables;
-    },
-    getFieldsByTable: function (tableName) {
-      var result = [];
-      user.company.tables.forEach(function (table) {
-        if (table.table_name === tableName) {
-          result = table.fields
-        }
-      });
-      return result;
     },
     isLoggedIn: function () {
       return user ? true : false;
@@ -98,6 +62,12 @@ angular.module('agilesales-web').factory('AuthService', ['localStorageService', 
       if (user) {
         localStorageService.set(user.username + 'state', {'state': state, 'params': params});
       }
+    },
+    signOut: function () {
+      user = null;
+      access_token = '';
+      this.setToken('');
+      window.location = '/';
     }
   };
 }]);

@@ -83,6 +83,9 @@ body {
 .ag-header .header-nav.select {
   background-color: #f5f5f5;
 }
+.ag-header .header-nav.right {
+  float: right;
+}
 .ag-header .header-img {
   float: left;
   height: 16px;

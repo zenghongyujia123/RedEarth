@@ -9,6 +9,7 @@ body {
   left: 0px;
   right: 0px;
   bottom: 0px;
+  height: 100%;
   position: absolute;
 }
 .ag-btn {
@@ -120,6 +121,10 @@ body {
   cursor: pointer;
   text-align: center;
   margin-top: 80px;
+}
+.ag-home-page .row .home-item-panel:hover .name {
+  background-color: #666;
+  color: white;
 }
 .ag-home-page .row .home-item-panel .icon {
   height: 128px;
@@ -358,6 +363,11 @@ body {
   height: 128px;
   margin: auto;
   margin-bottom: 20px;
+}
+.re-suggest-home-page .row .home-item-panel:hover .name,
+.re-system-setting-page .row .home-item-panel:hover .name {
+  background-color: #666;
+  color: white;
 }
 .re-suggest-home-page .row .home-item-panel .name,
 .re-system-setting-page .row .home-item-panel .name {

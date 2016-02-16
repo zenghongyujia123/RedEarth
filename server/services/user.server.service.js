@@ -19,7 +19,7 @@ exports.signin = function (username, password, callback) {
       return callback({err: error.business.user_account_not_exist});
     }
 
-    if (user.password !== password) {
+    if (user.password !== cryptoLib.toMd5(password)) {
       return callback({err: error.business.user_account_password_error});
     }
 

@@ -45,7 +45,6 @@ input:-webkit-autofill {
   font-size: 16px;
   border-radius: 0px;
   border-bottom: 1px solid #A7A6D4;
-  color: white;
 }
 .sign-container .input:focus {
   outline: none;

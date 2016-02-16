@@ -12,8 +12,6 @@ var cookieLib = require('./../../libraries/cookie');
 exports.signin = function (req, res, next) {
   var username = req.body.username;
   var password = req.body.password;
-  return res.redirect('/webapp');
-
   userService.signin(username, password, function (err, user) {
     if (err) {
      return res.send(err);

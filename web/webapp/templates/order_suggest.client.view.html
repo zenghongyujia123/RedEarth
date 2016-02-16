@@ -1,7 +1,56 @@
 <div class="re-suggest-page">
-  <button ui-sref="order_suggest.suggest_area_last_month">导入上月销售库存在途</button>
-  <ui-view class="re-suggest-view">
-    <div class="left"></div>
-    <div class="right"></div>
-  </ui-view>
+  <div class="re-suggest-header">
+    '<'建议订单
+  </div>
+  <div class="re-suggest-body" ng-class="{'is-home':location.hash==='#/order_suggest/suggest_home'}">
+    <div class="re-suggest-left">
+      <div class="suggest-left-item"
+           ng-class="{'select':location.hash==='#/order_suggest/suggest_area_last_month'}"
+           ui-sref="order_suggest.suggest_area_last_month">
+        地区导入上月销售库存在途
+      </div>
+      <div class="suggest-left-item"
+           ng-class="{'select':location.hash==='#/order_suggest/suggest_area_other_order'}"
+           ui-sref="order_suggest.suggest_area_other_order">
+        地区导入其他订单
+      </div>
+      <div class="suggest-left-item"
+           ng-class="{'select':location.hash==='#/order_suggest/suggest_area_suggest_result'}"
+           ui-sref="order_suggest.suggest_area_suggest_result">
+        地区建议订单
+      </div>
+      <div class="suggest-left-item"
+           ng-class="{'select':location.hash==='#/order_suggest/suggest_hq_current'}"
+           ui-sref="order_suggest.suggest_hq_current">
+        总部导入当前库存
+      </div>
+      <div class="suggest-left-item"
+           ng-class="{'select':location.hash==='#/order_suggest/suggest_hq_agency'}"
+           ui-sref="order_suggest.suggest_hq_agency">
+        总部导入批发商订单
+      </div>
+      <div class="suggest-left-item"
+           ng-class="{'select':location.hash==='#/order_suggest/suggest_hq_wholesaler'}"
+           ui-sref="order_suggest.suggest_hq_wholesaler">
+        总部导入经销商订单
+      </div>
+      <div class="suggest-left-item"
+           ng-class="{'select':location.hash==='#/order_suggest/suggest_hq_e_commerce'}"
+           ui-sref="order_suggest.suggest_hq_e_commerce">
+        总部导入电商订单
+      </div>
+      <div class="suggest-left-item"
+           ng-class="{'select':location.hash==='#/order_suggest/suggest_hq_maozi'}"
+           ui-sref="order_suggest.suggest_hq_maozi">
+        总部导入茂姿订单
+      </div>
+      <div class="suggest-left-item"
+           ng-class="{'select':location.hash==='#/order_suggest/suggest_hq_suggest_result'}"
+           ui-sref="order_suggest.suggest_hq_suggest_result">
+      总部建议订单
+      </div>
+    </div>
+    <ui-view class="re-suggest-right">
+    </ui-view>
+  </div>
 </div>

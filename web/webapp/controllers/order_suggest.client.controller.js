@@ -5,6 +5,7 @@ angular.module('agilesales-web').controller('OrderSuggestCtrl', ['$scope', '$sta
   $scope.location = window.location;
   $scope.importBtns = [];
   $rootScope.$on('suggest.import.changed', function (event, data) {
-    $scope.importBtns = data;
+    $scope.importBtns = data.btns;
+    $scope.title = data.title;
   });
 }]);

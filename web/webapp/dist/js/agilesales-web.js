@@ -916,7 +916,8 @@ angular.module('agilesales-web').controller('OrderSuggestCtrl', ['$scope', '$sta
   $scope.location = window.location;
   $scope.importBtns = [];
   $rootScope.$on('suggest.import.changed', function (event, data) {
-    $scope.importBtns = data;
+    $scope.importBtns = data.btns;
+    $scope.title = data.title;
   });
 }]);
 /**
@@ -941,103 +942,136 @@ angular.module('agilesales-web').controller('SettingPasswordCtrl', function () {
  * Created by zenghong on 16/1/15.
  */
 angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope', '$rootScope', function ($scope, rootScope) {
-  $scope.$emit('suggest.import.changed',[
-    {
-      text:'导入上月销售,库存,在途'
-    }
-  ])
+  $scope.$emit('suggest.import.changed',{
+    title:'建议订单',
+    btns:[
+      {
+        text:'导入上月销售,库存,在途'
+      }
+    ]
+  })
 }]);
 /**
  * Created by zenghong on 16/1/15.
  */
 angular.module('agilesales-web').controller('SuggestAreaOtherOrderCtrl', ['$scope', '$rootScope', function ($scope, rootScope) {
-  $scope.$emit('suggest.import.changed',[
-    {
-      text:'上传批发订单'
-    },
-    {
-      text:'上传试用订单'
-    },
-    {
-      text:'上传陈列订单'
-    }
-  ])
+  $scope.$emit('suggest.import.changed',{
+    title:'建议订单',
+    btns:[
+      {
+        text:'上传批发订单'
+      },
+      {
+        text:'上传试用订单'
+      },
+      {
+        text:'上传陈列订单'
+      }
+    ]
+  })
 }]);
 /**
  * Created by zenghong on 16/1/15.
  */
 angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$scope', '$rootScope', function ($scope, rootScope) {
-  $scope.$emit('suggest.import.changed', [
-    {
-      text: '提交'
-    }
-  ]);
+  $scope.$emit('suggest.import.changed', {
+    title:'建议订单',
+    btns:[
+      {
+        text: '提交'
+      }
+    ]
+  });
 }]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHomeCtrl', function () {
+angular.module('agilesales-web').controller('SuggestHomeCtrl', ['$scope', function ($scope) {
+  $scope.$emit('suggest.import.changed', {
+    title: '建议订单',
+    btns: []
+  });
 
-});
+}]);
 /**
  * Created by zenghong on 16/1/15.
  */
 angular.module('agilesales-web').controller('SuggestHqAgencyCtrl',['$scope', '$rootScope', function ($scope, rootScope) {
-  $scope.$emit('suggest.import.changed',[
-    {
-      text:'导入批发商订单'
-    }
-  ])
+  $scope.$emit('suggest.import.changed',{
+    title:'建议订单',
+    btns:[
+      {
+        text:'导入经销商订单'
+      }
+    ]
+
+  })
 }]);
 /**
  * Created by zenghong on 16/1/15.
  */
 angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope', '$rootScope', function ($scope, rootScope) {
-  $scope.$emit('suggest.import.changed',[
-    {
-      text:'导入当前库存'
-    }
-  ])
+  $scope.$emit('suggest.import.changed',{
+    title:'建议订单',
+    btns:[
+      {
+        text:'导入当前库存'
+      }
+    ]
+
+  })
 }]);
 /**
  * Created by zenghong on 16/1/15.
  */
 angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl',['$scope', '$rootScope', function ($scope, rootScope) {
-  $scope.$emit('suggest.import.changed',[
-    {
-      text:'导入当前订单'
-    }
-  ])
+  $scope.$emit('suggest.import.changed',{
+    title:'建议订单',
+    btns:[
+      {
+        text:'导入电商订单'
+      }
+    ]
+  })
 }]);
 /**
  * Created by zenghong on 16/1/15.
  */
 angular.module('agilesales-web').controller('SuggestHqMaoziCtrl',['$scope', '$rootScope', function ($scope, rootScope) {
-  $scope.$emit('suggest.import.changed',[
-    {
-      text:'导入茂姿订单'
-    }
-  ])
+  $scope.$emit('suggest.import.changed',{
+    title:'建议订单',
+    btns:[
+      {
+        text:'导入茂姿订单'
+      }
+    ]
+  })
 }]);
 /**
  * Created by zenghong on 16/1/15.
  */
 angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl',['$scope', '$rootScope', function ($scope, rootScope) {
-  $scope.$emit('suggest.import.changed',[
-    {
-      text:'提交'
-    }
-  ])
+  $scope.$emit('suggest.import.changed',{
+    title:'建议订单',
+    btns:[
+      {
+        text:'提交'
+      }
+    ]
+  })
 }]);
 /**
  * Created by zenghong on 16/1/15.
  */
 angular.module('agilesales-web').controller('SuggestHqWholeSalerCtrl', ['$scope', '$rootScope', function ($scope, rootScope) {
-  $scope.$emit('suggest.import.changed',[
-    {
-      text:'导入经销商订单'
-    }
-  ])
+  $scope.$emit('suggest.import.changed',{
+    title:'建议订单',
+    btns:[
+      {
+        text:'导入批发商订单'
+      }
+    ]
+  });
 }]);
 /**
  * Created by zenghong on 16/1/15.

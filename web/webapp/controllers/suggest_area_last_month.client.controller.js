@@ -14,7 +14,6 @@ angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope
     });
 
     $scope.sales = [];
-
     $scope.getSalesByArea = function () {
       AreaOrderService.getSalesByArea().then(function (data) {
         if(!data.err){
@@ -25,7 +24,6 @@ angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope
         console.log(data);
       });
     };
-
     $scope.getSalesByArea();
 
     function salesClickCallback() {

@@ -15,8 +15,12 @@ var appDb = require('./../../libraries/mongoose').appDb,
 exports.areaSalesStockOnwayImport = function (user, sales, callback) {
   var month = getLastMonth();
 
-  sales.each(sales, function (sale, eachCallback) {
-    AreaSales.findOne({month: month, area: user.area}, function (err, areaSales) {
+  async.each(sales, function (sale, eachCallback) {
+    AreaSales.findOne({
+      month: month,
+      department: user.department,
+      product_number: sale.product_number
+    }, function (err, areaSales) {
       if (err) {
         return eachCallback();
       }
@@ -30,13 +34,13 @@ exports.areaSalesStockOnwayImport = function (user, sales, callback) {
       areaSales.last_month_stock_count = sale.last_month_stock_count;
       areaSales.last_month_onway_count = sale.last_month_onway_count;
       areaSales.month = month;
-      areaSales.area = area;
+      areaSales.department = user.department;
       areaSales.save(function () {
         return eachCallback();
       });
-    }, function (err, result) {
-      return callback(err, result);
     });
+  }, function (err, result) {
+    return callback(err, result);
   });
 };
 
@@ -102,7 +106,7 @@ exports.getOrdersByArea = function (user, callback) {
 
 exports.getSalesByArea = function (user, callback) {
   var month = getLastMonth();
-  AreaSales.find({area: user.area, month: month}, function (err, areaSalse) {
+  AreaSales.find({department: user.department, month: month}, function (err, areaSalse) {
     if (err || !areaSalse) {
       return callback({err: error.system.db_error});
     }

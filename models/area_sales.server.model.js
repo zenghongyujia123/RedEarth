@@ -16,6 +16,9 @@ module.exports = function (appDb) {
     area: {
       type: String
     },
+    department:{
+      type:String
+    },
     month: {
       type: String
     },

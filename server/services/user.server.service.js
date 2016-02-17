@@ -93,7 +93,7 @@ function initUser() {
         principal_name: '袁慧珠',
         principal_emal: 'amy.hz.yuan@sh.eternal.hk',
         roles: [],
-        account_type:'地区分公司',
+        account_type:'地区总部',
         remark: ''
       },
       {
@@ -105,7 +105,7 @@ function initUser() {
         principal_name: '经销商助理',
         principal_emal: '',
         roles: [],
-        account_type:'地区分公司',
+        account_type:'地区总部',
         remark: ''
       },
       {
@@ -117,7 +117,7 @@ function initUser() {
         principal_name: '张丽颖',
         principal_emal: 'clara.ly.zhang@sh.eternal.hk',
         roles: [],
-        account_type:'地区分公司',
+        account_type:'地区总部',
         remark: ''
       },
       {
@@ -129,7 +129,7 @@ function initUser() {
         principal_name: '电商部助理',
         principal_emal: '',
         roles: [],
-        account_type:'地区分公司',
+        account_type:'地区总部',
         remark: ''
       },
       {

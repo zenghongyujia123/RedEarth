@@ -9,5 +9,5 @@ angular.module('agilesales-web').controller('SuggestHqMaoziCtrl',['$scope', '$ro
         text:'导入茂姿订单'
       }
     ]
-  })
+  });
 }]);

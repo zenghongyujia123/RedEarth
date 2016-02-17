@@ -9,7 +9,7 @@
 angular.module('agilesales-web').factory('ExcelReaderService', function () {
 
   var activeXReader = {
-    getWorkSheet: function (element, callback) {
+    getWorkSheet: function (element,sheetName, callback) {
       var fileObject = document.getElementById('filename');
       fileObject.select();
       fileObject.blur();
@@ -23,7 +23,7 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
 
       var excel = new ActiveXObject('Excel.Application');
       var excel_file = excel.Workbooks.open(filePath);
-      var excelSheet = excel.Worksheets('Sheet1');
+      var excelSheet = excel.Worksheets(sheetName);
 
       console.log(excelSheet.UsedRange.Rows.Count);
       console.log(excelSheet.UsedRange.Columns.Count);
@@ -78,7 +78,7 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
   };
 
   var otherReader = {
-    getWorkSheet: function (element, callback) {
+    getWorkSheet: function (element,sheetName, callback) {
       var file = element.files[0];
       var suffix = file.name.substring(file.name.lastIndexOf('.') + 1).toLowerCase();
       if (suffix !== 'xls' && suffix !== 'xlsx') {
@@ -125,8 +125,8 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
         reader.readAsArrayBuffer(file);
       }
     },
-    checkHeader: function (workbook, headers, callback) {
-      var excelSheet = workbook.Sheets.Sheet1;
+    checkHeader: function (workbook, headers,sheetName, callback) {
+      var excelSheet = workbook.Sheets[0];
       if (!excelSheet) {
         return callback(false);
       }
@@ -145,8 +145,8 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
       }
       return callback(true);
     },
-    isHeaderNameExist: function (workbook, headerColumn) {
-      var excelSheet = workbook.Sheets.Sheet1;
+    isHeaderNameExist: function (workbook, headerColumn,sheetName) {
+      var excelSheet = workbook.Sheets[0];
       if (!excelSheet) {
         return false;
       }
@@ -159,10 +159,9 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
       }
       return false;
     },
-    getSheetData: function (workbook, headers, callback) {
+    getSheetData: function (workbook, headers, sheetName,callback) {
       //目前只取第一个sheet的内容
-      var sheet1Name = workbook.SheetNames['Sheet1'];
-      var xlsSheetArray = XLSX.utils.sheet_to_row_object_array(workbook.Sheets['Sheet1']);
+      var xlsSheetArray = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
       //var jsonResultString = JSON.stringify(xlsSheetArray);
 
       if (!xlsSheetArray || xlsSheetArray.length <= 0) {

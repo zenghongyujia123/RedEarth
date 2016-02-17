@@ -264,90 +264,6 @@ angular.module('agilesales-web').directive('agHoverShake', [function () {
 /**
  * Created by zenghong on 16/1/18.
  */
-angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',function ($rootScope) {
-  return {
-    restrict: 'AE',
-    templateUrl: 'directives/dialog_confirm/dialog_confirm.client.view.html',
-    replace: true,
-    scope: {},
-    link: function ($scope, $element, $attrs) {
-      $scope.info = {
-        title: '',
-        content:'',
-        color: 'blue'
-      };
-
-      $scope.show = function () {
-        $element.addClass('show');
-      };
-      $scope.hide = function () {
-        $element.removeClass('show');
-      };
-      $scope.submit = function () {
-        $element.removeClass('show');
-        if ($scope.info.callback) {
-          $scope.info.callback($scope.info);
-        }
-      };
-      $rootScope.$on('show.dialogConfirm', function (event, data) {
-        setTheme(data);
-        $scope.show();
-      });
-
-      function setTheme(info) {
-        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
-        $scope.info = info;
-      }
-    }
-  }
-}]);
-/**
- * Created by zenghong on 16/1/18.
- */
-angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
-  return {
-    restrict: 'AE',
-    templateUrl: 'directives/dialog_input/dialog_input.client.view.html',
-    replace: true,
-    scope: {},
-    link: function ($scope, $element, $attrs) {
-      $scope.info = {
-        title: '',
-        contents: [{
-          key: '请输入拜访卡名称',
-          tip: '点击输入名称',
-          value: ''
-        }],
-        color: 'blue'
-      };
-
-      $scope.show = function () {
-        $element.addClass('show');
-      };
-      $scope.hide = function () {
-        $element.removeClass('show');
-      };
-      $scope.submit = function () {
-        $element.removeClass('show');
-        if ($scope.info.callback) {
-          $scope.info.callback($scope.info);
-        }
-      };
-      $rootScope.$on('show.dialogInput', function (event, data) {
-        setTheme(data);
-        $scope.show();
-      });
-
-      function setTheme(info) {
-        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
-        $scope.info = info;
-      }
-    }
-  }
-}]);
-/**
- * Created by zenghong on 16/1/18.
- */
 angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', function ($rootScope) {
   return {
     restrict: 'AE',
@@ -448,12 +364,12 @@ angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'Exc
       $scope.handleFile = function (ele) {
         var excelReader = ExcelReaderService.getReader();
 
-        excelReader.getWorkSheet(ele, function (err, excelSheet) {
-          excelReader.checkHeader(excelSheet, $scope.info.headers, function (isOurTemplate) {
+        excelReader.getWorkSheet(ele,$scope.info.contents[0].sheetName, function (err, excelSheet) {
+          excelReader.checkHeader(excelSheet, $scope.info.headers, $scope.info.contents[0].sheetName,function (isOurTemplate) {
             if (!isOurTemplate) {
               var a = isOurTemplate;
             }
-            excelReader.getSheetData(excelSheet, $scope.info.headers, function (err, sheetData) {
+            excelReader.getSheetData(excelSheet, $scope.info.headers,$scope.info.contents[0].sheetName ,function (err, sheetData) {
               if ($scope.info.callback) {
                 $scope.info.callback(sheetData);
               }
@@ -462,6 +378,90 @@ angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'Exc
           });
         });
       };
+
+      function setTheme(info) {
+        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
+        $scope.info = info;
+      }
+    }
+  }
+}]);
+/**
+ * Created by zenghong on 16/1/18.
+ */
+angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
+  return {
+    restrict: 'AE',
+    templateUrl: 'directives/dialog_input/dialog_input.client.view.html',
+    replace: true,
+    scope: {},
+    link: function ($scope, $element, $attrs) {
+      $scope.info = {
+        title: '',
+        contents: [{
+          key: '请输入拜访卡名称',
+          tip: '点击输入名称',
+          value: ''
+        }],
+        color: 'blue'
+      };
+
+      $scope.show = function () {
+        $element.addClass('show');
+      };
+      $scope.hide = function () {
+        $element.removeClass('show');
+      };
+      $scope.submit = function () {
+        $element.removeClass('show');
+        if ($scope.info.callback) {
+          $scope.info.callback($scope.info);
+        }
+      };
+      $rootScope.$on('show.dialogInput', function (event, data) {
+        setTheme(data);
+        $scope.show();
+      });
+
+      function setTheme(info) {
+        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
+        $scope.info = info;
+      }
+    }
+  }
+}]);
+/**
+ * Created by zenghong on 16/1/18.
+ */
+angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',function ($rootScope) {
+  return {
+    restrict: 'AE',
+    templateUrl: 'directives/dialog_confirm/dialog_confirm.client.view.html',
+    replace: true,
+    scope: {},
+    link: function ($scope, $element, $attrs) {
+      $scope.info = {
+        title: '',
+        content:'',
+        color: 'blue'
+      };
+
+      $scope.show = function () {
+        $element.addClass('show');
+      };
+      $scope.hide = function () {
+        $element.removeClass('show');
+      };
+      $scope.submit = function () {
+        $element.removeClass('show');
+        if ($scope.info.callback) {
+          $scope.info.callback($scope.info);
+        }
+      };
+      $rootScope.$on('show.dialogConfirm', function (event, data) {
+        setTheme(data);
+        $scope.show();
+      });
 
       function setTheme(info) {
         $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
@@ -596,7 +596,7 @@ angular.module('agilesales-web').factory('AuthService', ['localStorageService', 
 angular.module('agilesales-web').factory('ExcelReaderService', function () {
 
   var activeXReader = {
-    getWorkSheet: function (element, callback) {
+    getWorkSheet: function (element,sheetName, callback) {
       var fileObject = document.getElementById('filename');
       fileObject.select();
       fileObject.blur();
@@ -610,7 +610,7 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
 
       var excel = new ActiveXObject('Excel.Application');
       var excel_file = excel.Workbooks.open(filePath);
-      var excelSheet = excel.Worksheets('Sheet1');
+      var excelSheet = excel.Worksheets(sheetName);
 
       console.log(excelSheet.UsedRange.Rows.Count);
       console.log(excelSheet.UsedRange.Columns.Count);
@@ -665,7 +665,7 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
   };
 
   var otherReader = {
-    getWorkSheet: function (element, callback) {
+    getWorkSheet: function (element,sheetName, callback) {
       var file = element.files[0];
       var suffix = file.name.substring(file.name.lastIndexOf('.') + 1).toLowerCase();
       if (suffix !== 'xls' && suffix !== 'xlsx') {
@@ -712,8 +712,8 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
         reader.readAsArrayBuffer(file);
       }
     },
-    checkHeader: function (workbook, headers, callback) {
-      var excelSheet = workbook.Sheets.Sheet1;
+    checkHeader: function (workbook, headers,sheetName, callback) {
+      var excelSheet = workbook.Sheets[0];
       if (!excelSheet) {
         return callback(false);
       }
@@ -732,8 +732,8 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
       }
       return callback(true);
     },
-    isHeaderNameExist: function (workbook, headerColumn) {
-      var excelSheet = workbook.Sheets.Sheet1;
+    isHeaderNameExist: function (workbook, headerColumn,sheetName) {
+      var excelSheet = workbook.Sheets[0];
       if (!excelSheet) {
         return false;
       }
@@ -746,10 +746,9 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
       }
       return false;
     },
-    getSheetData: function (workbook, headers, callback) {
+    getSheetData: function (workbook, headers, sheetName,callback) {
       //目前只取第一个sheet的内容
-      var sheet1Name = workbook.SheetNames['Sheet1'];
-      var xlsSheetArray = XLSX.utils.sheet_to_row_object_array(workbook.Sheets['Sheet1']);
+      var xlsSheetArray = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
       //var jsonResultString = JSON.stringify(xlsSheetArray);
 
       if (!xlsSheetArray || xlsSheetArray.length <= 0) {
@@ -973,25 +972,89 @@ angular.module('agilesales-web').controller('SettingPasswordCtrl', function () {
  * Created by zenghong on 16/1/15.
  */
 angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope', '$rootScope', 'AreaOrderService',
-  function ($scope, rootScope, AreaOrderService) {
+  function ($scope, $rootScope, AreaOrderService) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单',
       btns: [
         {
-          text: '导入上月销售,库存,在途'
+          text: '导入上月销售,库存,在途',
+          clickCallback: salesClickCallback
         }
       ]
     });
 
-    $scope.getSalesByArea =function(){
-      AreaOrderService.getSalesByArea().then(function(data){
+    $scope.sales = [];
+
+    $scope.getSalesByArea = function () {
+      AreaOrderService.getSalesByArea().then(function (data) {
+        if(!data.err){
+          $scope.sales = data;
+        }
         console.log(data);
-      },function(data){
+      }, function (data) {
         console.log(data);
       });
     };
 
     $scope.getSalesByArea();
+
+    function salesClickCallback() {
+      var headers = [
+        {key: 'A1', value: 'SKU编码'},
+        {key: 'B1', value: '上月销售量'},
+        {key: 'C1', value: '上月月结库存量'},
+        {key: 'D1', value: '上月月结在途量'}
+      ];
+
+      function upload(saleses, i) {
+        AreaOrderService.areaSalesStockOnwayImport(saleses[i++])
+          .then(function (data) {
+            console.log(data);
+            if (saleses[i]) {
+              upload(saleses, i);
+            }
+          }, function (err) {
+            console.log(err);
+          });
+      }
+
+      $scope.areaSalesStockOnwayImport = function (saleses) {
+        var i = 0;
+        upload(saleses, i);
+      };
+
+      $rootScope.$broadcast('show.dialogUpload', {
+        title: '上传销量库存在途量',
+        contents: [{
+          key: '请选择需要上传的销量库存在途量文件',
+          value: '点击选择文件',
+          tip: '点击选择文件',
+          sheetName: '分区'
+        }],
+        color: 'blue',
+        headers: headers,
+        callback: function (data) {
+          var result = [];
+          data.forEach(function (item) {
+            result.push({
+              product_number: item['SKU编码'],
+              last_month_sales_count: item['上月销售量'],
+              last_month_stock_count: item['上月月结库存量'],
+              last_month_onway_count: item['上月月结在途量'],
+            });
+          });
+          var sales = [];
+          for (var i = 0, len = result.length; i < len; i += 100) {
+            sales.push(result.slice(i, i + 100));
+          }
+          if (sales.length > 0) {
+            $scope.areaSalesStockOnwayImport(sales);
+          }
+          console.log(sales);
+        }
+      });
+    }
+
   }]);
 /**
  * Created by zenghong on 16/1/15.

@@ -40,12 +40,12 @@ angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'Exc
       $scope.handleFile = function (ele) {
         var excelReader = ExcelReaderService.getReader();
 
-        excelReader.getWorkSheet(ele, function (err, excelSheet) {
-          excelReader.checkHeader(excelSheet, $scope.info.headers, function (isOurTemplate) {
+        excelReader.getWorkSheet(ele,$scope.info.contents[0].sheetName, function (err, excelSheet) {
+          excelReader.checkHeader(excelSheet, $scope.info.headers, $scope.info.contents[0].sheetName,function (isOurTemplate) {
             if (!isOurTemplate) {
               var a = isOurTemplate;
             }
-            excelReader.getSheetData(excelSheet, $scope.info.headers, function (err, sheetData) {
+            excelReader.getSheetData(excelSheet, $scope.info.headers,$scope.info.contents[0].sheetName ,function (err, sheetData) {
               if ($scope.info.callback) {
                 $scope.info.callback(sheetData);
               }

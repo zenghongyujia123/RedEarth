@@ -1,0 +1,87 @@
+/**
+ * Created by zenghong on 16/2/17.
+ */
+'use strict';
+
+var mongoose = require('mongoose'),
+  Schema = mongoose.Schema,
+  timestamps = require('mongoose-timestamp');
+
+module.exports = function (appDb) {
+  var AreaOrderSchema = new Schema({
+    object: {
+      type: String,
+      default: 'areaOrder'
+    },
+    //SKU编码
+    product_number: {
+      type: String
+    },
+    //产品名称
+    product_name: {
+      type: String
+    },
+    //产品条码
+    product_barcode: {
+      type: String
+    },
+    //品类
+    category: {
+      type: String
+    },
+    //中分类名称
+    mid_classify: {
+      type: String
+    },
+    //销售价格
+    sales_price: {
+      type: Number
+    },
+    //订单号码
+    order_number: {
+      type: String
+    },
+    //订单数量
+    order_count: {
+      type: Number,
+      default:0
+    },
+    //订单类别(D01:正品,D02:批发，D03:试用装，D04:陈列)
+    order_type: {
+      type: String,
+      default: 'DO1',
+      enum: ['DO1', 'DO2', 'DO3', 'DO4']
+    },
+    //总销售价格
+    total_price: {
+      type: Number,
+      default:0
+    },
+    //上月销量
+    last_month_sales_count: {
+      type: Number,
+      default:0
+    },
+    //上月月结库存
+    last_month_stock_count: {
+      type: Number,
+      default:0
+    },
+    //上月月结在途量
+    last_month_onway_count: {
+      type: Number,
+      default:0
+    },
+    //是否审批
+    is_approval: {
+      type: Boolean
+    }
+  });
+
+  AreaOrderSchema.plugin(timestamps, {
+    createdAt: 'created',
+    updatedAt: 'updated'
+  });
+
+  appDb.model('AreaOrder', AreaOrderSchema);
+};

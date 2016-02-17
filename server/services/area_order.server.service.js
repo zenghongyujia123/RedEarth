@@ -62,7 +62,7 @@ exports.otherOrderImport = function (user, orders, callback) {
     AreaOrder.findOne({
       order_number: order_number + order.order_type,
       product_number: order.product_number,
-      month:month,
+      month: month,
     }, function (err, areaOrder) {
       if (err) {
         return eachCallback();
@@ -98,7 +98,7 @@ exports.otherOrderImport = function (user, orders, callback) {
 
 exports.getOrdersByArea = function (user, callback) {
   var month = getLastMonth();
-  AreaOrder.find({department:user.department,month:month}, function (err, orders) {
+  AreaOrder.find({department: user.department, month: month}, function (err, orders) {
     if (err || !orders) {
       return callback({err: error.system.db_error});
     }
@@ -114,6 +114,50 @@ exports.getSalesByArea = function (user, callback) {
     }
     return callback(null, areaSalse);
   })
+};
+
+exports.historySalesStockOnwayImport = function (user, sales, callback) {
+  async.each(sales, function (sale, eachCallback) {
+    if (!sale.department || !sale.product_number || !sale.month) {
+      return eachCallback();
+    }
+
+    AreaSales.findOne({
+      product_number: sale.product_number,
+      month: sale.month,
+      department: sale.department
+    }, function (err, areaSale) {
+      if (err) {
+        return eachCallback();
+      }
+
+      if (!areaSale) {
+        areaSale = new AreaSales({});
+      }
+
+      areaSale.department = sale.department;
+      areaSale.month = sale.month;
+      areaSale.product_number = sale.product_number;
+      if (sale.last_month_sales_count) {
+        areaSale.last_month_sales_count = sale.last_month_sales_count;
+      }
+
+      if (sale.last_month_onway_count) {
+        areaSale.last_month_onway_count = sale.last_month_onway_count;
+      }
+
+      if (sale.last_month_stock_count) {
+        areaSale.last_month_stock_count = sale.last_month_stock_count;
+      }
+
+      sale.save(function () {
+        return eachCallback();
+      });
+
+    });
+  }, function (err, result) {
+    return callback(err, {})
+  });
 };
 
 

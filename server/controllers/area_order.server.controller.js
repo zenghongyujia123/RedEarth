@@ -40,5 +40,14 @@ exports.getSalesByArea = function (req, res, next) {
   });
 };
 
+exports.historySalesStockOnwayImport = function (req, res, next) {
+  areaOrderService.historySalesStockOnwayImport  (req.user, req.body.sales, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};
+
 
 

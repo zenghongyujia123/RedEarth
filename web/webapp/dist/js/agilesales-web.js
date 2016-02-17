@@ -135,10 +135,10 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'templates/suggest_hq_display.client.view.html',
         controller: "SuggestHqDisplayCtrl"
       })
-      .state('order_suggest.suggest_hq_wholesaler', {
-        url: '/suggest_hq_wholesaler',
-        templateUrl: 'templates/suggest_hq_wholesaler.client.view.html',
-        controller: "SuggestHqWholeSalerCtrl"
+      .state('order_suggest.suggest_hq_other_order', {
+        url: '/suggest_hq_other_order',
+        templateUrl: 'templates/suggest_hq_other_order.client.view.html',
+        controller: "SuggestHqOtherOrderCtrl"
       });
 
     $urlRouterProvider.otherwise('/');
@@ -309,6 +309,50 @@ angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',func
 /**
  * Created by zenghong on 16/1/18.
  */
+angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
+  return {
+    restrict: 'AE',
+    templateUrl: 'directives/dialog_input/dialog_input.client.view.html',
+    replace: true,
+    scope: {},
+    link: function ($scope, $element, $attrs) {
+      $scope.info = {
+        title: '',
+        contents: [{
+          key: '请输入拜访卡名称',
+          tip: '点击输入名称',
+          value: ''
+        }],
+        color: 'blue'
+      };
+
+      $scope.show = function () {
+        $element.addClass('show');
+      };
+      $scope.hide = function () {
+        $element.removeClass('show');
+      };
+      $scope.submit = function () {
+        $element.removeClass('show');
+        if ($scope.info.callback) {
+          $scope.info.callback($scope.info);
+        }
+      };
+      $rootScope.$on('show.dialogInput', function (event, data) {
+        setTheme(data);
+        $scope.show();
+      });
+
+      function setTheme(info) {
+        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
+        $scope.info = info;
+      }
+    }
+  }
+}]);
+/**
+ * Created by zenghong on 16/1/18.
+ */
 angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', function ($rootScope) {
   return {
     restrict: 'AE',
@@ -423,50 +467,6 @@ angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'Exc
           });
         });
       };
-
-      function setTheme(info) {
-        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
-        $scope.info = info;
-      }
-    }
-  }
-}]);
-/**
- * Created by zenghong on 16/1/18.
- */
-angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
-  return {
-    restrict: 'AE',
-    templateUrl: 'directives/dialog_input/dialog_input.client.view.html',
-    replace: true,
-    scope: {},
-    link: function ($scope, $element, $attrs) {
-      $scope.info = {
-        title: '',
-        contents: [{
-          key: '请输入拜访卡名称',
-          tip: '点击输入名称',
-          value: ''
-        }],
-        color: 'blue'
-      };
-
-      $scope.show = function () {
-        $element.addClass('show');
-      };
-      $scope.hide = function () {
-        $element.removeClass('show');
-      };
-      $scope.submit = function () {
-        $element.removeClass('show');
-        if ($scope.info.callback) {
-          $scope.info.callback($scope.info);
-        }
-      };
-      $rootScope.$on('show.dialogInput', function (event, data) {
-        setTheme(data);
-        $scope.show();
-      });
 
       function setTheme(info) {
         $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
@@ -1084,6 +1084,19 @@ angular.module('agilesales-web').controller('SuggestHqMaoziCtrl',['$scope', '$ro
 /**
  * Created by zenghong on 16/1/15.
  */
+angular.module('agilesales-web').controller('SuggestHqOtherOrderCtrl', ['$scope', '$rootScope', function ($scope, rootScope) {
+  $scope.$emit('suggest.import.changed',{
+    title:'建议订单',
+    btns:[
+      {
+        text:'导入批发商订单'
+      }
+    ]
+  });
+}]);
+/**
+ * Created by zenghong on 16/1/15.
+ */
 angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl',['$scope', '$rootScope', function ($scope, rootScope) {
   $scope.$emit('suggest.import.changed',{
     title:'建议订单',
@@ -1093,19 +1106,6 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl',['$scop
       }
     ]
   })
-}]);
-/**
- * Created by zenghong on 16/1/15.
- */
-angular.module('agilesales-web').controller('SuggestHqWholeSalerCtrl', ['$scope', '$rootScope', function ($scope, rootScope) {
-  $scope.$emit('suggest.import.changed',{
-    title:'建议订单',
-    btns:[
-      {
-        text:'导入批发商订单'
-      }
-    ]
-  });
 }]);
 /**
  * Created by zenghong on 16/1/15.

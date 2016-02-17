@@ -135,10 +135,10 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'templates/suggest_hq_display.client.view.html',
         controller: "SuggestHqDisplayCtrl"
       })
-      .state('order_suggest.suggest_hq_wholesaler', {
-        url: '/suggest_hq_wholesaler',
-        templateUrl: 'templates/suggest_hq_wholesaler.client.view.html',
-        controller: "SuggestHqWholeSalerCtrl"
+      .state('order_suggest.suggest_hq_other_order', {
+        url: '/suggest_hq_other_order',
+        templateUrl: 'templates/suggest_hq_other_order.client.view.html',
+        controller: "SuggestHqOtherOrderCtrl"
       });
 
     $urlRouterProvider.otherwise('/');

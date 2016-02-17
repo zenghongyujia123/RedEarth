@@ -130,11 +130,6 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'templates/suggest_hq_suggest_result.client.view.html',
         controller: "SuggestHqSuggestResultCtrl"
       })
-      .state('order_suggest.suggest_hq_display', {
-        url: '/suggest_hq_display',
-        templateUrl: 'templates/suggest_hq_display.client.view.html',
-        controller: "SuggestHqDisplayCtrl"
-      })
       .state('order_suggest.suggest_hq_other_order', {
         url: '/suggest_hq_other_order',
         templateUrl: 'templates/suggest_hq_other_order.client.view.html',

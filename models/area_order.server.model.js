@@ -57,21 +57,6 @@ module.exports = function (appDb) {
       type: Number,
       default: 0
     },
-    //上月销量
-    last_month_sales_count: {
-      type: Number,
-      default: 0
-    },
-    //上月月结库存
-    last_month_stock_count: {
-      type: Number,
-      default: 0
-    },
-    //上月月结在途量
-    last_month_onway_count: {
-      type: Number,
-      default: 0
-    },
     area: {
       type: String
     },

@@ -31,5 +31,14 @@ exports.getOrdersByArea = function (req, res, next) {
   });
 };
 
+exports.getSalesByArea = function (req, res, next) {
+  areaOrderService.getSalesByArea (req.user, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};
+
 
 

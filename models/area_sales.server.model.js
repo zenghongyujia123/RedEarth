@@ -16,8 +16,8 @@ module.exports = function (appDb) {
     area: {
       type: String
     },
-    department:{
-      type:String
+    department: {
+      type: String
     },
     month: {
       type: String
@@ -40,6 +40,9 @@ module.exports = function (appDb) {
     last_month_onway_count: {
       type: Number,
       default: 0
+    },
+    username: {
+      type: String
     }
   });
 

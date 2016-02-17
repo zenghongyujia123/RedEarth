@@ -26,7 +26,9 @@ exports.areaSalesStockOnwayImport = function (user, sales, callback) {
       }
 
       if (!areaSales) {
-        areaSales = new AreaSales({});
+        areaSales = new AreaSales({
+          username: user.username
+        });
       }
 
       areaSales.product_number = sale.product_number;
@@ -116,7 +118,7 @@ exports.getSalesByArea = function (user, callback) {
   })
 };
 
-exports.historySalesStockOnwayImport = function (user, sales, callback) {
+exports.historyAreaSalesStockOnwayImport = function (user, sales, callback) {
   async.each(sales, function (sale, eachCallback) {
     if (!sale.department || !sale.product_number || !sale.month) {
       return eachCallback();
@@ -132,7 +134,9 @@ exports.historySalesStockOnwayImport = function (user, sales, callback) {
       }
 
       if (!areaSale) {
-        areaSale = new AreaSales({});
+        areaSale = new AreaSales({
+          username: user.username
+        });
       }
 
       areaSale.department = sale.department;
@@ -157,6 +161,21 @@ exports.historySalesStockOnwayImport = function (user, sales, callback) {
     });
   }, function (err, result) {
     return callback(err, {})
+  });
+};
+
+exports.getHistoryAreaSalesStockOnway = function (user, callback) {
+  var condition = {};
+  if (user.account_type === '地区分公司') {
+    condition.department = user.department;
+  }
+
+  AreaSales.find(condition, function (err, areaSales) {
+    if (err || !areaSales) {
+      return callback({err: error.system.db_error});
+    }
+
+    return callback(null, areaSales);
   });
 };
 

@@ -49,15 +49,17 @@ module.exports = function (appDb) {
     //订单类别(D01:正品,D02:批发，D03:试用装，D04:陈列)
     order_type: {
       type: String,
-      default: 'DO1',
-      enum: ['DO1', 'DO2', 'DO3', 'DO4']
+      default: 'DO1'
     },
     //总销售价格
     total_price: {
       type: Number,
       default: 0
     },
-    area: {
+    department: {
+      type: String
+    },
+    month: {
       type: String
     },
     //是否审批

@@ -57,10 +57,12 @@ function getLastMonth() {
 
 exports.otherOrderImport = function (user, orders, callback) {
   var order_number = getOrderNumber(user.username);
-  orders.each(orders, function (order, eachCallback) {
+  var month = getLastMonth();
+  async.each(orders, function (order, eachCallback) {
     AreaOrder.findOne({
       order_number: order_number + order.order_type,
-      product_number: order.product_number
+      product_number: order.product_number,
+      month:month,
     }, function (err, areaOrder) {
       if (err) {
         return eachCallback();
@@ -78,25 +80,25 @@ exports.otherOrderImport = function (user, orders, callback) {
       areaOrder.product_barcode = order.product_name;
       areaOrder.category = order.category;
       areaOrder.mid_classify = order.mid_classify;
-      areaOrder.sales_price = order.sales_price;
+      areaOrder.sales_price = parseFloat(order.sales_price);
       areaOrder.order_number = order_number + order.order_type;
-      areaOrder.order_count = order.order_count;
+      areaOrder.order_count = parseInt(order.order_count);
       areaOrder.order_type = order.order_type;
-      areaOrder.total_price = order.total_price;
-      areaOrder.is_approval = is_approval;
-      areaOrder.area = user.area;
-      areaOrder.save(function () {
+      areaOrder.total_price = parseFloat(order.total_price);
+      areaOrder.department = user.department;
+      areaOrder.month = month;
+      areaOrder.save(function (err) {
         return eachCallback();
       });
-    }, function (err, result) {
-      return callback(err, result);
     });
+  }, function (err, result) {
+    return callback(err, result);
   });
 };
 
 exports.getOrdersByArea = function (user, callback) {
-  var order_number = getOrderNumber(user.username);
-  AreaOrder.find({order_number: order_number + user.area}, function (err, orders) {
+  var month = getLastMonth();
+  AreaOrder.find({department:user.department,month:month}, function (err, orders) {
     if (err || !orders) {
       return callback({err: error.system.db_error});
     }

@@ -37,14 +37,14 @@ module.exports = function (appDb) {
     sales_price: {
       type: Number
     },
-    //订单号码
+    //订单号码,年月+用户编号+订单类别
     order_number: {
       type: String
     },
     //订单数量
     order_count: {
       type: Number,
-      default:0
+      default: 0
     },
     //订单类别(D01:正品,D02:批发，D03:试用装，D04:陈列)
     order_type: {
@@ -55,26 +55,30 @@ module.exports = function (appDb) {
     //总销售价格
     total_price: {
       type: Number,
-      default:0
+      default: 0
     },
     //上月销量
     last_month_sales_count: {
       type: Number,
-      default:0
+      default: 0
     },
     //上月月结库存
     last_month_stock_count: {
       type: Number,
-      default:0
+      default: 0
     },
     //上月月结在途量
     last_month_onway_count: {
       type: Number,
-      default:0
+      default: 0
+    },
+    area: {
+      type: String
     },
     //是否审批
     is_approval: {
-      type: Boolean
+      type: Boolean,
+      default: false
     }
   });
 

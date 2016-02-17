@@ -264,46 +264,6 @@ angular.module('agilesales-web').directive('agHoverShake', [function () {
 /**
  * Created by zenghong on 16/1/18.
  */
-angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',function ($rootScope) {
-  return {
-    restrict: 'AE',
-    templateUrl: 'directives/dialog_confirm/dialog_confirm.client.view.html',
-    replace: true,
-    scope: {},
-    link: function ($scope, $element, $attrs) {
-      $scope.info = {
-        title: '',
-        content:'',
-        color: 'blue'
-      };
-
-      $scope.show = function () {
-        $element.addClass('show');
-      };
-      $scope.hide = function () {
-        $element.removeClass('show');
-      };
-      $scope.submit = function () {
-        $element.removeClass('show');
-        if ($scope.info.callback) {
-          $scope.info.callback($scope.info);
-        }
-      };
-      $rootScope.$on('show.dialogConfirm', function (event, data) {
-        setTheme(data);
-        $scope.show();
-      });
-
-      function setTheme(info) {
-        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
-        $scope.info = info;
-      }
-    }
-  }
-}]);
-/**
- * Created by zenghong on 16/1/18.
- */
 angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
   return {
     restrict: 'AE',
@@ -409,6 +369,46 @@ angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', func
 /**
  * Created by zenghong on 16/1/18.
  */
+angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',function ($rootScope) {
+  return {
+    restrict: 'AE',
+    templateUrl: 'directives/dialog_confirm/dialog_confirm.client.view.html',
+    replace: true,
+    scope: {},
+    link: function ($scope, $element, $attrs) {
+      $scope.info = {
+        title: '',
+        content:'',
+        color: 'blue'
+      };
+
+      $scope.show = function () {
+        $element.addClass('show');
+      };
+      $scope.hide = function () {
+        $element.removeClass('show');
+      };
+      $scope.submit = function () {
+        $element.removeClass('show');
+        if ($scope.info.callback) {
+          $scope.info.callback($scope.info);
+        }
+      };
+      $rootScope.$on('show.dialogConfirm', function (event, data) {
+        setTheme(data);
+        $scope.show();
+      });
+
+      function setTheme(info) {
+        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
+        $scope.info = info;
+      }
+    }
+  }
+}]);
+/**
+ * Created by zenghong on 16/1/18.
+ */
 angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'ExcelReaderService', function ($rootScope, ExcelReaderService) {
   return {
     restrict: 'AE',
@@ -493,6 +493,22 @@ angular.module('agilesales-web').factory('PublicInterceptor', ['AuthService', fu
 }]);
 
 
+/**
+ * Created by zenghong on 16/1/21.
+ */
+angular.module('agilesales-web').factory('AreaOrderService', ['HttpService', function (HttpService) {
+  return {
+    otherOrderImport: function (orders) {
+      return HttpService.post('/webapp/area/order/import', {orders: orders});
+    },
+    areaSalesStockOnwayImport: function (sales) {
+      return HttpService.post('/webapp/area/sales/import', {sales: sales});
+    },
+    getOrdersByArea: function () {
+      return HttpService.get('/webapp/area/order', {});
+    }
+  };
+}]);
 /**
  * Created by zenghong on 16/1/21.
  */
@@ -1024,7 +1040,10 @@ angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope', '$
       var btns = [];
       if ($scope.user.show_name === '总部经销商部') {
         btns.push({
-          text: '导入经销商订单'
+          text: '导入经销商订单',
+          clickCallback: function () {
+
+          }
         });
       }
       $scope.$emit('suggest.import.changed', {
@@ -1032,6 +1051,138 @@ angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope', '$
         btns: btns
       });
     }
+
+    function executeCallback() {
+      var headers = [
+        {key: 'A1', value: '人员编号'},
+        {key: 'B1', value: '工号'},
+        {key: 'C1', value: '姓名'},
+        {key: 'D1', value: '岗位'},
+        {key: 'E1', value: '职务'},
+        {key: 'F1', value: '电话号码'},
+        {key: 'G1', value: '邮箱'},
+        {key: 'H1', value: '性别'},
+        {key: 'I1', value: '上级领导编号'},
+        {key: 'J1', value: '上级领导姓名'},
+        {key: 'K1', value: '常驻城市'},
+        {key: 'L1', value: '辖区'},
+        {key: 'M1', value: '帐号开通日期'},
+        {key: 'N1', value: '在职状态'},
+        {key: 'O1', value: '人员类型'}
+      ];
+      function upload(peoples, i) {
+        PeopleService.uploadMultiPeoples(peoples[i++])
+          .then(function (data) {
+            console.log(data);
+            if (peoples[i]) {
+              upload(peoples, i);
+            }
+          }, function (err) {
+            console.log(err);
+          });
+      }
+
+      $scope.uploadMultiPeoples = function (peoples) {
+        var i = 0;
+        upload(peoples, i);
+        //AreaService.uploadMultiCutomers(customers).then(function (data) {
+        //  console.log(data);
+        //}, function (data) {
+        //  console.log(data);
+        //});
+      };
+
+      $rootScope.$broadcast('show.dialogUpload', {
+        title: '上传人员',
+        contents: [{
+          key: '请选择需要上传的人员文件',
+          value: '点击选择文件',
+          tip: '点击选择文件'
+        }],
+        color: 'blue',
+        headers: headers,
+        callback: function (data) {
+          var obj = {};
+          var arr = [];
+          data.forEach(function (item) {
+            if (!obj[item['电话号码']]) {
+              obj[item['电话号码']] = {};
+              $scope.headers.forEach(function (header) {
+                obj[item['电话号码']][header] = item[header];
+              });
+            }
+          });
+
+          var result = [];
+
+          for (var p in obj) {
+            var item = {};
+            for (var i in obj[p]) {
+              switch (i) {
+                case '人员编号':
+                  item.number = obj[p][i];
+                  break;
+                case '工号':
+                  item.job_number = obj[p][i];
+                  break;
+                case '姓名':
+                  item.name = obj[p][i];
+                  break;
+                case '岗位':
+                  item.job = obj[p][i];
+                  break;
+                case '职务':
+                  item.duty = obj[p][i];
+                  break;
+                case '电话号码':
+                  item.telephone = obj[p][i];
+                  break;
+                case '邮箱':
+                  item.email = obj[p][i];
+                  break;
+                case '性别':
+                  item.sex = obj[p][i];
+                  break;
+                case '上级领导工号':
+                  item.parent_number = obj[p][i];
+                  break;
+                case '上级领导姓名':
+                  item.parent_name = obj[p][i];
+                  break;
+                case '常驻城市':
+                  item.city = obj[p][i];
+                  break;
+                case '辖区':
+                  item.area = obj[p][i];
+                  break;
+                case '帐号开通日期':
+                  item.create_date = obj[p][i];
+                  break;
+                case '在职状态':
+                  item.job_status = obj[p][i];
+                  break;
+                case '人员类型':
+                  item.role = obj[p][i];
+                  break;
+              }
+
+            }
+            result.push(item);
+          }
+          var peoples = [];
+          for (var i = 0, len = result.length; i < len; i += 100) {
+            peoples.push(result.slice(i, i + 100));
+          }
+
+          console.log(obj);
+          console.log(result);
+          console.log(peoples);
+          $scope.uploadMultiPeoples(peoples);
+        }
+      });
+    }
+
+
   }]);
 /**
  * Created by zenghong on 16/1/15.

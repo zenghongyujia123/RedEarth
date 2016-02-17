@@ -47,7 +47,7 @@ function getOrderNumber(username) {
 function getLastMonth() {
   var cur = new Date();
   cur = cur.setMonth(cur.getMonth() - 1);
-  cur = moment.format('YYYYMM');
+  cur = moment(cur).format('YYYYMM');
   return cur;
 }
 

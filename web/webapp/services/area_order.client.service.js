@@ -11,6 +11,9 @@ angular.module('agilesales-web').factory('AreaOrderService', ['HttpService', fun
     },
     getOrdersByArea: function () {
       return HttpService.get('/webapp/area/order', {});
+    },
+    getSalesByArea: function () {
+      return HttpService.get('/webapp/area/sales', {});
     }
   };
 }]);

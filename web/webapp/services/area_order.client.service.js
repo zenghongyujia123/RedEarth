@@ -14,6 +14,9 @@ angular.module('agilesales-web').factory('AreaOrderService', ['HttpService', fun
     },
     getSalesByArea: function () {
       return HttpService.get('/webapp/area/sales', {});
+    },
+    getHistorySales:function(){
+      return HttpService.get('/webapp/area/sales/history', {});
     }
   };
 }]);

@@ -509,6 +509,9 @@ angular.module('agilesales-web').factory('AreaOrderService', ['HttpService', fun
     },
     getSalesByArea: function () {
       return HttpService.get('/webapp/area/sales', {});
+    },
+    getHistorySales:function(){
+      return HttpService.get('/webapp/area/sales/history', {});
     }
   };
 }]);
@@ -840,9 +843,22 @@ angular.module('agilesales-web').controller('DashboardQueryCtrl', function () {
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HistoryDeskCtrl', function () {
+angular.module('agilesales-web').controller('HistoryDeskCtrl', ['$scope', function ($scope) {
+  $scope.$emit('suggest.import.changed', {
+    title: '历史数据',
+    btns: [
+      {
+        text: '导入柜台资料',
+        clickCallback: importClickCallback
+      }
+    ]
+  });
 
-});
+  function importClickCallback() {
+  }
+
+
+}]);
 /**
  * Created by zenghong on 16/1/15.
  */
@@ -852,21 +868,86 @@ angular.module('agilesales-web').controller('HistoryHomeCtrl', function () {
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HistoryProductCtrl', function () {
+angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', function ($scope) {
+  $scope.$emit('suggest.import.changed', {
+    title: '历史数据',
+    btns: [
+      {
+        text: '导入产品资料',
+        clickCallback: importClickCallback
+      }
+    ]
+  });
 
-});
+  function importClickCallback() {
+  }
+
+
+}]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HistorySalesCtrl', function () {
+angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', 'AreaOrderService',
+  function ($scope, AreaOrderService) {
+    $scope.$emit('suggest.import.changed', {
+      title: '历史数据',
+      btns: [
+        {
+          text: '导入历史销售',
+          clickCallback: importClickCallback
+        }
+      ]
+    });
 
-});
+    function importClickCallback(){}
+
+    $scope.sales = [];
+
+    $scope.getHistorySales = function () {
+      AreaOrderService.getHistorySales().then(function (data) {
+        console.log(data);
+        if (data && !data.err) {
+          $scope.sales = data;
+        }
+      }, function (data) {
+        console.log(data);
+      });
+    };
+    $scope.getHistorySales();
+
+  }]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HistoryStockCtrl', function () {
+angular.module('agilesales-web').controller('HistoryStockCtrl', ['$scope', 'AreaOrderService',
+  function ($scope, AreaOrderService) {
+    $scope.$emit('suggest.import.changed', {
+      title: '历史数据',
+      btns: [
+        {
+          text: '导入历史库存',
+          clickCallback: importClickCallback
+        }
+      ]
+    });
 
-});
+    function importClickCallback(){}
+
+
+    $scope.sales = [];
+
+    $scope.getHistorySales = function () {
+      AreaOrderService.getHistorySales().then(function (data) {
+        console.log(data);
+        if (data && !data.err) {
+          $scope.sales = data;
+        }
+      }, function (data) {
+        console.log(data);
+      });
+    };
+    $scope.getHistorySales();
+  }]);
 /**
  * Created by zenghong on 16/1/15.
  */
@@ -925,9 +1006,14 @@ angular.module('agilesales-web').controller('OrderDetailCtrl', function () {
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderHistoryCtrl', function () {
-
-});
+angular.module('agilesales-web').controller('OrderHistoryCtrl', ['$scope', function ($scope) {
+  $scope.importBtns = [];
+  $scope.location = window.location;
+  $scope.$on('suggest.import.changed', function (event,data) {
+    $scope.importBtns = data.btns;
+    $scope.title = data.title;
+  });
+}]);
 /**
  * Created by zenghong on 16/1/15.
  */
@@ -1118,8 +1204,8 @@ angular.module('agilesales-web').controller('SuggestAreaOtherOrderCtrl', ['$scop
         });
     }
 
-    function getContentKey(orderType) {
-      switch (orderType) {
+    function getContentKey(type) {
+      switch (type) {
         case  'D02':
           return '批发订单';
         case  'D03':

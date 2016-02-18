@@ -102,7 +102,7 @@ module.exports = function (appDb) {
       type: String
     },
     //ABC类说明
-    classify_explain: {
+    abc_classify_explain: {
       type: String
     },
     //ABC类别%
@@ -110,15 +110,15 @@ module.exports = function (appDb) {
       type: String
     },
     //柜台销售参考(月)
-    cash_desk_sales_reference: {
-      type: String
-    },
-    //柜台安全库存(月)
-    cash_desk_safe_stock: {
+    desk_sales_reference: {
       type: String
     },
     //柜台最少订量(月)
-    cash_desk_minimum_order_count: {
+    desk_minimum_order_count: {
+      type: String
+    },
+    //柜台安全库存(月)
+    desk_safe_stock: {
       type: String
     },
     //地区销售参考(月)
@@ -174,11 +174,11 @@ module.exports = function (appDb) {
       type: String
     },
     //柜台促销活动月份
-    cash_desk_promotion_month: {
+    desk_promotion_month: {
       type: String
     },
     //柜台促销活动比率
-    cash_desk_promotion_rate: {
+    desk_promotion_rate: {
       type: String
     },
     //字段1

@@ -67,5 +67,14 @@ exports.getAreaSuggestOrder = function (req, res, next) {
   });
 };
 
+exports.suggestOrderSubmit = function (req, res, next) {
+  areaOrderService.suggestOrderSubmit (req.user, req.body.sales, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};
+
 
 

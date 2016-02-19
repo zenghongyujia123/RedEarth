@@ -256,8 +256,26 @@ exports.getAreaSuggestOrder = function (user, callback) {
   });
 };
 
-exports.suggestOrderSubmit = function (err, callback) {
+exports.suggestOrderSubmit = function (user, sales, callback) {
+  async.each(sales, function (sale, eachCallback) {
+    if (sale.status === '已审核') {
+      return eachCallback();
+    }
+    AreaSales.findOne({_id: sale._id}, function (err, areaSales) {
+      if (err || !AreaSales) {
+        return eachCallback();
+      }
 
+      areaSales.system_suggest_count = sale.system_suggest_count;
+      areaSales.system_suggest_count_modify = sale.system_suggest_count_modify;
+      areaSales.system_suggest_count_modify_percent = sale.system_suggest_count_modify_percent;
+      areaSales.save(function () {
+        return eachCallback();
+      });
+    });
+  }, function (err, result) {
+    return callback(err, {});
+  });
 };
 
 

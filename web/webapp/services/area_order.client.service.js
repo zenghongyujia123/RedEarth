@@ -23,6 +23,9 @@ angular.module('agilesales-web').factory('AreaOrderService', ['HttpService', fun
     },
     getAreaSuggestOrder: function () {
       return HttpService.get('/webapp/area/order/suggest', {});
+    },
+    suggestOrderSubmit: function (sales) {
+      return HttpService.post('/webapp/area/sales/submit', {sales: sales});
     }
   };
 }]);

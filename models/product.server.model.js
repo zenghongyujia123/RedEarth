@@ -15,7 +15,8 @@ module.exports = function (appDb) {
     },
     //产品编码
     product_number: {
-      type: String
+      type: String,
+      unique: true
     },
     //产品条码
     product_barcode: {

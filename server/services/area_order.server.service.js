@@ -10,56 +10,87 @@ var appDb = require('./../../libraries/mongoose').appDb,
   User = appDb.model('User'),
   moment = require('moment'),
   AreaOrder = appDb.model('AreaOrder'),
+  Product = appDb.model('Product'),
   AreaSales = appDb.model('AreaSales');
 
 exports.areaSalesStockOnwayImport = function (user, sales, callback) {
-  var month = getLastMonth();
+  var month = getLastMonth(1);
 
   async.each(sales, function (sale, eachCallback) {
-    AreaSales.findOne({
-      month: month,
-      department: user.department,
-      product_number: sale.product_number
-    }, function (err, areaSales) {
-      if (err) {
+    Product.findOne({product_number: sale.product_number}, function (err, product) {
+      if (err || !product)
         return eachCallback();
-      }
 
-      if (!areaSales) {
-        areaSales = new AreaSales({
-          username: user.username
+      AreaSales.findOne({
+        month: month,
+        department: user.department,
+        product_number: sale.product_number
+      }, function (err, areaSales) {
+        if (err) {
+          return eachCallback();
+        }
+
+        if (!areaSales) {
+          areaSales = new AreaSales({
+            username: user.username
+          });
+        }
+
+        areaSales.product_number = sale.product_number;
+        areaSales.last_month_sales_count = isNaN(parseInt(sale.last_month_sales_count)) ? 0 : parseInt(sale.last_month_sales_count);
+        areaSales.last_month_stock_count = isNaN(parseInt(sale.last_month_stock_count)) ? 0 : parseInt(sale.last_month_stock_count);
+        areaSales.last_month_onway_count = isNaN(parseInt(sale.last_month_onway_count)) ? 0 : parseInt(sale.last_month_onway_count);
+        areaSales.last_month_sales_count_1 = isNaN(parseInt(sale.last_month_onway_count)) ? 0 : parseInt(sale.last_month_onway_count);
+        areaSales.product = product;
+        areaSales.month = month;
+        areaSales.department = user.department;
+
+        AreaSales.findOne({
+          month: getLastMonth(2),
+          product_number: sale.product_number,
+          department: user.department
+        }, function (err, areaSales2) {
+          areaSales.last_month_sales_count_2 = 0;
+          if (areaSales2) {
+            areaSales.last_month_sales_count_2 = areaSales2.last_month_sales_count;
+          }
+          AreaSales.findOne({
+            month: getLastMonth(3),
+            product_number: sale.product_number,
+            department: user.department
+          }, function (err, areaSales3) {
+            areaSales.last_month_sales_count_3 = 0;
+            if (areaSales3) {
+              areaSales.last_month_sales_count_3 = areaSales3.last_month_sales_count;
+            }
+            areaSales.save(function (err) {
+              return eachCallback();
+            });
+          });
         });
-      }
-
-      areaSales.product_number = sale.product_number;
-      areaSales.last_month_sales_count = isNaN(parseInt(sale.last_month_sales_count)) ? 0 : parseInt(sale.last_month_sales_count);
-      areaSales.last_month_stock_count = isNaN(parseInt(sale.last_month_stock_count)) ? 0 : parseInt(sale.last_month_stock_count);
-      areaSales.last_month_onway_count = isNaN(parseInt(sale.last_month_onway_count)) ? 0 : parseInt(sale.last_month_onway_count);
-      areaSales.month = month;
-      areaSales.department = user.department;
-      areaSales.save(function () {
-        return eachCallback();
       });
     });
+
+
   }, function (err, result) {
     return callback(err, result);
   });
 };
 
 function getOrderNumber(username) {
-  return getLastMonth() + username;
+  return getLastMonth(1) + username;
 }
 
-function getLastMonth() {
+function getLastMonth(index) {
   var cur = new Date();
-  cur = cur.setMonth(cur.getMonth() - 1);
+  cur = cur.setMonth(cur.getMonth() - index);
   cur = moment(cur).format('YYYYMM');
   return cur;
 }
 
 exports.otherOrderImport = function (user, orders, callback) {
   var order_number = getOrderNumber(user.username);
-  var month = getLastMonth();
+  var month = getLastMonth(1);
   async.each(orders, function (order, eachCallback) {
     AreaOrder.findOne({
       order_number: order_number + order.order_type,
@@ -99,7 +130,7 @@ exports.otherOrderImport = function (user, orders, callback) {
 };
 
 exports.getOrdersByArea = function (user, callback) {
-  var month = getLastMonth();
+  var month = getLastMonth(1);
   AreaOrder.find({department: user.department, month: month}, function (err, orders) {
     if (err || !orders) {
       return callback({err: error.system.db_error});
@@ -109,7 +140,7 @@ exports.getOrdersByArea = function (user, callback) {
 };
 
 exports.getSalesByArea = function (user, callback) {
-  var month = getLastMonth();
+  var month = getLastMonth(1);
   AreaSales.find({department: user.department, month: month}, function (err, areaSalse) {
     if (err || !areaSalse) {
       return callback({err: error.system.db_error});
@@ -171,6 +202,17 @@ exports.getHistoryAreaSalesStockOnway = function (user, callback) {
   }
 
   AreaSales.find(condition, function (err, areaSales) {
+    if (err || !areaSales) {
+      return callback({err: error.system.db_error});
+    }
+
+    return callback(null, areaSales);
+  });
+};
+
+exports.getAreaSuggestOrder = function (user, callback) {
+  var month = getLastMonth(1);
+  AreaSales.find({department: user.department, month: month}).populate('product').exec(function (err, areaSales) {
     if (err || !areaSales) {
       return callback({err: error.system.db_error});
     }

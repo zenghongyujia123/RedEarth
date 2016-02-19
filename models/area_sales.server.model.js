@@ -19,12 +19,17 @@ module.exports = function (appDb) {
     department: {
       type: String
     },
+    //上月月份
     month: {
       type: String
     },
     //产品编码
     product_number: {
       type: String
+    },
+    product: {
+      type: Schema.Types.ObjectId,
+      ref: 'Product'
     },
     //上月销量
     last_month_sales_count: {
@@ -43,6 +48,36 @@ module.exports = function (appDb) {
     },
     username: {
       type: String
+    },
+    next_month_sales_forecast_0: {
+      type: Number
+    },
+    next_month_sales_forecast_1: {
+      type: Number
+    },
+    next_month_sales_forecast_2: {
+      type: Number
+    },
+    next_month_sales_forecast_3: {
+      type: Number
+    },
+    next_month_sales_forecast_4: {
+      type: Number
+    },
+    next_month_sales_forecast_5: {
+      type: Number
+    },
+    next_month_sales_forecast_6: {
+      type: Number
+    },
+    last_month_sales_count_1: {
+      type: Number
+    },
+    last_month_sales_count_2: {
+      type: Number
+    },
+    last_month_sales_count_3: {
+      type: Number
     }
   });
 
@@ -50,6 +85,5 @@ module.exports = function (appDb) {
     createdAt: 'created',
     updatedAt: 'updated'
   });
-
   appDb.model('AreaSales', AreaSalesSchema);
 };

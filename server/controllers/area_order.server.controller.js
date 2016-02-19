@@ -58,5 +58,14 @@ exports.getHistoryAreaSalesStockOnway = function (req, res, next) {
   });
 };
 
+exports.getAreaSuggestOrder = function (req, res, next) {
+  areaOrderService.getAreaSuggestOrder (req.user, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};
+
 
 

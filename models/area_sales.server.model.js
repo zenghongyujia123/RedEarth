@@ -49,6 +49,12 @@ module.exports = function (appDb) {
     username: {
       type: String
     },
+    //安全库存
+    safe_stock: {
+      type: Number,
+      default: 0
+    },
+    //
     next_month_sales_forecast_0: {
       type: Number,
       default: 0
@@ -98,7 +104,7 @@ module.exports = function (appDb) {
   });
 
   AreaSalesSchema.pre('save', function (next) {
-    if (this.last_month_sales_count_3!==0 || this.last_month_sales_count_2!==0|| this.last_month_sales_count_1!==0) {
+    if (this.last_month_sales_count_3 !== 0 || this.last_month_sales_count_2 !== 0 || this.last_month_sales_count_1 !== 0) {
       this.next_month_sales_forecast_0 = parseInt((this.last_month_sales_count_3 + this.last_month_sales_count_2 + this.last_month_sales_count_1) / 3);
       this.next_month_sales_forecast_1 = parseInt((this.last_month_sales_count_2 + this.last_month_sales_count_1 + this.next_month_sales_forecast_0 ) / 3);
       this.next_month_sales_forecast_2 = parseInt((this.last_month_sales_count_1 + this.next_month_sales_forecast_0 + this.next_month_sales_forecast_1 ) / 3);
@@ -107,7 +113,10 @@ module.exports = function (appDb) {
       this.next_month_sales_forecast_5 = parseInt((this.next_month_sales_forecast_2 + this.next_month_sales_forecast_3 + this.next_month_sales_forecast_4 ) / 3);
       this.next_month_sales_forecast_6 = parseInt((this.next_month_sales_forecast_3 + this.next_month_sales_forecast_4 + this.next_month_sales_forecast_5 ) / 3);
     }
-    console.log(this.next_month_sales_forecast_6);
+
+    if (this.last_month_stock_count_1 !== 0 || this.last_month_stock_count_2 !== 0 || this.last_month_stock_count_3 !== 0) {
+      this.safe_stock = parseInt(( this.last_month_stock_count_1 + this.last_month_stock_count_2 + this.last_month_stock_count_3) / 3) * 2
+    }
     next();
   });
 

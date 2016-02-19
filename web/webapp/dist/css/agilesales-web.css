@@ -420,7 +420,10 @@ body {
 .re-table .re-table-header .header-col {
   line-height: 60px;
   float: left;
+  overflow: hidden;
   width: 200px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .re-table .re-table-body {
   position: absolute;
@@ -432,6 +435,7 @@ body {
 .re-table .re-table-body .body-col {
   line-height: 40px;
   float: left;
+  height: 40px;
   width: 200px;
 }
 .re-table .re-table-row {
@@ -455,6 +459,7 @@ body {
 .re-suggest-right-select-panel .row .select-item {
   color: #333;
   line-height: 40px;
+  height: 40px;
   border: 1px solid #333;
   text-align: center;
   cursor: pointer;

@@ -126,7 +126,7 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
       }
     },
     checkHeader: function (workbook, headers,sheetName, callback) {
-      var excelSheet = workbook.Sheets[0];
+      var excelSheet = workbook.Sheets[sheetName];
       if (!excelSheet) {
         return callback(false);
       }

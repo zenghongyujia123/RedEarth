@@ -1,7 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaOtherOrderCtrl', ['$scope', '$rootScope', 'AreaOrderService', function ($scope, $rootScope, AreaOrderService) {
+angular.module('agilesales-web').controller('SuggestAreaOtherOrderCtrl', ['$scope', '$rootScope', 'AreaOrderService',
+  function ($scope, $rootScope, AreaOrderService) {
   $scope.$emit('suggest.import.changed', {
     title: '建议订单',
     btns: [

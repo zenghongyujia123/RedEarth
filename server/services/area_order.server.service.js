@@ -40,7 +40,8 @@ exports.areaSalesStockOnwayImport = function (user, sales, callback) {
         areaSales.last_month_sales_count = isNaN(parseInt(sale.last_month_sales_count)) ? 0 : parseInt(sale.last_month_sales_count);
         areaSales.last_month_stock_count = isNaN(parseInt(sale.last_month_stock_count)) ? 0 : parseInt(sale.last_month_stock_count);
         areaSales.last_month_onway_count = isNaN(parseInt(sale.last_month_onway_count)) ? 0 : parseInt(sale.last_month_onway_count);
-        areaSales.last_month_sales_count_1 = isNaN(parseInt(sale.last_month_onway_count)) ? 0 : parseInt(sale.last_month_onway_count);
+        areaSales.last_month_sales_count_1 = isNaN(parseInt(sale.last_month_sales_count)) ? 0 : parseInt(sale.last_month_sales_count);
+        areaSales.last_month_stock_count_1 = isNaN(parseInt(sale.last_month_stock_count)) ? 0 : parseInt(sale.last_month_stock_count);
         areaSales.product = product;
         areaSales.month = month;
         areaSales.department = user.department;
@@ -51,8 +52,10 @@ exports.areaSalesStockOnwayImport = function (user, sales, callback) {
           department: user.department
         }, function (err, areaSales2) {
           areaSales.last_month_sales_count_2 = 0;
+          areaSales.last_month_stock_count_2 = 0;
           if (areaSales2) {
             areaSales.last_month_sales_count_2 = areaSales2.last_month_sales_count;
+            areaSales.last_month_stock_count_2 = areaSales2.last_month_stock_count;
           }
           AreaSales.findOne({
             month: getLastMonth(3),
@@ -60,8 +63,10 @@ exports.areaSalesStockOnwayImport = function (user, sales, callback) {
             department: user.department
           }, function (err, areaSales3) {
             areaSales.last_month_sales_count_3 = 0;
+            areaSales.last_month_stock_count_3 = 0;
             if (areaSales3) {
               areaSales.last_month_sales_count_3 = areaSales3.last_month_sales_count;
+              areaSales.last_month_stock_count_3 = areaSales3.last_month_stock_count;
             }
             areaSales.save(function (err) {
               return eachCallback();
@@ -212,12 +217,42 @@ exports.getHistoryAreaSalesStockOnway = function (user, callback) {
 
 exports.getAreaSuggestOrder = function (user, callback) {
   var month = getLastMonth(1);
+  var suggests = [];
   AreaSales.find({department: user.department, month: month}).populate('product').exec(function (err, areaSales) {
     if (err || !areaSales) {
       return callback({err: error.system.db_error});
     }
-
-    return callback(null, areaSales);
+    async.each(areaSales, function (areaSale, eachCallback) {
+      var suggest = {};
+      if (areaSale.toObject)
+        areaSale = areaSale.toObject();
+      AreaOrder.aggregate([
+        {
+          $match: {
+            product_number: areaSale.product_number,
+            month: month,
+            department: areaSale.department
+          }
+        },
+        {
+          $group: {
+            _id: '$order_type',
+            count: {$sum: '$order_count'}
+          }
+        }
+      ]).exec(function (err, result) {
+        suggest = areaSale;
+        if (result) {
+          result.forEach(function (item) {
+            suggest[item._id] = item.count;
+          })
+        }
+        suggests.push(suggest);
+        return eachCallback();
+      });
+    }, function (err) {
+      return callback(null, suggests);
+    });
   });
 };
 

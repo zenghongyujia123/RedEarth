@@ -78,7 +78,7 @@ exports.importProducts = function (user, products, callback) {
       findProduct.field_4 = product.field_4;
       findProduct.field_5 = product.field_5;
       findProduct.save(function (err) {
-        return callback();
+        return eachCallback();
       });
     });
   }, function (err, result) {

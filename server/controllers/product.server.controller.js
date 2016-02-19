@@ -14,7 +14,7 @@ exports.getProducts = function (req, res, next) {
 };
 
 exports.importProducts = function (req, res, next) {
-  productService.importProducts(req.user, req.body.producs, function (err, result) {
+  productService.importProducts(req.user, req.body.products, function (err, result) {
     if (err) {
       return res.send(err);
     }

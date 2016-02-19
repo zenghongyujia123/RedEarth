@@ -4,7 +4,7 @@
       <i class="fa fa-angle-left"></i>
       历史数据
     </span>
-    <div class="import-btn" ng-repeat="b in importBtns" ng-click="b.clickCallback()">{{b.text}}</div>
+    <div class="import-btn" ng-repeat="b in importBtns" ng-click="b.clickCallback()" ng-show="user.account_type==='澳妆供应链'">{{b.text}}</div>
   </div>
   <div class="re-suggest-body" ng-class="{'is-home':location.hash==='#/order_history/history_home'}">
     <div class="re-suggest-left">

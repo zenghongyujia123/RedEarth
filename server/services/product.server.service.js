@@ -86,5 +86,12 @@ exports.importProducts = function (user, products, callback) {
   });
 };
 
+exports.getDesks = function (user, callback) {
+
+};
+
+exports.importDesks = function (user, callback) {
+
+};
 
 

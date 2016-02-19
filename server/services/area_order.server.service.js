@@ -32,9 +32,9 @@ exports.areaSalesStockOnwayImport = function (user, sales, callback) {
       }
 
       areaSales.product_number = sale.product_number;
-      areaSales.last_month_sales_count = sale.last_month_sales_count;
-      areaSales.last_month_stock_count = sale.last_month_stock_count;
-      areaSales.last_month_onway_count = sale.last_month_onway_count;
+      areaSales.last_month_sales_count = isNaN(parseInt(sale.last_month_sales_count)) ? 0 : parseInt(sale.last_month_sales_count);
+      areaSales.last_month_stock_count = isNaN(parseInt(sale.last_month_stock_count)) ? 0 : parseInt(sale.last_month_stock_count);
+      areaSales.last_month_onway_count = isNaN(parseInt(sale.last_month_onway_count)) ? 0 : parseInt(sale.last_month_onway_count);
       areaSales.month = month;
       areaSales.department = user.department;
       areaSales.save(function () {
@@ -143,18 +143,18 @@ exports.historyAreaSalesStockOnwayImport = function (user, sales, callback) {
       areaSale.month = sale.month;
       areaSale.product_number = sale.product_number;
       if (sale.last_month_sales_count) {
-        areaSale.last_month_sales_count = sale.last_month_sales_count;
+        areaSale.last_month_sales_count = isNaN(parseInt(sale.last_month_sales_count)) ? 0 : parseInt(sale.last_month_sales_count);
       }
 
       if (sale.last_month_onway_count) {
-        areaSale.last_month_onway_count = sale.last_month_onway_count;
+        areaSale.last_month_onway_count = isNaN(parseInt(sale.last_month_onway_count)) ? 0 : parseInt(sale.last_month_onway_count);
       }
 
       if (sale.last_month_stock_count) {
-        areaSale.last_month_stock_count = sale.last_month_stock_count;
+        areaSale.last_month_stock_count = isNaN(parseInt(sale.last_month_stock_count)) ? 0 : parseInt(sale.last_month_stock_count);
       }
 
-      sale.save(function () {
+      areaSale.save(function (err) {
         return eachCallback();
       });
 

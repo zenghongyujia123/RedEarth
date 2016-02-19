@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', 'AreaOrderService',
-  function ($scope, AreaOrderService) {
+angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$rootScope', 'AreaOrderService',
+  function ($scope, $rootScope, AreaOrderService) {
     $scope.$emit('suggest.import.changed', {
       title: '历史数据',
       btns: [
@@ -12,8 +12,6 @@ angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', 'Area
         }
       ]
     });
-
-    function importClickCallback(){}
 
     $scope.sales = [];
 
@@ -27,6 +25,68 @@ angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', 'Area
         console.log(data);
       });
     };
+
     $scope.getHistorySales();
+    function importClickCallback() {
+      var headers = [
+        {key: 'A1', value: 'SKU编码'},
+        {key: 'B1', value: '地区'},
+        {key: 'C1', value: '月份'},
+        {key: 'D1', value: '月销售量'},
+        {key: 'E1', value: '月结库存量'},
+        {key: 'F1', value: '月结在途量'}
+      ];
+
+      function upload(sales, i) {
+        AreaOrderService.importsHistorySales(sales[i++])
+          .then(function (data) {
+            console.log(data);
+            if (sales[i]) {
+              upload(sales, i);
+            }
+          }, function (err) {
+            console.log(err);
+          });
+      }
+
+      $scope.importsHistorySales = function (sales) {
+        var i = 0;
+        upload(sales, i);
+      };
+
+      $rootScope.$broadcast('show.dialogUpload', {
+        title: '上传历史销量库存在途量资料',
+        contents: [{
+          key: '请选择需要上传资料文件',
+          value: '点击选择文件',
+          tip: '点击选择文件',
+          sheetName: '历史销量库存在途量'
+        }],
+        color: 'blue',
+        headers: headers,
+        callback: function (data) {
+          var result = [];
+          data.forEach(function (item) {
+            var p = {};
+            p.product_number = item['SKU编码'];
+            p.department = item['地区'];
+            p.month = item['月份'];
+            p.last_month_sales_count = parseInt(item['月销售量']);
+            p.last_month_stock_count = parseInt(item['月结库存量']);
+            p.last_month_onway_count = parseInt(item['月结在途量']);
+            result.push(p);
+          });
+          var sales = [];
+          for (var i = 0, len = result.length; i < len; i += 50) {
+            sales.push(result.slice(i, i + 50));
+          }
+          if (sales.length > 0) {
+            $scope.importsHistorySales(sales);
+          }
+          console.log(data);
+          console.log(sales);
+        }
+      });
+    }
 
   }]);

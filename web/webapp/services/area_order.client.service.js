@@ -15,8 +15,11 @@ angular.module('agilesales-web').factory('AreaOrderService', ['HttpService', fun
     getSalesByArea: function () {
       return HttpService.get('/webapp/area/sales', {});
     },
-    getHistorySales:function(){
+    getHistorySales: function () {
       return HttpService.get('/webapp/area/sales/history', {});
+    },
+    importsHistorySales: function (sales) {
+      return HttpService.post('/webapp/area/sales/history_import', {sales: sales});
     }
   };
 }]);

@@ -7,7 +7,8 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
       title: '建议订单',
       btns: [
         {
-          text: '提交'
+          text: '提交',
+          clickCallback: suggestOrderSubmit
         }
       ]
     });
@@ -43,7 +44,44 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
 
     $scope.modifySystemAreaSuggestPercent = function (sale) {
       sale.system_suggest_count_modify_percent = parseInt((sale.system_suggest_count_modify) * 100 / sale.system_suggest_count)
+    };
+
+    function suggestOrderSubmit() {
+      var sales = [];
+
+      $scope.orders.forEach(function (sale) {
+        if (sale.status !== '已审核') {
+          sales.push({
+            _id: sale._id,
+            system_suggest_count: sale.system_suggest_count,
+            system_suggest_count_modify: sale.system_suggest_count_modify,
+            system_suggest_count_modify_percent: sale.system_suggest_count_modify_percent,
+            D02: sale.D02,
+            D03: sale.D03,
+            D04: sale.D04
+          });
+        }
+      });
+      var final_sales = [];
+      for (var i = 0, len = sales.length; i < len; i += 40) {
+        final_sales.push(sales.slice(i, i + 40));
+      }
+
+      upload(final_sales, 0);
+    };
+
+    function upload(sales, i) {
+      AreaOrderService.suggestOrderSubmit(sales[i++])
+        .then(function (data) {
+          console.log(data);
+          if (sales[i]) {
+            upload(sales, i);
+          }
+          else {
+            alert('ok');
+          }
+        }, function (err) {
+          console.log(err);
+        });
     }
-
-
   }]);

@@ -304,50 +304,6 @@ angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',func
 /**
  * Created by zenghong on 16/1/18.
  */
-angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
-  return {
-    restrict: 'AE',
-    templateUrl: 'directives/dialog_input/dialog_input.client.view.html',
-    replace: true,
-    scope: {},
-    link: function ($scope, $element, $attrs) {
-      $scope.info = {
-        title: '',
-        contents: [{
-          key: '请输入拜访卡名称',
-          tip: '点击输入名称',
-          value: ''
-        }],
-        color: 'blue'
-      };
-
-      $scope.show = function () {
-        $element.addClass('show');
-      };
-      $scope.hide = function () {
-        $element.removeClass('show');
-      };
-      $scope.submit = function () {
-        $element.removeClass('show');
-        if ($scope.info.callback) {
-          $scope.info.callback($scope.info);
-        }
-      };
-      $rootScope.$on('show.dialogInput', function (event, data) {
-        setTheme(data);
-        $scope.show();
-      });
-
-      function setTheme(info) {
-        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
-        $scope.info = info;
-      }
-    }
-  }
-}]);
-/**
- * Created by zenghong on 16/1/18.
- */
 angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', function ($rootScope) {
   return {
     restrict: 'AE',
@@ -470,6 +426,50 @@ angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'Exc
     }
   }
 }]);
+/**
+ * Created by zenghong on 16/1/18.
+ */
+angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
+  return {
+    restrict: 'AE',
+    templateUrl: 'directives/dialog_input/dialog_input.client.view.html',
+    replace: true,
+    scope: {},
+    link: function ($scope, $element, $attrs) {
+      $scope.info = {
+        title: '',
+        contents: [{
+          key: '请输入拜访卡名称',
+          tip: '点击输入名称',
+          value: ''
+        }],
+        color: 'blue'
+      };
+
+      $scope.show = function () {
+        $element.addClass('show');
+      };
+      $scope.hide = function () {
+        $element.removeClass('show');
+      };
+      $scope.submit = function () {
+        $element.removeClass('show');
+        if ($scope.info.callback) {
+          $scope.info.callback($scope.info);
+        }
+      };
+      $rootScope.$on('show.dialogInput', function (event, data) {
+        setTheme(data);
+        $scope.show();
+      });
+
+      function setTheme(info) {
+        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
+        $scope.info = info;
+      }
+    }
+  }
+}]);
 angular.module('agilesales-web').factory('PublicInterceptor', ['AuthService', function (AuthService) {
   return {
     'request': function (req) {
@@ -518,6 +518,9 @@ angular.module('agilesales-web').factory('AreaOrderService', ['HttpService', fun
     },
     getAreaSuggestOrder: function () {
       return HttpService.get('/webapp/area/order/suggest', {});
+    },
+    suggestOrderSubmit: function (sales) {
+      return HttpService.post('/webapp/area/sales/submit', {sales: sales});
     }
   };
 }]);
@@ -1653,7 +1656,8 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
       title: '建议订单',
       btns: [
         {
-          text: '提交'
+          text: '提交',
+          clickCallback: suggestOrderSubmit
         }
       ]
     });
@@ -1689,9 +1693,46 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
 
     $scope.modifySystemAreaSuggestPercent = function (sale) {
       sale.system_suggest_count_modify_percent = parseInt((sale.system_suggest_count_modify) * 100 / sale.system_suggest_count)
+    };
+
+    function suggestOrderSubmit() {
+      var sales = [];
+
+      $scope.orders.forEach(function (sale) {
+        if (sale.status !== '已审核') {
+          sales.push({
+            _id: sale._id,
+            system_suggest_count: sale.system_suggest_count,
+            system_suggest_count_modify: sale.system_suggest_count_modify,
+            system_suggest_count_modify_percent: sale.system_suggest_count_modify_percent,
+            D02: sale.D02,
+            D03: sale.D03,
+            D04: sale.D04
+          });
+        }
+      });
+      var final_sales = [];
+      for (var i = 0, len = sales.length; i < len; i += 40) {
+        final_sales.push(sales.slice(i, i + 40));
+      }
+
+      upload(final_sales, 0);
+    };
+
+    function upload(sales, i) {
+      AreaOrderService.suggestOrderSubmit(sales[i++])
+        .then(function (data) {
+          console.log(data);
+          if (sales[i]) {
+            upload(sales, i);
+          }
+          else {
+            alert('ok');
+          }
+        }, function (err) {
+          console.log(err);
+        });
     }
-
-
   }]);
 /**
  * Created by zenghong on 16/1/15.

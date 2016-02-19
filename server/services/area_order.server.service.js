@@ -269,6 +269,10 @@ exports.suggestOrderSubmit = function (user, sales, callback) {
       areaSales.system_suggest_count = sale.system_suggest_count;
       areaSales.system_suggest_count_modify = sale.system_suggest_count_modify;
       areaSales.system_suggest_count_modify_percent = sale.system_suggest_count_modify_percent;
+      areaSales.status = '未审核';
+      areaSales.D02 = sale.D02;
+      areaSales.D03 = sale.D03;
+      areaSales.D04 = sale.D04;
       areaSales.save(function () {
         return eachCallback();
       });

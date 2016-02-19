@@ -79,6 +79,18 @@ module.exports = function (appDb) {
       enum: ['未提交', '未审核', '已审核'],
       default: '未提交'
     },
+    D02:{
+      type:Number,
+      default:0
+    },
+    D03:{
+      type:Number,
+      default:0
+    },
+    D04:{
+      type:Number,
+      default:0
+    },
     next_month_sales_forecast_0: {
       type: Number,
       default: 0

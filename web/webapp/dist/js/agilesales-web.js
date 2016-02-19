@@ -264,67 +264,6 @@ angular.module('agilesales-web').directive('agHoverShake', [function () {
 /**
  * Created by zenghong on 16/1/18.
  */
-angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', function ($rootScope) {
-  return {
-    restrict: 'AE',
-    templateUrl: 'directives/dialog_select/dialog_select.client.view.html',
-    replace: true,
-    scope: {},
-    link: function ($scope, $element, $attrs) {
-      $scope.options = [];
-      $scope.info = {
-        title: '',
-        contents: [{
-          key: '请输入拜访卡名称',
-          value: '点击输入名称'
-        }],
-        color: 'blue'
-      };
-
-      $scope.show = function () {
-        $element.addClass('show');
-      };
-      $scope.hide = function () {
-        $element.removeClass('show');
-      };
-      $scope.submit = function () {
-        $element.removeClass('show');
-        $scope.info.callback($scope.info);
-      };
-      $scope.toggleOptions = function (index) {
-        if ($element.find('.ag-row-option-container').eq(index).hasClass('show')) {
-          $scope.hideOptions(index);
-        }
-        else {
-          $scope.showOptions(index);
-        }
-      };
-
-      $scope.selectOption = function (content, option) {
-        content.value = option;
-      };
-
-      $rootScope.$on('show.dialogSelect', function (event, data) {
-        setTheme(data);
-        $scope.show();
-      });
-      function setTheme(info) {
-        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
-        $scope.info = info;
-      }
-
-      $scope.showOptions = function (index) {
-        $element.find('.ag-row-option-container').eq(index).addClass('show');
-      };
-      $scope.hideOptions = function (index) {
-        $element.find('.ag-row-option-container').eq(index).removeClass('show');
-      }
-    }
-  }
-}]);
-/**
- * Created by zenghong on 16/1/18.
- */
 angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',function ($rootScope) {
   return {
     restrict: 'AE',
@@ -402,6 +341,67 @@ angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', funct
       function setTheme(info) {
         $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
         $scope.info = info;
+      }
+    }
+  }
+}]);
+/**
+ * Created by zenghong on 16/1/18.
+ */
+angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', function ($rootScope) {
+  return {
+    restrict: 'AE',
+    templateUrl: 'directives/dialog_select/dialog_select.client.view.html',
+    replace: true,
+    scope: {},
+    link: function ($scope, $element, $attrs) {
+      $scope.options = [];
+      $scope.info = {
+        title: '',
+        contents: [{
+          key: '请输入拜访卡名称',
+          value: '点击输入名称'
+        }],
+        color: 'blue'
+      };
+
+      $scope.show = function () {
+        $element.addClass('show');
+      };
+      $scope.hide = function () {
+        $element.removeClass('show');
+      };
+      $scope.submit = function () {
+        $element.removeClass('show');
+        $scope.info.callback($scope.info);
+      };
+      $scope.toggleOptions = function (index) {
+        if ($element.find('.ag-row-option-container').eq(index).hasClass('show')) {
+          $scope.hideOptions(index);
+        }
+        else {
+          $scope.showOptions(index);
+        }
+      };
+
+      $scope.selectOption = function (content, option) {
+        content.value = option;
+      };
+
+      $rootScope.$on('show.dialogSelect', function (event, data) {
+        setTheme(data);
+        $scope.show();
+      });
+      function setTheme(info) {
+        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
+        $scope.info = info;
+      }
+
+      $scope.showOptions = function (index) {
+        $element.find('.ag-row-option-container').eq(index).addClass('show');
+      };
+      $scope.hideOptions = function (index) {
+        $element.find('.ag-row-option-container').eq(index).removeClass('show');
       }
     }
   }
@@ -1670,30 +1670,28 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
     };
     $scope.getAreaSuggestOrder();
 
-    $scope.getMonthForecast = function (last1, last2, last3) {
-      var result = [];
-      var current = parseInt((last3 + last2 + last1 ) / 3);
-      result.push({index: 0, value: current});
-      var next1 = parseInt((last2 + last1 + current ) / 3);
-      result.push({index: 1, value: next1});
+    $scope.getSystemAreaSuggest = function (sale) {
+      var next_6_month_forecast =
+        sale.next_month_sales_forecast_0 +
+        sale.next_month_sales_forecast_1 +
+        sale.next_month_sales_forecast_2 +
+        sale.next_month_sales_forecast_3 +
+        sale.next_month_sales_forecast_4 +
+        sale.next_month_sales_forecast_5;
+      sale.system_suggest_count = parseInt(sale.next_month_sales_forecast_0 - (sale.last_month_stock_count + sale.last_month_onway_count - next_6_month_forecast - parseInt(sale['D02'])) * sale.product.abc_category / 100);
 
-      var next2 = parseInt((last1 + current + next1) / 3);
-      result.push({index: 2, value: next2});
+      if (sale.system_suggest_count_modify === 0) {
+        sale.system_suggest_count_modify = sale.system_suggest_count;
+      }
 
-      var next3 = parseInt((current + next1 + next2) / 3);
-      result.push({index: 3, value: next3});
+      return sale.system_suggest_count;
+    };
 
-      var next4 = parseInt((next1 + next2 + next3) / 3);
-      result.push({index: 4, value: next4});
-
-      var next5 = parseInt((next2 + next3 + next4) / 3);
-      result.push({index: 5, value: next5});
-
-      var next6 = parseInt((next3 + next4 + next5) / 3);
-      result.push({index: 6, value: next6});
-
-      return result;
+    $scope.modifySystemAreaSuggestPercent = function (sale) {
+      sale.system_suggest_count_modify_percent = parseInt((sale.system_suggest_count_modify) * 100 / sale.system_suggest_count)
     }
+
+
   }]);
 /**
  * Created by zenghong on 16/1/15.

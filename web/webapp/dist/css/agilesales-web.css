@@ -438,6 +438,13 @@ body {
   height: 40px;
   width: 200px;
 }
+.re-table .re-table-body .body-col.yellow {
+  background-color: greenyellow;
+}
+.re-table input {
+  background-color: inherit;
+  border: 0px;
+}
 .re-table .re-table-row {
   overflow: hidden;
   border-bottom: 1px solid #cdcdcd;

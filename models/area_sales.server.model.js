@@ -54,7 +54,31 @@ module.exports = function (appDb) {
       type: Number,
       default: 0
     },
-    //
+    //系统建议订单
+    system_suggest_count: {
+      type: Number,
+      default: 0
+    },
+    //修改后的系统建议订单
+    system_suggest_count_modify: {
+      type: Number,
+      default: 0
+    },
+    //修改后的系统建议订单%
+    system_suggest_count_modify_percent: {
+      type: Number,
+      default: 0
+    },
+    //备注
+    remark:{
+      type:String,
+      defualt:''
+    },
+    status: {
+      type: String,
+      enum: ['未提交', '未审核', '已审核'],
+      default: '未提交'
+    },
     next_month_sales_forecast_0: {
       type: Number,
       default: 0
@@ -116,6 +140,10 @@ module.exports = function (appDb) {
 
     if (this.last_month_stock_count_1 !== 0 || this.last_month_stock_count_2 !== 0 || this.last_month_stock_count_3 !== 0) {
       this.safe_stock = parseInt(( this.last_month_stock_count_1 + this.last_month_stock_count_2 + this.last_month_stock_count_3) / 3) * 2
+    }
+
+    if (this.system_suggest_count !== 0 && this.system_suggest_count_modify === 0) {
+      this.system_suggest_count_modify = this.system_suggest_count;
     }
     next();
   });

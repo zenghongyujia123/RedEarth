@@ -256,5 +256,9 @@ exports.getAreaSuggestOrder = function (user, callback) {
   });
 };
 
+exports.suggestOrderSubmit = function (err, callback) {
+
+};
+
 
 

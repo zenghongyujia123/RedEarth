@@ -5,5 +5,6 @@
 var _ = require('lodash');
 exports = _.extend(exports, {
   user: require('./user'),
-  area_order: require('./area_order')
+  area_order: require('./area_order'),
+  product: require('./product')
 });

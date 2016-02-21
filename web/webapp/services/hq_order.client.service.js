@@ -9,6 +9,13 @@ angular.module('agilesales-web').factory('HqOrderService', ['HttpService', funct
     },
     hqStockImport: function (stocks) {
       return HttpService.post('/webapp/hq/stocks/import', {stocks: stocks});
+    },
+    getHqOtherOrders: function () {
+      return HttpService.get('/webapp/hq/orders', {});
+    },
+    hqOtherOrderImport: function (orders) {
+      return HttpService.post('/webapp/hq/orders/import', {orders: orders});
     }
+
   };
 }]);

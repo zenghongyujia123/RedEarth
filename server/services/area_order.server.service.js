@@ -282,5 +282,9 @@ exports.suggestOrderSubmit = function (user, sales, callback) {
   });
 };
 
+exports.getOrderList = function (user, callback) {
+
+};
+
 
 

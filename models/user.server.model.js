@@ -28,6 +28,9 @@ module.exports = function (appDb) {
     password: {
       type: String
     },
+    number:{
+      type:String
+    },
     show_name: {
       type: String
     },

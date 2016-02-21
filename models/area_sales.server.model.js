@@ -54,6 +54,10 @@ module.exports = function (appDb) {
       type: Number,
       default: 0
     },
+    //订单号,年月+用户编号+订单类別
+    order_number: {
+      type:String
+    },
     //系统建议订单
     system_suggest_count: {
       type: Number,
@@ -70,26 +74,26 @@ module.exports = function (appDb) {
       default: 0
     },
     //备注
-    remark:{
-      type:String,
-      defualt:''
+    remark: {
+      type: String,
+      defualt: ''
     },
     status: {
       type: String,
       enum: ['未提交', '未审核', '已审核'],
       default: '未提交'
     },
-    D02:{
-      type:Number,
-      default:0
+    D02: {
+      type: Number,
+      default: 0
     },
-    D03:{
-      type:Number,
-      default:0
+    D03: {
+      type: Number,
+      default: 0
     },
-    D04:{
-      type:Number,
-      default:0
+    D04: {
+      type: Number,
+      default: 0
     },
     next_month_sales_forecast_0: {
       type: Number,

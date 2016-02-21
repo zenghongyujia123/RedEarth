@@ -51,6 +51,16 @@ exports.hqStockImport = function (user, stocks, callback) {
   });
 };
 
+exports.getHqCurrentStocks = function (user, callback) {
+  HqSales.find({month: getLastMonth(1)}, function (err, hqSales) {
+    if (err || !hqSales) {
+      return callback({err: error.system.db_error});
+    }
+
+    return callback(null, hqSales);
+  });
+};
+
 function getOrderNumber(username) {
   return getLastMonth(1) + username;
 }

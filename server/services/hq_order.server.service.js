@@ -10,7 +10,7 @@ var appDb = require('./../../libraries/mongoose').appDb,
   moment = require('moment'),
   AreaOrder = appDb.model('AreaOrder'),
   Product = appDb.model('Product'),
-  AreaSubmitOrder = appDb.model('AreaSubmitOrder'),
+  HqOrder = appDb.model('HqOrder'),
   HqSales = appDb.model('HqSales');
 
 exports.hqStockImport = function (user, stocks, callback) {
@@ -30,8 +30,7 @@ exports.hqStockImport = function (user, stocks, callback) {
         }
 
         if (!hqSales) {
-          hqSales = new HqSales({
-          });
+          hqSales = new HqSales({});
         }
 
         hqSales.product_number = stock.product_number;
@@ -56,6 +55,54 @@ exports.getHqCurrentStocks = function (user, callback) {
     }
 
     return callback(null, hqSales);
+  });
+};
+
+exports.getHqOtherOrders = function (user, info, callback) {
+  var condition = {
+    month: getLastMonth(1)
+  };
+  if (info.order_type) {
+    condition.order_type = info.order_type;
+  }
+  HqOrder.find(condition, function (err, hqOrders) {
+    if (err || !hqOrders) {
+      return callback({err: error.system.db_error});
+    }
+    return callback(null, hqOrders);
+  });
+};
+
+exports.hqOtherOrderImport = function (user, orders, callback) {
+  var month = getLastMonth(1);
+  async.each(orders, function (order, eachCallback) {
+    HqOrder.findOne({month: month, product_number: order.product_number}, function (err, hqOrder) {
+      if (err) {
+        return callback({err: error.system.db_error});
+      }
+
+      if (!hqOrder) {
+        hqOrder = new HqOrder({
+          month: month,
+          product_number: order.product_number
+        });
+      }
+
+      hqOrder.product_name = order.product_name;
+      hqOrder.product_barcode = order.product_barcode;
+      hqOrder.category = order.category;
+      hqOrder.sales_price = order.sales_price;
+      hqOrder.jinyi_cost = order.jinyi_cost;
+      hqOrder.order_number = order.order_number;
+      hqOrder.order_count = order.order_count;
+      hqOrder.order_type = order.order_type;
+      hqOrder.jinyi_total_price = order.jinyi_total_price;
+      hqOrder.save(function (err) {
+        return eachCallback();
+      });
+    });
+  }, function (err) {
+    return callback(err, {});
   });
 };
 

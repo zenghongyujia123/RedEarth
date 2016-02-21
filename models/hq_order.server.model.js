@@ -13,6 +13,9 @@ module.exports = function (appDb) {
       type: String,
       default: 'hqOrder'
     },
+    month: {
+      type: String
+    },
     product_number: {
       type: String
     },
@@ -37,8 +40,11 @@ module.exports = function (appDb) {
     order_count: {
       type: Number
     },
+    //Y01:正品 Y02:批发 Y03:试用装 YO4:陈列 Y05:经销商 Y06:电商 Y07:茂姿订单
     order_type: {
-      type: String
+      type: String,
+      enum: ['Y01', 'Y02', 'Y03', 'Y04', 'Y05', 'Y06', 'Y07'],
+      default: 'Y01'
     },
     jinyi_total_price: {
       type: Number

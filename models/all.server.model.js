@@ -6,5 +6,6 @@ module.exports = function (appDb) {
   require('./desk')(appDb);
   require('./product')(appDb);
   require('./area_order')(appDb);
+  require('./area_submit_order')(appDb);
   require('./area_sales')(appDb);
 };

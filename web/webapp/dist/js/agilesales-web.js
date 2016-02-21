@@ -304,19 +304,19 @@ angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',func
 /**
  * Created by zenghong on 16/1/18.
  */
-angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', function ($rootScope) {
+angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
   return {
     restrict: 'AE',
-    templateUrl: 'directives/dialog_select/dialog_select.client.view.html',
+    templateUrl: 'directives/dialog_input/dialog_input.client.view.html',
     replace: true,
     scope: {},
     link: function ($scope, $element, $attrs) {
-      $scope.options = [];
       $scope.info = {
         title: '',
         contents: [{
           key: '请输入拜访卡名称',
-          value: '点击输入名称'
+          tip: '点击输入名称',
+          value: ''
         }],
         color: 'blue'
       };
@@ -329,35 +329,18 @@ angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', func
       };
       $scope.submit = function () {
         $element.removeClass('show');
-        $scope.info.callback($scope.info);
-      };
-      $scope.toggleOptions = function (index) {
-        if ($element.find('.ag-row-option-container').eq(index).hasClass('show')) {
-          $scope.hideOptions(index);
-        }
-        else {
-          $scope.showOptions(index);
+        if ($scope.info.callback) {
+          $scope.info.callback($scope.info);
         }
       };
-
-      $scope.selectOption = function (content, option) {
-        content.value = option;
-      };
-
-      $rootScope.$on('show.dialogSelect', function (event, data) {
+      $rootScope.$on('show.dialogInput', function (event, data) {
         setTheme(data);
         $scope.show();
       });
+
       function setTheme(info) {
         $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
         $scope.info = info;
-      }
-
-      $scope.showOptions = function (index) {
-        $element.find('.ag-row-option-container').eq(index).addClass('show');
-      };
-      $scope.hideOptions = function (index) {
-        $element.find('.ag-row-option-container').eq(index).removeClass('show');
       }
     }
   }
@@ -429,19 +412,19 @@ angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'Exc
 /**
  * Created by zenghong on 16/1/18.
  */
-angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
+angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', function ($rootScope) {
   return {
     restrict: 'AE',
-    templateUrl: 'directives/dialog_input/dialog_input.client.view.html',
+    templateUrl: 'directives/dialog_select/dialog_select.client.view.html',
     replace: true,
     scope: {},
     link: function ($scope, $element, $attrs) {
+      $scope.options = [];
       $scope.info = {
         title: '',
         contents: [{
           key: '请输入拜访卡名称',
-          tip: '点击输入名称',
-          value: ''
+          value: '点击输入名称'
         }],
         color: 'blue'
       };
@@ -454,18 +437,35 @@ angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', funct
       };
       $scope.submit = function () {
         $element.removeClass('show');
-        if ($scope.info.callback) {
-          $scope.info.callback($scope.info);
+        $scope.info.callback($scope.info);
+      };
+      $scope.toggleOptions = function (index) {
+        if ($element.find('.ag-row-option-container').eq(index).hasClass('show')) {
+          $scope.hideOptions(index);
+        }
+        else {
+          $scope.showOptions(index);
         }
       };
-      $rootScope.$on('show.dialogInput', function (event, data) {
+
+      $scope.selectOption = function (content, option) {
+        content.value = option;
+      };
+
+      $rootScope.$on('show.dialogSelect', function (event, data) {
         setTheme(data);
         $scope.show();
       });
-
       function setTheme(info) {
         $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
         $scope.info = info;
+      }
+
+      $scope.showOptions = function (index) {
+        $element.find('.ag-row-option-container').eq(index).addClass('show');
+      };
+      $scope.hideOptions = function (index) {
+        $element.find('.ag-row-option-container').eq(index).removeClass('show');
       }
     }
   }
@@ -521,7 +521,11 @@ angular.module('agilesales-web').factory('AreaOrderService', ['HttpService', fun
     },
     suggestOrderSubmit: function (sales) {
       return HttpService.post('/webapp/area/sales/submit', {sales: sales});
+    },
+    getAreaOrderList: function () {
+      return HttpService.get('/webapp/area/query', {});
     }
+
   };
 }]);
 /**
@@ -859,9 +863,16 @@ angular.module('agilesales-web').factory('UserService', [ 'HttpService', functio
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('DashboardQueryCtrl', function () {
-
-});
+angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'AreaOrderService', function ($scope, AreaOrderService) {
+  $scope.getAreaOrderList = function () {
+    AreaOrderService.getAreaOrderList().then(function (data) {
+      console.log(data);
+    }, function (data) {
+      console.log(data);
+    });
+  };
+  $scope.getAreaOrderList();
+}]);
 /**
  * Created by zenghong on 16/1/15.
  */
@@ -1405,9 +1416,20 @@ angular.module('agilesales-web').controller('OrderHistoryCtrl', ['$scope', 'Auth
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderQueryCtrl', function () {
-
-});
+angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', 'AreaOrderService', function ($scope, AreaOrderService) {
+  $scope.orders = [];
+  $scope.getAreaOrderList = function () {
+    AreaOrderService.getAreaOrderList().then(function (data) {
+      console.log(data);
+      if(data&&!data.err){
+        $scope.orders = data;
+      }
+    }, function (data) {
+      console.log(data);
+    });
+  };
+  $scope.getAreaOrderList();
+}]);
 /**
  * Created by zenghong on 16/1/15.
  */

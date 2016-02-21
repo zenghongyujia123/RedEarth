@@ -18,70 +18,15 @@
         </div>
       </div>
       <div class="re-table-body">
-        <div class="re-table-row" style="width:1200px;min-width: 100%;">
-          <div class="body-col">sadfadf232412</div>
-          <div class="body-col">32</div>
-          <div class="body-col">345</div>
-          <div class="body-col">123123</div>
-        </div>
-        <div class="re-table-row" style="width:1200px;min-width: 100%;">
-          <div class="body-col">sadfadf232412</div>
-          <div class="body-col">32</div>
-          <div class="body-col">345</div>
-          <div class="body-col">123123</div>
-        </div>
-        <div class="re-table-row" style="width:1200px;min-width: 100%;">
-          <div class="body-col">sadfadf232412</div>
-          <div class="body-col">32</div>
-          <div class="body-col">345</div>
-          <div class="body-col">123123</div>
-        </div>
-        <div class="re-table-row" style="width:1200px;min-width: 100%;">
-          <div class="body-col">sadfadf232412</div>
-          <div class="body-col">32</div>
-          <div class="body-col">345</div>
-          <div class="body-col">123123</div>
-        </div>
-        <div class="re-table-row" style="width:1200px;min-width: 100%;">
-          <div class="body-col">sadfadf232412</div>
-          <div class="body-col">32</div>
-          <div class="body-col">345</div>
-          <div class="body-col">123123</div>
-        </div>
-        <div class="re-table-row" style="width:1200px;min-width: 100%;">
-          <div class="body-col">sadfadf232412</div>
-          <div class="body-col">32</div>
-          <div class="body-col">345</div>
-          <div class="body-col">123123</div>
-        </div>
-        <div class="re-table-row" style="width:1200px;min-width: 100%;">
-          <div class="body-col">sadfadf232412</div>
-          <div class="body-col">32</div>
-          <div class="body-col">345</div>
-          <div class="body-col">123123</div>
-        </div>
-        <div class="re-table-row" style="width:1200px;min-width: 100%;">
-          <div class="body-col">sadfadf232412</div>
-          <div class="body-col">32</div>
-          <div class="body-col">345</div>
-          <div class="body-col">123123</div>
-        </div>
-        <div class="re-table-row" style="width:1200px;min-width: 100%;">
-          <div class="body-col">sadfadf232412</div>
-          <div class="body-col">32</div>
-          <div class="body-col">345</div>
-          <div class="body-col">123123</div>
-        </div>
-        <div class="re-table-row" style="width:1200px;min-width: 100%;">
-          <div class="body-col">sadfadf232412</div>
-          <div class="body-col">32</div>
-          <div class="body-col">345</div>
-          <div class="body-col">123123</div>
+        <div class="re-table-row" style="width:1200px;min-width: 100%;" ng-repeat="o in orders">
+          <div class="body-col">{{$index}}</div>
+          <div class="body-col">{{o.order_number}}</div>
+          <div class="body-col">{{o.created}}</div>
+          <div class="body-col">{{o.status}}</div>
+          <div class="body-col">编辑/审批</div>
+          <div class="body-col">导入交期</div>
         </div>
       </div>
-
-
     </div>
-
   </div>
 </div>

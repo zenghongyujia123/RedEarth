@@ -12,6 +12,7 @@ module.exports = function (app) {
   app.route('/webapp/area/order').get(filter.requireUser, all.area_order.getOrdersByArea);
   app.route('/webapp/area/order/suggest').get(filter.requireUser, all.area_order.getAreaSuggestOrder);
   app.route('/webapp/area/sales').get(filter.requireUser, all.area_order.getSalesByArea);
+  app.route('/webapp/area/query').get(filter.requireUser, all.area_order.getAreaOrderList);
   app.route('/webapp/area/sales/history').get(filter.requireUser, all.area_order.getHistoryAreaSalesStockOnway);
 
   app.route('/webapp/area/sales/submit').post(filter.requireUser, all.area_order.suggestOrderSubmit);

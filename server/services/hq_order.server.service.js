@@ -310,9 +310,7 @@ exports.suggestOrderSubmit = function (user, sales, callback) {
 };
 
 exports.getAreaOrderList = function (user, callback) {
-  AreaSubmitOrder.find({
-    user_number: user.number
-  }).sort('month').exec(function (err, aresSales) {
+  AreaSubmitOrder.find().sort('month').exec(function (err, aresSales) {
     if (err || !aresSales) {
       return callback({err: error.system.db_error});
     }

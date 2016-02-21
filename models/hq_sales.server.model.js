@@ -16,13 +16,19 @@ module.exports = function (appDb) {
     product_number: {
       type: String
     },
+    //正品
     genuine_goods: {
       type: Number,
       default: 0
     },
+    month:{
+      type:String
+    },
+    //近效期
     validity: {
       type: String,
     },
+    //次品
     ungenuine_goods: {
       type: Number,
       default: 0

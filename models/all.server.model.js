@@ -8,4 +8,5 @@ module.exports = function (appDb) {
   require('./area_order')(appDb);
   require('./area_submit_order')(appDb);
   require('./area_sales')(appDb);
+  require('./hq_sales')(appDb);
 };

@@ -7,56 +7,56 @@ angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope', '
       title: '建议订单',
       btns: [{
         text: '导入当前库存',
-        clickCallback: salesClickCallback
+        clickCallback: ClickCallback
       }]
     });
 
 
     $scope.stocks = [];
-    $scope.getSalesByArea = function () {
-      AreaOrderService.getSalesByArea().then(function (data) {
+    $scope.getHqCurrentStocks = function () {
+      HqOrderService.getHqCurrentStocks().then(function (data) {
         if (!data.err) {
-          $scope.sales = data;
+          $scope.stocks = data;
         }
         console.log(data);
       }, function (data) {
         console.log(data);
       });
     };
-    $scope.getSalesByArea();
+    $scope.getHqCurrentStocks();
 
-    function salesClickCallback() {
+    function ClickCallback() {
       var headers = [
         {key: 'A1', value: 'SKU编码'},
-        {key: 'B1', value: '上月销售量'},
-        {key: 'C1', value: '上月月结库存量'},
-        {key: 'D1', value: '上月月结在途量'}
+        {key: 'B1', value: '正品'},
+        {key: 'C1', value: '近效期'},
+        {key: 'D1', value: '次品'}
       ];
 
-      function upload(saleses, i) {
-        AreaOrderService.areaSalesStockOnwayImport(saleses[i++])
+      function upload(stocks, i) {
+        HqOrderService.hqStockImport(stocks[i++])
           .then(function (data) {
             console.log(data);
-            if (saleses[i]) {
-              upload(saleses, i);
+            if (stocks[i]) {
+              upload(stocks, i);
             }
           }, function (err) {
             console.log(err);
           });
       }
 
-      $scope.areaSalesStockOnwayImport = function (saleses) {
+      $scope.hqStockImport = function (stocks) {
         var i = 0;
-        upload(saleses, i);
+        upload(stocks, i);
       };
 
       $rootScope.$broadcast('show.dialogUpload', {
-        title: '上传销量库存在途量',
+        title: '上传当前湖村',
         contents: [{
-          key: '请选择需要上传的销量库存在途量文件',
+          key: '请选择需要上传的库存文件',
           value: '点击选择文件',
           tip: '点击选择文件',
-          sheetName: '分区'
+          sheetName: '总部库存'
         }],
         color: 'blue',
         headers: headers,
@@ -65,19 +65,19 @@ angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope', '
           data.forEach(function (item) {
             result.push({
               product_number: item['SKU编码'],
-              last_month_sales_count: item['上月销售量'],
-              last_month_stock_count: item['上月月结库存量'],
-              last_month_onway_count: item['上月月结在途量'],
+              genuine_goods: item['正品'],
+              validity: item['近效期'],
+              ungenuine_goods: item['次品']
             });
           });
-          var sales = [];
+          var stocks = [];
           for (var i = 0, len = result.length; i < len; i += 100) {
-            sales.push(result.slice(i, i + 100));
+            stocks.push(result.slice(i, i + 100));
           }
-          if (sales.length > 0) {
-            $scope.areaSalesStockOnwayImport(sales);
+          if (stocks.length > 0) {
+            $scope.hqStockImport(stocks);
           }
-          console.log(sales);
+          console.log(stocks);
         }
       });
     }

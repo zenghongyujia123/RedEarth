@@ -8,43 +8,11 @@
     </div>
   </div>
   <div class="re-table-body" style="min-width: 900px;">
-    <div class="re-table-row">
-      <div class="body-col">sadfadf232412</div>
-      <div class="body-col">32</div>
-      <div class="body-col">345</div>
-      <div class="body-col">123123</div>
-    </div>
-    <div class="re-table-row">
-      <div class="body-col">sadfadf232412</div>
-      <div class="body-col">32</div>
-      <div class="body-col">345</div>
-      <div class="body-col">123123</div>
-    </div>
-    <div class="re-table-row">
-      <div class="body-col">sadfadf232412</div>
-      <div class="body-col">32</div>
-      <div class="body-col">345</div>
-      <div class="body-col">123123</div>
-    </div>
-    <div class="re-table-row">
-      <div class="body-col">sadfadf232412</div>
-      <div class="body-col">32</div>
-      <div class="body-col">345</div>
-      <div class="body-col">123123</div>
-    </div>
-    <div class="re-table-row">
-      <div class="body-col">sadfadf232412</div>
-      <div class="body-col">32</div>
-      <div class="body-col">345</div>
-      <div class="body-col">123123</div>
-    </div>
-    <div class="re-table-row">
-      <div class="body-col">sadfadf232412</div>
-      <div class="body-col">32</div>
-      <div class="body-col">345</div>
-      <div class="body-col">123123</div>
+    <div class="re-table-row" ng-repeat="s in stocks">
+      <div class="body-col">{{s.product_number}}</div>
+      <div class="body-col">{{s.genuine_goods}}</div>
+      <div class="body-col">{{s.validity}}</div>
+      <div class="body-col">{{s.ungenuine_goods}}</div>
     </div>
   </div>
-
-
 </div>

@@ -7,5 +7,6 @@ var filter = require('../filters/all').user;
 
 module.exports = function (app) {
   app.route('/webapp/hq/stocks/import').post(filter.requireUser, all.hq_order.hqStockImport);
+  app.route('/webapp/hq/stocks').get(filter.requireUser, all.hq_order.getHqCurrentStocks);
 
 };

@@ -5,14 +5,13 @@
 
 var appDb = require('./../../libraries/mongoose').appDb,
   error = require('./../../errors/all'),
-  cryptoLib = require('./../../libraries/crypto'),
   async = require('async'),
   User = appDb.model('User'),
   moment = require('moment'),
   AreaOrder = appDb.model('AreaOrder'),
   Product = appDb.model('Product'),
   AreaSubmitOrder = appDb.model('AreaSubmitOrder'),
-  HqSales = appDb.model('HqSales ');
+  HqSales = appDb.model('HqSales');
 
 exports.hqStockImport = function (user, stocks, callback) {
   var month = getLastMonth(1);
@@ -31,8 +30,7 @@ exports.hqStockImport = function (user, stocks, callback) {
         }
 
         if (!hqSales) {
-          hqSales = new AreaSales({
-            username: user.username
+          hqSales = new HqSales({
           });
         }
 

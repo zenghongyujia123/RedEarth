@@ -65,6 +65,9 @@ exports.getHqOtherOrders = function (user, info, callback) {
   if (info.order_type) {
     condition.order_type = info.order_type;
   }
+  else {
+    condition.order_type = {$in:['Y02','Y03','Y04']};
+  }
   HqOrder.find(condition, function (err, hqOrders) {
     if (err || !hqOrders) {
       return callback({err: error.system.db_error});
@@ -76,7 +79,7 @@ exports.getHqOtherOrders = function (user, info, callback) {
 exports.hqOtherOrderImport = function (user, orders, callback) {
   var month = getLastMonth(1);
   async.each(orders, function (order, eachCallback) {
-    HqOrder.findOne({month: month, product_number: order.product_number}, function (err, hqOrder) {
+    HqOrder.findOne({month: month, product_number: order.product_number,order_type:order.order_type}, function (err, hqOrder) {
       if (err) {
         return callback({err: error.system.db_error});
       }

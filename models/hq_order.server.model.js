@@ -29,7 +29,7 @@ module.exports = function (appDb) {
       type: String
     },
     sales_price: {
-      type: String
+      type: Number
     },
     jinyi_cost: {
       type: Number

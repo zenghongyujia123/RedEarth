@@ -23,7 +23,7 @@ exports.getHqCurrentStocks = function (req, res, next) {
 };
 
 exports.getHqOtherOrders = function (req, res, next) {
-  hqOrderService.getHqOtherOrders (req.user, {}, function (err, result) {
+  hqOrderService.getHqOtherOrders (req.user, {order_type:req.query.order_type||''}, function (err, result) {
     if (err) {
       return res.send(err);
     }

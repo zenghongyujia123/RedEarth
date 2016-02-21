@@ -807,8 +807,8 @@ angular.module('agilesales-web').factory('HqOrderService', ['HttpService', funct
     hqStockImport: function (stocks) {
       return HttpService.post('/webapp/hq/stocks/import', {stocks: stocks});
     },
-    getHqOtherOrders: function () {
-      return HttpService.get('/webapp/hq/orders', {});
+    getHqOtherOrders: function (order_type) {
+      return HttpService.get('/webapp/hq/orders', {order_type:order_type||''});
     },
     hqOtherOrderImport: function (orders) {
       return HttpService.post('/webapp/hq/orders/import', {orders: orders});
@@ -1794,156 +1794,114 @@ angular.module('agilesales-web').controller('SuggestHomeCtrl', ['$scope', 'AuthS
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope', '$rootScope', 'AuthService',
-  function ($scope, rootScope, AuthService) {
+angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope', '$rootScope', 'AuthService', 'HqOrderService',
+  function ($scope, $rootScope, AuthService, HqOrderService) {
     $scope.user = AuthService.getUser() || {};
-    AuthService.onUserUpdated('SuggestHqEcommerceCtrl', function (user) {
+    AuthService.onUserUpdated('SuggestHqAgencyCtrl', function (user) {
       $scope.user = user;
       btnsChange();
     });
     btnsChange();
     function btnsChange() {
-      var btns = [];
-      if ($scope.user.show_name === '总部经销商部') {
-        btns.push({
-          text: '导入经销商订单',
-          clickCallback: function () {
-
-          }
-        });
-      }
       $scope.$emit('suggest.import.changed', {
         title: '建议订单',
-        btns: btns
+        btns: [
+          {
+            text: '上传经销商订单',
+            clickCallback: function () {
+              orderClickCallback('Y05');
+            }
+          }
+        ]
       });
     }
 
-    function executeCallback() {
+    $scope.orders = [];
+    $scope.getHqOtherOrders = function () {
+      HqOrderService.getHqOtherOrders('Y05').then(function (data) {
+        if (!data.err) {
+          $scope.orders = data;
+        }
+        console.log(data);
+      }, function (data) {
+        console.log(data);
+      });
+    };
+    $scope.getHqOtherOrders();
+
+    function orderClickCallback(orderType) {
       var headers = [
-        {key: 'A1', value: '人员编号'},
-        {key: 'B1', value: '工号'},
-        {key: 'C1', value: '姓名'},
-        {key: 'D1', value: '岗位'},
-        {key: 'E1', value: '职务'},
-        {key: 'F1', value: '电话号码'},
-        {key: 'G1', value: '邮箱'},
-        {key: 'H1', value: '性别'},
-        {key: 'I1', value: '上级领导编号'},
-        {key: 'J1', value: '上级领导姓名'},
-        {key: 'K1', value: '常驻城市'},
-        {key: 'L1', value: '辖区'},
-        {key: 'M1', value: '帐号开通日期'},
-        {key: 'N1', value: '在职状态'},
-        {key: 'O1', value: '人员类型'}
+        {key: 'A1', value: 'SKU编码'},
+        {key: 'B1', value: '产品名称'},
+        {key: 'C1', value: '产品条码'},
+        {key: 'D1', value: '品类'},
+        {key: 'E1', value: '中分类名称'},
+        {key: 'F1', value: '销售价格'},
+        {key: 'G1', value: '晋颖成本价'},
+        {key: 'H1', value: '订单数量'},
+        {key: 'I1', value: '晋颖总价格'}
       ];
-      function upload(peoples, i) {
-        PeopleService.uploadMultiPeoples(peoples[i++])
+
+      function upload(orders, i) {
+        HqOrderService.hqOtherOrderImport(orders[i++])
           .then(function (data) {
             console.log(data);
-            if (peoples[i]) {
-              upload(peoples, i);
+            if (orders[i]) {
+              upload(orders, i);
             }
           }, function (err) {
             console.log(err);
           });
       }
 
-      $scope.uploadMultiPeoples = function (peoples) {
+      function getContentKey(type) {
+        switch (type) {
+          case  'Y05':
+            return '批发订单';
+        }
+        return '';
+      }
+
+      $scope.hqOtherOrderImport = function (orders) {
         var i = 0;
-        upload(peoples, i);
-        //AreaService.uploadMultiCutomers(customers).then(function (data) {
-        //  console.log(data);
-        //}, function (data) {
-        //  console.log(data);
-        //});
+        upload(orders, i);
       };
 
       $rootScope.$broadcast('show.dialogUpload', {
-        title: '上传人员',
+        title: '上传' + getContentKey(orderType),
         contents: [{
-          key: '请选择需要上传的人员文件',
+          key: getContentKey(orderType),
           value: '点击选择文件',
-          tip: '点击选择文件'
+          tip: '点击选择文件',
+          sheetName: '总部上传其他订单页面格式'
         }],
         color: 'blue',
         headers: headers,
         callback: function (data) {
-          var obj = {};
-          var arr = [];
-          data.forEach(function (item) {
-            if (!obj[item['电话号码']]) {
-              obj[item['电话号码']] = {};
-              $scope.headers.forEach(function (header) {
-                obj[item['电话号码']][header] = item[header];
-              });
-            }
-          });
-
           var result = [];
-
-          for (var p in obj) {
-            var item = {};
-            for (var i in obj[p]) {
-              switch (i) {
-                case '人员编号':
-                  item.number = obj[p][i];
-                  break;
-                case '工号':
-                  item.job_number = obj[p][i];
-                  break;
-                case '姓名':
-                  item.name = obj[p][i];
-                  break;
-                case '岗位':
-                  item.job = obj[p][i];
-                  break;
-                case '职务':
-                  item.duty = obj[p][i];
-                  break;
-                case '电话号码':
-                  item.telephone = obj[p][i];
-                  break;
-                case '邮箱':
-                  item.email = obj[p][i];
-                  break;
-                case '性别':
-                  item.sex = obj[p][i];
-                  break;
-                case '上级领导工号':
-                  item.parent_number = obj[p][i];
-                  break;
-                case '上级领导姓名':
-                  item.parent_name = obj[p][i];
-                  break;
-                case '常驻城市':
-                  item.city = obj[p][i];
-                  break;
-                case '辖区':
-                  item.area = obj[p][i];
-                  break;
-                case '帐号开通日期':
-                  item.create_date = obj[p][i];
-                  break;
-                case '在职状态':
-                  item.job_status = obj[p][i];
-                  break;
-                case '人员类型':
-                  item.role = obj[p][i];
-                  break;
-              }
-
-            }
-            result.push(item);
-          }
-          var peoples = [];
+          data.forEach(function (item) {
+            result.push({
+              product_number: item['SKU编码'],
+              product_name: item['产品名称'],
+              product_barcode: item['产品条码'],
+              category: item['品类'],
+              mid_classify: item['中分类名称'],
+              sales_price: item['销售价格'],
+              order_count: item['订单数量'],
+              order_type: orderType,
+              total_price: item['总销售价格'],
+              jinyi_cost: item['晋颖成本价'],
+              jinyi_total_price: item['晋颖总价格']
+            });
+          });
+          var orders = [];
           for (var i = 0, len = result.length; i < len; i += 100) {
-            peoples.push(result.slice(i, i + 100));
+            orders.push(result.slice(i, i + 100));
           }
-
-          console.log(obj);
-          console.log(result);
-          console.log(peoples);
-          $scope.uploadMultiPeoples(peoples);
+          if (orders.length > 0) {
+            $scope.hqOtherOrderImport(orders);
+          }
+          console.log(orders);
         }
       });
     }
@@ -2037,39 +1995,233 @@ angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope', '
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope', '$rootScope', 'AuthService', function ($scope, rootScope, AuthService) {
-  $scope.user = AuthService.getUser() || {};
-  AuthService.onUserUpdated('SuggestHqEcommerceCtrl', function (user) {
-    $scope.user = user;
+angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope', '$rootScope', 'AuthService','HqOrderService',
+  function ($scope, rootScope, AuthService,HqOrderService) {
+    $scope.user = AuthService.getUser() || {};
+    AuthService.onUserUpdated('SuggestHqAgencyCtrl', function (user) {
+      $scope.user = user;
+      btnsChange();
+    });
     btnsChange();
-  });
-  btnsChange();
-  function btnsChange() {
-    var btns = [];
-    if ($scope.user.show_name === '总部电商部') {
-      btns.push({
-        text: '导入电商订单'
+    function btnsChange() {
+      $scope.$emit('suggest.import.changed', {
+        title: '建议订单',
+        btns: [
+          {
+            text: '导入电商订单',
+            clickCallback: function () {
+              orderClickCallback('Y06');
+            }
+          }
+        ]
       });
     }
-    $scope.$emit('suggest.import.changed', {
-      title: '建议订单',
-      btns: btns
-    });
-  }
-}]);
+
+    $scope.orders = [];
+    $scope.getHqOtherOrders = function () {
+      HqOrderService.getHqOtherOrders('Y06').then(function (data) {
+        if (!data.err) {
+          $scope.orders = data;
+        }
+        console.log(data);
+      }, function (data) {
+        console.log(data);
+      });
+    };
+    $scope.getHqOtherOrders();
+
+    function orderClickCallback(orderType) {
+      var headers = [
+        {key: 'A1', value: 'SKU编码'},
+        {key: 'B1', value: '产品名称'},
+        {key: 'C1', value: '产品条码'},
+        {key: 'D1', value: '品类'},
+        {key: 'E1', value: '中分类名称'},
+        {key: 'F1', value: '销售价格'},
+        {key: 'G1', value: '晋颖成本价'},
+        {key: 'H1', value: '订单数量'},
+        {key: 'I1', value: '晋颖总价格'}
+      ];
+
+      function upload(orders, i) {
+        HqOrderService.hqOtherOrderImport(orders[i++])
+          .then(function (data) {
+            console.log(data);
+            if (orders[i]) {
+              upload(orders, i);
+            }
+          }, function (err) {
+            console.log(err);
+          });
+      }
+
+      function getContentKey(type) {
+        switch (type) {
+          case  'Y05':
+            return '批发订单';
+        }
+        return '';
+      }
+
+      $scope.hqOtherOrderImport = function (orders) {
+        var i = 0;
+        upload(orders, i);
+      };
+
+      $rootScope.$broadcast('show.dialogUpload', {
+        title: '上传' + getContentKey(orderType),
+        contents: [{
+          key: getContentKey(orderType),
+          value: '点击选择文件',
+          tip: '点击选择文件',
+          sheetName: '总部上传其他订单页面格式'
+        }],
+        color: 'blue',
+        headers: headers,
+        callback: function (data) {
+          var result = [];
+          data.forEach(function (item) {
+            result.push({
+              product_number: item['SKU编码'],
+              product_name: item['产品名称'],
+              product_barcode: item['产品条码'],
+              category: item['品类'],
+              mid_classify: item['中分类名称'],
+              sales_price: item['销售价格'],
+              order_count: item['订单数量'],
+              order_type: orderType,
+              total_price: item['总销售价格'],
+              jinyi_cost: item['晋颖成本价'],
+              jinyi_total_price: item['晋颖总价格']
+            });
+          });
+          var orders = [];
+          for (var i = 0, len = result.length; i < len; i += 100) {
+            orders.push(result.slice(i, i + 100));
+          }
+          if (orders.length > 0) {
+            $scope.hqOtherOrderImport(orders);
+          }
+          console.log(orders);
+        }
+      });
+    }
+  }]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqMaoziCtrl',['$scope', '$rootScope', function ($scope, rootScope) {
-  $scope.$emit('suggest.import.changed',{
-    title:'建议订单',
-    btns:[
-      {
-        text:'导入茂姿订单'
+angular.module('agilesales-web').controller('SuggestHqMaoziCtrl', ['$scope', '$rootScope', 'AuthService', 'HqOrderService',
+  function ($scope, $rootScope, AuthService, HqOrderService) {
+    $scope.user = AuthService.getUser() || {};
+    AuthService.onUserUpdated('SuggestHqMaoziCtrl', function (user) {
+      $scope.user = user;
+      btnsChange();
+    });
+    btnsChange();
+    function btnsChange() {
+      $scope.$emit('suggest.import.changed', {
+        title: '建议订单',
+        btns: [
+          {
+            text: '导入茂姿订单',
+            clickCallback: function () {
+              orderClickCallback('Y07');
+            }
+          }
+        ]
+      });
+    }
+
+    $scope.orders = [];
+    $scope.getHqOtherOrders = function () {
+      HqOrderService.getHqOtherOrders('Y07').then(function (data) {
+        if (!data.err) {
+          $scope.orders = data;
+        }
+        console.log(data);
+      }, function (data) {
+        console.log(data);
+      });
+    };
+    $scope.getHqOtherOrders();
+
+    function orderClickCallback(orderType) {
+      var headers = [
+        {key: 'A1', value: 'SKU编码'},
+        {key: 'B1', value: '产品名称'},
+        {key: 'C1', value: '产品条码'},
+        {key: 'D1', value: '品类'},
+        {key: 'E1', value: '中分类名称'},
+        {key: 'F1', value: '销售价格'},
+        {key: 'G1', value: '晋颖成本价'},
+        {key: 'H1', value: '订单数量'},
+        {key: 'I1', value: '晋颖总价格'}
+      ];
+
+      function upload(orders, i) {
+        HqOrderService.hqOtherOrderImport(orders[i++])
+          .then(function (data) {
+            console.log(data);
+            if (orders[i]) {
+              upload(orders, i);
+            }
+          }, function (err) {
+            console.log(err);
+          });
       }
-    ]
-  });
-}]);
+
+      function getContentKey(type) {
+        switch (type) {
+          case  'Y05':
+            return '批发订单';
+        }
+        return '';
+      }
+
+      $scope.hqOtherOrderImport = function (orders) {
+        var i = 0;
+        upload(orders, i);
+      };
+
+      $rootScope.$broadcast('show.dialogUpload', {
+        title: '上传' + getContentKey(orderType),
+        contents: [{
+          key: getContentKey(orderType),
+          value: '点击选择文件',
+          tip: '点击选择文件',
+          sheetName: '总部上传其他订单页面格式'
+        }],
+        color: 'blue',
+        headers: headers,
+        callback: function (data) {
+          var result = [];
+          data.forEach(function (item) {
+            result.push({
+              product_number: item['SKU编码'],
+              product_name: item['产品名称'],
+              product_barcode: item['产品条码'],
+              category: item['品类'],
+              mid_classify: item['中分类名称'],
+              sales_price: item['销售价格'],
+              order_count: item['订单数量'],
+              order_type: orderType,
+              total_price: item['总销售价格'],
+              jinyi_cost: item['晋颖成本价'],
+              jinyi_total_price: item['晋颖总价格']
+            });
+          });
+          var orders = [];
+          for (var i = 0, len = result.length; i < len; i += 100) {
+            orders.push(result.slice(i, i + 100));
+          }
+          if (orders.length > 0) {
+            $scope.hqOtherOrderImport(orders);
+          }
+          console.log(orders);
+        }
+      });
+    }
+  }]);
 /**
  * Created by zenghong on 16/1/15.
  */

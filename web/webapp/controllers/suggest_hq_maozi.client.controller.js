@@ -63,8 +63,8 @@ angular.module('agilesales-web').controller('SuggestHqMaoziCtrl', ['$scope', '$r
 
       function getContentKey(type) {
         switch (type) {
-          case  'Y05':
-            return '批发订单';
+          case  'Y07':
+            return '茂姿订单';
         }
         return '';
       }

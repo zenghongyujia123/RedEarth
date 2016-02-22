@@ -2,7 +2,7 @@
  * Created by zenghong on 16/1/15.
  */
 angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope', '$rootScope', 'AuthService','HqOrderService',
-  function ($scope, rootScope, AuthService,HqOrderService) {
+  function ($scope, $rootScope, AuthService,HqOrderService) {
     $scope.user = AuthService.getUser() || {};
     AuthService.onUserUpdated('SuggestHqAgencyCtrl', function (user) {
       $scope.user = user;
@@ -63,8 +63,8 @@ angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope',
 
       function getContentKey(type) {
         switch (type) {
-          case  'Y05':
-            return '批发订单';
+          case  'Y06':
+            return '电商订单';
         }
         return '';
       }

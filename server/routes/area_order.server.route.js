@@ -14,6 +14,7 @@ module.exports = function (app) {
   app.route('/webapp/area/sales').get(filter.requireUser, all.area_order.getSalesByArea);
   app.route('/webapp/area/query').get(filter.requireUser, all.area_order.getAreaOrderList);
   app.route('/webapp/area/sales/history').get(filter.requireUser, all.area_order.getHistoryAreaSalesStockOnway);
+  app.route('/webapp/area/order/detail').get(filter.requireUser, all.area_order.getAreaOrderDetail);
 
   app.route('/webapp/area/sales/submit').post(filter.requireUser, all.area_order.suggestOrderSubmit);
 

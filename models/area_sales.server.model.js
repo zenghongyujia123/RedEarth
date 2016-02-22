@@ -56,7 +56,7 @@ module.exports = function (appDb) {
     },
     //订单号,年月+用户编号+订单类別
     order_number: {
-      type:String
+      type: String
     },
     //系统建议订单
     system_suggest_count: {
@@ -87,11 +87,23 @@ module.exports = function (appDb) {
       type: Number,
       default: 0
     },
+    D02_approve: {
+      type: Number,
+      default: 0
+    },
     D03: {
       type: Number,
       default: 0
     },
+    D03_approve: {
+      type: Number,
+      default: 0
+    },
     D04: {
+      type: Number,
+      default: 0
+    },
+    D04_approve: {
       type: Number,
       default: 0
     },

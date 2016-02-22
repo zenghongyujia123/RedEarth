@@ -310,13 +310,24 @@ exports.suggestOrderSubmit = function (user, sales, callback) {
 };
 
 exports.getAreaOrderList = function (user, callback) {
-  AreaSubmitOrder.find({
-    user_number: user.number
-  }).sort('month').exec(function (err, aresSales) {
+  var condition = {};
+  if (user.account_type === 'account_type') {
+    condition.user_number = user.number;
+  }
+  AreaSubmitOrder.find(condition).sort('month').exec(function (err, aresSales) {
     if (err || !aresSales) {
       return callback({err: error.system.db_error});
     }
     return callback(null, aresSales);
+  });
+};
+
+exports.getAreaOrderDetail = function (user, order_number, callback) {
+  AreaSales.find({order_number: order_number}).populate('product').exec(function (err, areaSales) {
+    if (err || !areaSales) {
+      return callback({err: error.system.db_error});
+    }
+    return callback(null, areaSales);
   });
 };
 

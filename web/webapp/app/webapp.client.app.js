@@ -21,7 +21,7 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
         controller: "OrderQueryCtrl"
       })
       .state('order_detail', {
-        url: '/order_detail',
+        url: '/order_detail/:order_number',
         templateUrl: 'templates/order_detail.client.view.html',
         controller: "OrderDetailCtrl"
       })

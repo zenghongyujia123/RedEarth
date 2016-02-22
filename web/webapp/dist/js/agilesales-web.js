@@ -21,7 +21,7 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
         controller: "OrderQueryCtrl"
       })
       .state('order_detail', {
-        url: '/order_detail',
+        url: '/order_detail/:order_number',
         templateUrl: 'templates/order_detail.client.view.html',
         controller: "OrderDetailCtrl"
       })
@@ -264,6 +264,50 @@ angular.module('agilesales-web').directive('agHoverShake', [function () {
 /**
  * Created by zenghong on 16/1/18.
  */
+angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
+  return {
+    restrict: 'AE',
+    templateUrl: 'directives/dialog_input/dialog_input.client.view.html',
+    replace: true,
+    scope: {},
+    link: function ($scope, $element, $attrs) {
+      $scope.info = {
+        title: '',
+        contents: [{
+          key: '请输入拜访卡名称',
+          tip: '点击输入名称',
+          value: ''
+        }],
+        color: 'blue'
+      };
+
+      $scope.show = function () {
+        $element.addClass('show');
+      };
+      $scope.hide = function () {
+        $element.removeClass('show');
+      };
+      $scope.submit = function () {
+        $element.removeClass('show');
+        if ($scope.info.callback) {
+          $scope.info.callback($scope.info);
+        }
+      };
+      $rootScope.$on('show.dialogInput', function (event, data) {
+        setTheme(data);
+        $scope.show();
+      });
+
+      function setTheme(info) {
+        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
+        $scope.info = info;
+      }
+    }
+  }
+}]);
+/**
+ * Created by zenghong on 16/1/18.
+ */
 angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',function ($rootScope) {
   return {
     restrict: 'AE',
@@ -304,10 +348,10 @@ angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',func
 /**
  * Created by zenghong on 16/1/18.
  */
-angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
+angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'ExcelReaderService', function ($rootScope, ExcelReaderService) {
   return {
     restrict: 'AE',
-    templateUrl: 'directives/dialog_input/dialog_input.client.view.html',
+    templateUrl: 'directives/dialog_upload/dialog_upload.client.view.html',
     replace: true,
     scope: {},
     link: function ($scope, $element, $attrs) {
@@ -315,10 +359,15 @@ angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', funct
         title: '',
         contents: [{
           key: '请输入拜访卡名称',
-          tip: '点击输入名称',
-          value: ''
+          value: '点击输入名称'
         }],
-        color: 'blue'
+        color: 'blue',
+        type: 'execel',
+        headers: [
+          {key: 'A1', value: '大区'},
+          {key: 'B1', value: '省区'},
+          {key: 'C1', value: '办事处'}
+        ]
       };
 
       $scope.show = function () {
@@ -329,14 +378,29 @@ angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', funct
       };
       $scope.submit = function () {
         $element.removeClass('show');
-        if ($scope.info.callback) {
-          $scope.info.callback($scope.info);
-        }
       };
-      $rootScope.$on('show.dialogInput', function (event, data) {
+      $rootScope.$on('show.dialogUpload', function (event, data) {
         setTheme(data);
         $scope.show();
       });
+
+      $scope.handleFile = function (ele) {
+        var excelReader = ExcelReaderService.getReader();
+
+        excelReader.getWorkSheet(ele,$scope.info.contents[0].sheetName, function (err, excelSheet) {
+          excelReader.checkHeader(excelSheet, $scope.info.headers, $scope.info.contents[0].sheetName,function (isOurTemplate) {
+            if (!isOurTemplate) {
+              var a = isOurTemplate;
+            }
+            excelReader.getSheetData(excelSheet, $scope.info.headers,$scope.info.contents[0].sheetName ,function (err, sheetData) {
+              if ($scope.info.callback) {
+                $scope.info.callback(sheetData);
+              }
+              $scope.hide();
+            });
+          });
+        });
+      };
 
       function setTheme(info) {
         $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
@@ -406,70 +470,6 @@ angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', func
     }
   }
 }]);
-/**
- * Created by zenghong on 16/1/18.
- */
-angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'ExcelReaderService', function ($rootScope, ExcelReaderService) {
-  return {
-    restrict: 'AE',
-    templateUrl: 'directives/dialog_upload/dialog_upload.client.view.html',
-    replace: true,
-    scope: {},
-    link: function ($scope, $element, $attrs) {
-      $scope.info = {
-        title: '',
-        contents: [{
-          key: '请输入拜访卡名称',
-          value: '点击输入名称'
-        }],
-        color: 'blue',
-        type: 'execel',
-        headers: [
-          {key: 'A1', value: '大区'},
-          {key: 'B1', value: '省区'},
-          {key: 'C1', value: '办事处'}
-        ]
-      };
-
-      $scope.show = function () {
-        $element.addClass('show');
-      };
-      $scope.hide = function () {
-        $element.removeClass('show');
-      };
-      $scope.submit = function () {
-        $element.removeClass('show');
-      };
-      $rootScope.$on('show.dialogUpload', function (event, data) {
-        setTheme(data);
-        $scope.show();
-      });
-
-      $scope.handleFile = function (ele) {
-        var excelReader = ExcelReaderService.getReader();
-
-        excelReader.getWorkSheet(ele,$scope.info.contents[0].sheetName, function (err, excelSheet) {
-          excelReader.checkHeader(excelSheet, $scope.info.headers, $scope.info.contents[0].sheetName,function (isOurTemplate) {
-            if (!isOurTemplate) {
-              var a = isOurTemplate;
-            }
-            excelReader.getSheetData(excelSheet, $scope.info.headers,$scope.info.contents[0].sheetName ,function (err, sheetData) {
-              if ($scope.info.callback) {
-                $scope.info.callback(sheetData);
-              }
-              $scope.hide();
-            });
-          });
-        });
-      };
-
-      function setTheme(info) {
-        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
-        $scope.info = info;
-      }
-    }
-  }
-}]);
 angular.module('agilesales-web').factory('PublicInterceptor', ['AuthService', function (AuthService) {
   return {
     'request': function (req) {
@@ -524,8 +524,10 @@ angular.module('agilesales-web').factory('AreaOrderService', ['HttpService', fun
     },
     getAreaOrderList: function () {
       return HttpService.get('/webapp/area/query', {});
+    },
+    getAreaOrderDetail: function (order_number) {
+      return HttpService.get('/webapp/area/order/detail', {order_number: order_number});
     }
-
   };
 }]);
 /**
@@ -1414,9 +1416,29 @@ angular.module('agilesales-web').controller('IndexCtrl', ['$scope', '$rootScope'
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderDetailCtrl', function () {
+angular.module('agilesales-web').controller('OrderDetailCtrl', ['$scope', '$stateParams', 'AreaOrderService', 'AuthService',
+  function ($scope, $stateParams, AreaOrderService, AuthService) {
+    $scope.order_number = $stateParams.order_number;
+    $scope.orders = [];
+    $scope.getAreaOrderDetail = function () {
+      AreaOrderService.getAreaOrderDetail($scope.order_number).then(function (data) {
+        if (data && !data.err) {
+          $scope.orders = data;
+        }
+        console.log(data);
+      }, function (data) {
+        console.log(data);
+      });
+    };
 
-});
+    $scope.getAreaOrderDetail();
+
+    $scope.user = AuthService.getUser() || {};
+    AuthService.onUserUpdated('AuthService', function (user) {
+      $scope.user = user;
+    });
+
+  }]);
 /**
  * Created by zenghong on 16/1/15.
  */
@@ -1437,12 +1459,12 @@ angular.module('agilesales-web').controller('OrderHistoryCtrl', ['$scope', 'Auth
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', 'AreaOrderService', function ($scope, AreaOrderService) {
+angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state', 'AreaOrderService', function ($scope, $state, AreaOrderService) {
   $scope.orders = [];
   $scope.getAreaOrderList = function () {
     AreaOrderService.getAreaOrderList().then(function (data) {
       console.log(data);
-      if(data&&!data.err){
+      if (data && !data.err) {
         $scope.orders = data;
       }
     }, function (data) {
@@ -1450,6 +1472,10 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', 'AreaOr
     });
   };
   $scope.getAreaOrderList();
+
+  $scope.goDetail = function (o) {
+    $state.go('order_detail', {order_number: o.order_number});
+  }
 }]);
 /**
  * Created by zenghong on 16/1/15.

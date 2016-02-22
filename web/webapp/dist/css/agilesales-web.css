@@ -441,6 +441,9 @@ body {
 .re-table .re-table-body .body-col.yellow {
   background-color: greenyellow;
 }
+.re-table .re-table-body .re-table-row:hover {
+  background-color: #efefef;
+}
 .re-table input {
   background-color: inherit;
   border: 0px;
@@ -448,6 +451,7 @@ body {
 .re-table .re-table-row {
   overflow: hidden;
   border-bottom: 1px solid #cdcdcd;
+  cursor: pointer;
 }
 .re-table.has-top {
   top: 170px;

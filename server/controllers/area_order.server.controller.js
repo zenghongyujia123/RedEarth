@@ -85,5 +85,14 @@ exports.getAreaOrderList = function (req, res, next) {
   });
 };
 
+exports.getAreaOrderDetail = function (req, res, next) {
+  areaOrderService.getAreaOrderDetail (req.user, req.query.order_number, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};
+
 
 

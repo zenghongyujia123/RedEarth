@@ -1,8 +1,13 @@
 <div class="re-order-query-page">
-  <div class="re-child-header"></div>
+  <div class="re-child-header">
+    <span ui-sref="home">
+      <i class="fa fa-angle-left"></i>
+      订单详情
+    </span>
+  </div>
   <div class="re-child-body">
     <div class="re-table">
-      <div class="re-table-header" style="min-width: 6400px;">
+      <div class="re-table-header" style="min-width: 6600px;">
         <div class="re-table-row">
           <div class="header-col">SKU编码</div>
           <div class="header-col">产品名称</div>
@@ -10,70 +15,77 @@
           <div class="header-col">品类</div>
           <div class="header-col">中分类名称</div>
           <div class="header-col">销售价格</div>
-          <div class="header-col">jinyi成本价</div>
           <div class="header-col">ABC分类</div>
           <div class="header-col">ABC类说明</div>
           <div class="header-col">ABC类别%</div>
-          <div class="header-col">上月月结库存总部正品库存</div>
+          <div class="header-col">上月月结库存包括店柜库存</div>
           <div class="header-col">在途已订购未交货</div>
-          <div class="header-col">月均销售前3个月</div>
           <div class="header-col">安全库存2个月</div>
-          <div class="header-col">1月销售</div>
-          <div class="header-col">2月销售</div>
-          <div class="header-col">3月销售</div>
-          <div class="header-col">4月销售</div>
-          <div class="header-col">5月销售</div>
-          <div class="header-col">6月销售</div>
-          <div class="header-col">上传批发订单</div>
-          <div class="header-col">订单系统建议</div>
+          <div class="header-col">当月销售预测</div>
+          <div class="header-col">后1月销售预测</div>
+          <div class="header-col">后2月销售预测</div>
+          <div class="header-col">后3月销售预测</div>
+          <div class="header-col">后4月销售预测</div>
+          <div class="header-col">后5月销售预测</div>
+          <div class="header-col">后6月销售预测</div>
+          <div class="header-col">当月上传批发订单</div>
+          <div class="header-col">当月订单系统建议</div>
           <div class="header-col">修改</div>
           <div class="header-col">修改%</div>
           <div class="header-col">备注</div>
           <div class="header-col">确认超额订购?</div>
           <div class="header-col">上传订单适用装</div>
-          <div class="header-col">陈列</div>
+          <div class="header-col">最终审批适用装</div>
+          <div class="header-col">上传订单陈列</div>
+          <div class="header-col">最终审批陈列</div>
           <div class="header-col">最终审批订货数</div>
-          <div class="header-col">适用装</div>
-          <div class="header-col">陈列</div>
           <div class="header-col">总金额</div>
+          <div class="header-col">审批状态</div>
         </div>
       </div>
-      <div class="re-table-body" style="min-width: 6400px;">
-        <div class="re-table-row">
-          <div class="body-col">sadfadf232412</div>
-          <div class="body-col">32</div>
-          <div class="body-col">345</div>
-          <div class="body-col">123123</div>
-        </div>
-        <div class="re-table-row">
-          <div class="body-col">sadfadf232412</div>
-          <div class="body-col">32</div>
-          <div class="body-col">345</div>
-          <div class="body-col">123123</div>
-        </div>
-        <div class="re-table-row">
-          <div class="body-col">sadfadf232412</div>
-          <div class="body-col">32</div>
-          <div class="body-col">345</div>
-          <div class="body-col">123123</div>
-        </div>
-        <div class="re-table-row">
-          <div class="body-col">sadfadf232412</div>
-          <div class="body-col">32</div>
-          <div class="body-col">345</div>
-          <div class="body-col">123123</div>
-        </div>
-        <div class="re-table-row">
-          <div class="body-col">sadfadf232412</div>
-          <div class="body-col">32</div>
-          <div class="body-col">345</div>
-          <div class="body-col">123123</div>
-        </div>
-        <div class="re-table-row">
-          <div class="body-col">sadfadf232412</div>
-          <div class="body-col">32</div>
-          <div class="body-col">345</div>
-          <div class="body-col">123123</div>
+      <div class="re-table-body" style="min-width: 6600px;">
+        <div class="re-table-row" ng-repeat="o in orders">
+          <div class="body-col">{{o.product.product_number}}</div>
+          <div class="body-col">{{o.product.product_name}}</div>
+          <div class="body-col">{{o.product.product_barcode}}</div>
+          <div class="body-col">{{o.product.category}}</div>
+          <div class="body-col">{{o.product.mid_classify}}</div>
+          <div class="body-col">{{o.product.sales_price}}</div>
+          <div class="body-col">{{o.product.abc_classify}}</div>
+          <div class="body-col">{{o.product.abc_classify_explain}}</div>
+          <div class="body-col">{{o.product.abc_category}}</div>
+          <div class="body-col">{{o.last_month_stock_count}}</div>
+          <div class="body-col">{{o.last_month_onway_count}}</div>
+          <div class="body-col">{{o.safe_stock}}</div>
+          <div class="body-col">{{o.next_month_sales_forecast_0}}</div>
+          <div class="body-col">{{o.next_month_sales_forecast_1}}</div>
+          <div class="body-col">{{o.next_month_sales_forecast_2}}</div>
+          <div class="body-col">{{o.next_month_sales_forecast_3}}</div>
+          <div class="body-col">{{o.next_month_sales_forecast_4}}</div>
+          <div class="body-col">{{o.next_month_sales_forecast_5}}</div>
+          <div class="body-col">{{o.next_month_sales_forecast_6}}</div>
+          <div class="body-col">{{ o['D02']}}</div>
+          <div class="body-col">{{o.system_suggest_count}}</div>
+          <input class="body-col" ng-model="o.system_suggest_count_modify">
+
+          <div class="body-col" ng-class="{yellow:o.system_suggest_count_modify_percent>100}">
+            {{o.system_suggest_count_modify_percent}}%
+          </div>
+          <input class="body-col" ng-model="o.remark" ng-show="user.account_type==='地区分公司'">
+
+          <div class="body-col" ng-show="user.account_type==='地区总部'">{{o.remark}}</div>
+          <div class="body-col"></div>
+          <div class="body-col">{{o['D03']}}</div>
+          <div type="number" class="body-col" ng-show="user.account_type==='地区分公司'">{{o.D03_approve}}</div>
+          <input type="number" class="body-col" ng-model="o.D03_approve" ng-show="user.account_type==='地区总部'">
+
+          <div class="body-col">{{o['D04']}}</div>
+          <div type="number" class="body-col" ng-show="user.account_type==='地区分公司'">{{o.D04_approve}}</div>
+          <input type="number" class="body-col" ng-model="o.D04_approve" ng-show="user.account_type==='地区总部'">
+
+          <div class="body-col">{{''}}</div>
+          <div class="body-col">{{''}}</div>
+          <div class="body-col">{{o.status}}</div>
         </div>
       </div>
     </div>

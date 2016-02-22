@@ -441,6 +441,14 @@ body {
 .re-table .re-table-body .body-col.yellow {
   background-color: greenyellow;
 }
+.re-table .re-table-body .body-col.red {
+  background-color: red;
+  color: white;
+}
+.re-table .re-table-body .body-col.green {
+  background-color: green;
+  color: white;
+}
 .re-table .re-table-body .re-table-row:hover {
   background-color: #efefef;
 }

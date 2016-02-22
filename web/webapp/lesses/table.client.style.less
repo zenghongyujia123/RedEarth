@@ -2,7 +2,7 @@
   padding: 20px;
   width: 100%;
   overflow-y: auto;
-  top:0px;
+  top: 0px;
   bottom: 0px;
   position: absolute;
   .re-table-header {
@@ -19,7 +19,7 @@
   .re-table-body {
     position: absolute;
     overflow-y: auto;
-    top:80px;
+    top: 80px;
     min-width: 100%;
     bottom: 0px;
     .body-col {
@@ -27,18 +27,27 @@
       float: left;
       height: 40px;
       width: 200px;
-      &.yellow{
+      &.yellow {
         background-color: greenyellow;
       }
+      &.red {
+        background-color: red;
+        color: white;
+      }
+      &.green {
+        background-color: green;
+        color: white;
+      }
+
     }
     .re-table-row {
-      &:hover{
+      &:hover {
         background-color: #efefef;
       }
     }
   }
 
-  input{
+  input {
     background-color: inherit;
     border: 0px;
   }
@@ -49,36 +58,36 @@
     cursor: pointer;
   }
 
-  &.has-top{
-    top:170px;
+  &.has-top {
+    top: 170px;
   }
 }
 
-.re-suggest-right-select-panel{
-  .select-title{
+.re-suggest-right-select-panel {
+  .select-title {
     margin-top: 40px;
     margin-bottom: 20px;
     line-height: 50px;
     font-size: 20px;
     text-align: center;
   }
-  .row{
-    width:80%;
+  .row {
+    width: 80%;
     margin: auto;
-    .select-item{
-      color:#333;
+    .select-item {
+      color: #333;
       line-height: 40px;
       height: 40px;
       border: 1px solid #333;
       text-align: center;
       cursor: pointer;
-      &:hover{
-        color:white;
-        background-color:#333;
+      &:hover {
+        color: white;
+        background-color: #333;
       }
-      &.select{
-        color:white;
-        background-color:#333;
+      &.select {
+        color: white;
+        background-color: #333;
       }
     }
   }

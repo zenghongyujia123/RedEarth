@@ -9,6 +9,7 @@ var appDb = require('./../../libraries/mongoose').appDb,
   User = appDb.model('User'),
   moment = require('moment'),
   AreaOrder = appDb.model('AreaOrder'),
+  AreaSales = appDb.model('AreaSales'),
   Product = appDb.model('Product'),
   HqOrder = appDb.model('HqOrder'),
   HqSales = appDb.model('HqSales');
@@ -38,8 +39,36 @@ exports.hqStockImport = function (user, stocks, callback) {
         hqSales.ungenuine_goods = stock.ungenuine_goods;
         hqSales.validity = stock.validity;
         hqSales.month = month;
-        hqSales.save(function (err) {
-          return eachCallback();
+
+        AreaSales.aggregate([
+          {
+            $match: {
+              product_number: stock.product_number,
+              month: {$in: [getLastMonth(1), getLastMonth(2), getLastMonth(3)]}
+            }
+          },
+          {
+            $group: {
+              _id: '$month',
+              count: {$sum: '$last_month_sales_count'}
+            }
+          }
+        ]).exec(function (err, result) {
+          result.forEach(function (item) {
+            if (item._id===getLastMonth(1)) {
+              hqSales.last_month_sales_count_1 = item.count;
+            }
+            if (item._id===getLastMonth(2)) {
+              hqSales.last_month_sales_count_2 = item.count;
+            }
+            if (item._id===getLastMonth(3)) {
+              hqSales.last_month_sales_count_3 = item.count;
+            }
+          });
+
+          hqSales.save(function (err) {
+            return eachCallback();
+          });
         });
       });
     });
@@ -66,7 +95,7 @@ exports.getHqOtherOrders = function (user, info, callback) {
     condition.order_type = info.order_type;
   }
   else {
-    condition.order_type = {$in:['Y02','Y03','Y04']};
+    condition.order_type = {$in: ['Y02', 'Y03', 'Y04']};
   }
   HqOrder.find(condition, function (err, hqOrders) {
     if (err || !hqOrders) {
@@ -79,7 +108,11 @@ exports.getHqOtherOrders = function (user, info, callback) {
 exports.hqOtherOrderImport = function (user, orders, callback) {
   var month = getLastMonth(1);
   async.each(orders, function (order, eachCallback) {
-    HqOrder.findOne({month: month, product_number: order.product_number,order_type:order.order_type}, function (err, hqOrder) {
+    HqOrder.findOne({
+      month: month,
+      product_number: order.product_number,
+      order_type: order.order_type
+    }, function (err, hqOrder) {
       if (err) {
         return callback({err: error.system.db_error});
       }

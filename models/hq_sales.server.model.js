@@ -32,6 +32,58 @@ module.exports = function (appDb) {
     ungenuine_goods: {
       type: Number,
       default: 0
+    },
+    next_month_sales_forecast_0: {
+      type: Number,
+      default: 0
+    },
+    next_month_sales_forecast_1: {
+      type: Number,
+      default: 0
+    },
+    next_month_sales_forecast_2: {
+      type: Number,
+      default: 0
+    },
+    next_month_sales_forecast_3: {
+      type: Number,
+      default: 0
+    },
+    next_month_sales_forecast_4: {
+      type: Number,
+      default: 0
+    },
+    next_month_sales_forecast_5: {
+      type: Number,
+      default: 0
+    },
+    next_month_sales_forecast_6: {
+      type: Number,
+      default: 0
+    },
+    last_month_sales_count_1: {
+      type: Number,
+      default:0
+    },
+    last_month_sales_count_2: {
+      type: Number,
+      default:0
+    },
+    last_month_sales_count_3: {
+      type: Number,
+      default:0
+    },
+    last_month_stock_count_1: {
+      type: Number,
+      default:0
+    },
+    last_month_stock_count_2: {
+      type: Number,
+      default:0
+    },
+    last_month_stock_count_3: {
+      type: Number,
+      default:0
     }
   });
 

@@ -94,5 +94,14 @@ exports.getAreaOrderDetail = function (req, res, next) {
   });
 };
 
+exports.approveAreaOrder = function (req, res, next) {
+  areaOrderService.approveAreaOrder(req.user, req.body.order, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};
+
 
 

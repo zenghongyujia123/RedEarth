@@ -40,6 +40,8 @@ module.exports = {
   //<editor-fold desc="card template relative">
   customer_not_existed: {type: 'customer_not_existed', zh_message: '客户经销商不存在'},
   //<editor-fold>
-  article_not_found: {type: 'article_not_found', message: 'article not found', zh_message: '文章未找到'}
+  article_not_found: {type: 'article_not_found', message: 'article not found', zh_message: '文章未找到'},
+
+  area_sale_not_found: {type: 'area_sale_not_found', message: 'area_sale_not_found', zh_message: '订单未找到'}
 };
 

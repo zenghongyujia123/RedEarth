@@ -32,6 +32,9 @@ angular.module('agilesales-web').factory('AreaOrderService', ['HttpService', fun
     },
     getAreaOrderDetail: function (order_number) {
       return HttpService.get('/webapp/area/order/detail', {order_number: order_number});
+    },
+    approveAreaOrder: function (order) {
+      return HttpService.post('/webapp/area/sales/approve', {order: order});
     }
   };
 }]);

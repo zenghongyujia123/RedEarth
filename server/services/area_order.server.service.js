@@ -331,5 +331,27 @@ exports.getAreaOrderDetail = function (user, order_number, callback) {
   });
 };
 
+exports.approveAreaOrder = function (user, order, callback) {
+  AreaSales.findOne({_id: order._id}, function (err, areaSales) {
+    if (err) {
+      return callback({err: error.system.db_error});
+    }
+    if (!areaSales) {
+      return callback({err: error.business.area_sale_not_found});
+    }
+
+    areaSales.D02_approve = order.D02_approve;
+    areaSales.D03_approve = order.D03_approve;
+    areaSales.D04_approve = order.D04_approve;
+    areaSales.status = '已审核';
+    areaSales.save(function (err, saveAreaSales) {
+      if (err || !saveAreaSales) {
+        return callback({err: error.system.db_error});
+      }
+      return callback(null, saveAreaSales)
+    });
+  });
+};
+
 
 

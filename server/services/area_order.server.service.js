@@ -290,9 +290,14 @@ exports.suggestOrderSubmit = function (user, sales, callback) {
           areaSales.system_suggest_count_modify_percent = sale.system_suggest_count_modify_percent;
           areaSales.status = '未审核';
           areaSales.order_number = areaSubmitOrder.order_number;
+          areaSales.D01 = sale.D01;
+          areaSales.D01_approve = sale.D01_approve;
           areaSales.D02 = sale.D02;
+          areaSales.D02_approve = sale.D02_approve;
           areaSales.D03 = sale.D03;
+          areaSales.D03_approve = sale.D03_approve;
           areaSales.D04 = sale.D04;
+          areaSales.D04_approve = sale.D04_approve;
           areaSales.save(function () {
             return eachCallback();
           });

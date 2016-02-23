@@ -83,6 +83,16 @@ module.exports = function (appDb) {
       enum: ['未提交', '未审核', '已审核'],
       default: '未提交'
     },
+    //订货数
+    D01: {
+      type: Number,
+      default: 0
+    },
+    //最终审批订货数
+    D01_approve: {
+      type: Number,
+      default: 0
+    },
     D02: {
       type: Number,
       default: 0

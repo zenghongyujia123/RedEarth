@@ -65,6 +65,10 @@ module.exports = function (appDb) {
       type: Number,
       default: 0
     },
+    D01: {
+      type: Number,
+      default: 0
+    },
     D02: {
       type: Number,
       default: 0
@@ -74,6 +78,22 @@ module.exports = function (appDb) {
       default: 0
     },
     D04: {
+      type: Number,
+      default: 0
+    },
+    D01_approve: {
+      type: Number,
+      default: 0
+    },
+    D02_approve: {
+      type: Number,
+      default: 0
+    },
+    D03_approve: {
+      type: Number,
+      default: 0
+    },
+    D04_approve: {
       type: Number,
       default: 0
     },

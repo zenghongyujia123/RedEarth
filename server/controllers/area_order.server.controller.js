@@ -3,8 +3,10 @@
  */
 'use strict';
 var areaOrderService = require('./../services/all').area_order;
+var logService = require('./../services/all').re_log;
 
 exports.areaSalesStockOnwayImport = function (req, res, next) {
+  logService.insertLog(req.user.username, '导入地区销量,库存,在途');
   areaOrderService.areaSalesStockOnwayImport(req.user, req.body.sales, function (err, result) {
     if (err) {
       return res.send(err);
@@ -14,6 +16,7 @@ exports.areaSalesStockOnwayImport = function (req, res, next) {
 };
 
 exports.otherOrderImport = function (req, res, next) {
+  logService.insertLog(req.user.username,'导入地区其他订单');
   areaOrderService.otherOrderImport (req.user, req.body.orders, function (err, result) {
     if (err) {
       return res.send(err);
@@ -41,6 +44,7 @@ exports.getSalesByArea = function (req, res, next) {
 };
 
 exports.historyAreaSalesStockOnwayImport = function (req, res, next) {
+  logService.insertLog(req.user.username,'导入地区历史销量');
   areaOrderService.historyAreaSalesStockOnwayImport  (req.user, req.body.sales, function (err, result) {
     if (err) {
       return res.send(err);
@@ -68,6 +72,7 @@ exports.getAreaSuggestOrder = function (req, res, next) {
 };
 
 exports.suggestOrderSubmit = function (req, res, next) {
+  logService.insertLog(req.user.username,'提交地区订单');
   areaOrderService.suggestOrderSubmit (req.user, req.body.sales, function (err, result) {
     if (err) {
       return res.send(err);
@@ -95,6 +100,7 @@ exports.getAreaOrderDetail = function (req, res, next) {
 };
 
 exports.approveAreaOrder = function (req, res, next) {
+  logService.insertLog(req.user.username,'审批地区订单');
   areaOrderService.approveAreaOrder(req.user, req.body.order, function (err, result) {
     if (err) {
       return res.send(err);

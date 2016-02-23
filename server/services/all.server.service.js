@@ -7,5 +7,6 @@ exports = _.extend(exports, {
   user: require('./user'),
   area_order: require('./area_order'),
   hq_order: require('./hq_order'),
+  re_log: require('./re_log'),
   product: require('./product')
 });

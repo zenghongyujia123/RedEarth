@@ -134,6 +134,16 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
         url: '/suggest_hq_other_order',
         templateUrl: 'templates/suggest_hq_other_order.client.view.html',
         controller: "SuggestHqOtherOrderCtrl"
+      })
+      .state('order_hq_approve_area', {
+        url: '/order_hq_approve_area/:order_number',
+        templateUrl: 'templates/order_hq_approve_area.client.view.html',
+        controller: "OrderHqApproveAreaCtrl"
+      })
+      .state('order_re_approve_hq', {
+        url: '/order_re_approve_hq/:order_number',
+        templateUrl: 'templates/order_re_approve_hq.client.view.html',
+        controller: "OrderReApproveHqCtrl"
       });
 
     $urlRouterProvider.otherwise('/');
@@ -264,50 +274,6 @@ angular.module('agilesales-web').directive('agHoverShake', [function () {
 /**
  * Created by zenghong on 16/1/18.
  */
-angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
-  return {
-    restrict: 'AE',
-    templateUrl: 'directives/dialog_input/dialog_input.client.view.html',
-    replace: true,
-    scope: {},
-    link: function ($scope, $element, $attrs) {
-      $scope.info = {
-        title: '',
-        contents: [{
-          key: '请输入拜访卡名称',
-          tip: '点击输入名称',
-          value: ''
-        }],
-        color: 'blue'
-      };
-
-      $scope.show = function () {
-        $element.addClass('show');
-      };
-      $scope.hide = function () {
-        $element.removeClass('show');
-      };
-      $scope.submit = function () {
-        $element.removeClass('show');
-        if ($scope.info.callback) {
-          $scope.info.callback($scope.info);
-        }
-      };
-      $rootScope.$on('show.dialogInput', function (event, data) {
-        setTheme(data);
-        $scope.show();
-      });
-
-      function setTheme(info) {
-        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
-        $scope.info = info;
-      }
-    }
-  }
-}]);
-/**
- * Created by zenghong on 16/1/18.
- */
 angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',function ($rootScope) {
   return {
     restrict: 'AE',
@@ -348,10 +314,10 @@ angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',func
 /**
  * Created by zenghong on 16/1/18.
  */
-angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'ExcelReaderService', function ($rootScope, ExcelReaderService) {
+angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
   return {
     restrict: 'AE',
-    templateUrl: 'directives/dialog_upload/dialog_upload.client.view.html',
+    templateUrl: 'directives/dialog_input/dialog_input.client.view.html',
     replace: true,
     scope: {},
     link: function ($scope, $element, $attrs) {
@@ -359,15 +325,10 @@ angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'Exc
         title: '',
         contents: [{
           key: '请输入拜访卡名称',
-          value: '点击输入名称'
+          tip: '点击输入名称',
+          value: ''
         }],
-        color: 'blue',
-        type: 'execel',
-        headers: [
-          {key: 'A1', value: '大区'},
-          {key: 'B1', value: '省区'},
-          {key: 'C1', value: '办事处'}
-        ]
+        color: 'blue'
       };
 
       $scope.show = function () {
@@ -378,29 +339,14 @@ angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'Exc
       };
       $scope.submit = function () {
         $element.removeClass('show');
+        if ($scope.info.callback) {
+          $scope.info.callback($scope.info);
+        }
       };
-      $rootScope.$on('show.dialogUpload', function (event, data) {
+      $rootScope.$on('show.dialogInput', function (event, data) {
         setTheme(data);
         $scope.show();
       });
-
-      $scope.handleFile = function (ele) {
-        var excelReader = ExcelReaderService.getReader();
-
-        excelReader.getWorkSheet(ele,$scope.info.contents[0].sheetName, function (err, excelSheet) {
-          excelReader.checkHeader(excelSheet, $scope.info.headers, $scope.info.contents[0].sheetName,function (isOurTemplate) {
-            if (!isOurTemplate) {
-              var a = isOurTemplate;
-            }
-            excelReader.getSheetData(excelSheet, $scope.info.headers,$scope.info.contents[0].sheetName ,function (err, sheetData) {
-              if ($scope.info.callback) {
-                $scope.info.callback(sheetData);
-              }
-              $scope.hide();
-            });
-          });
-        });
-      };
 
       function setTheme(info) {
         $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
@@ -466,6 +412,70 @@ angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', func
       };
       $scope.hideOptions = function (index) {
         $element.find('.ag-row-option-container').eq(index).removeClass('show');
+      }
+    }
+  }
+}]);
+/**
+ * Created by zenghong on 16/1/18.
+ */
+angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'ExcelReaderService', function ($rootScope, ExcelReaderService) {
+  return {
+    restrict: 'AE',
+    templateUrl: 'directives/dialog_upload/dialog_upload.client.view.html',
+    replace: true,
+    scope: {},
+    link: function ($scope, $element, $attrs) {
+      $scope.info = {
+        title: '',
+        contents: [{
+          key: '请输入拜访卡名称',
+          value: '点击输入名称'
+        }],
+        color: 'blue',
+        type: 'execel',
+        headers: [
+          {key: 'A1', value: '大区'},
+          {key: 'B1', value: '省区'},
+          {key: 'C1', value: '办事处'}
+        ]
+      };
+
+      $scope.show = function () {
+        $element.addClass('show');
+      };
+      $scope.hide = function () {
+        $element.removeClass('show');
+      };
+      $scope.submit = function () {
+        $element.removeClass('show');
+      };
+      $rootScope.$on('show.dialogUpload', function (event, data) {
+        setTheme(data);
+        $scope.show();
+      });
+
+      $scope.handleFile = function (ele) {
+        var excelReader = ExcelReaderService.getReader();
+
+        excelReader.getWorkSheet(ele,$scope.info.contents[0].sheetName, function (err, excelSheet) {
+          excelReader.checkHeader(excelSheet, $scope.info.headers, $scope.info.contents[0].sheetName,function (isOurTemplate) {
+            if (!isOurTemplate) {
+              var a = isOurTemplate;
+            }
+            excelReader.getSheetData(excelSheet, $scope.info.headers,$scope.info.contents[0].sheetName ,function (err, sheetData) {
+              if ($scope.info.callback) {
+                $scope.info.callback(sheetData);
+              }
+              $scope.hide();
+            });
+          });
+        });
+      };
+
+      function setTheme(info) {
+        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
+        $scope.info = info;
       }
     }
   }
@@ -1483,10 +1493,54 @@ angular.module('agilesales-web').controller('OrderHistoryCtrl', ['$scope', 'Auth
 /**
  * Created by zenghong on 16/1/15.
  */
+angular.module('agilesales-web').controller('OrderHqApproveAreaCtrl', ['$scope', '$stateParams', 'AuthService', 'AreaOrderService',
+  function ($scope, $stateParams, AuthService, AreaOrderService) {
+    $scope.importBtns = [];
+    $scope.order_number = $stateParams.order_number;
+    $scope.location = window.location;
+    $scope.$on('suggest.import.changed', function (event, data) {
+      $scope.importBtns = data.btns;
+      $scope.title = data.title;
+    });
+
+    $scope.orders = [];
+    $scope.getAreaOrderDetail = function () {
+      AreaOrderService.getAreaOrderDetail($scope.order_number).then(function (data) {
+        if (data && !data.err) {
+          $scope.orders = data;
+        }
+        console.log(data);
+      }, function (data) {
+        console.log(data);
+      });
+    };
+
+    $scope.user = AuthService.getUser() || {};
+    AuthService.onUserUpdated('AuthService', function (user) {
+      $scope.user = user;
+    });
+    $scope.getAreaOrderDetail();
+
+  }]);
+/**
+ * Created by zenghong on 16/1/15.
+ */
 angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state', 'AreaOrderService', 'HqOrderService', 'AuthService',
   function ($scope, $state, AreaOrderService, HqOrderService, AuthService) {
     $scope.goDetail = function (o) {
-      $state.go('order_detail', {order_number: o.order_number});
+      if ($scope.user.account_type === '地区总部') {
+        $state.go('order_hq_approve_area', {order_number: o.order_number});
+      }
+
+      if ($scope.user.account_type === '地区分公司') {
+        $state.go('order_detail', {order_number: o.order_number});
+      }
+
+      if ($scope.user.account_type === '澳妆供应链') {
+        $state.go('order_re_approve_hq', {order_number: o.order_number});
+      }
+
+
     };
     $scope.user = AuthService.getUser() || {};
     $scope.signOut = function () {
@@ -1520,7 +1574,6 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state
     };
 
     if ($scope.user.account_type === '地区总部') {
-      $scope.getHqOrderList();
       $scope.getAreaOrderList();
     }
 
@@ -1531,6 +1584,38 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state
     if ($scope.user.account_type === '澳妆供应链') {
       $scope.getHqOrderList();
     }
+
+  }]);
+/**
+ * Created by zenghong on 16/1/15.
+ */
+angular.module('agilesales-web').controller('OrderReApproveHqCtrl', ['$scope', '$stateParams', 'AuthService', 'AreaOrderService',
+  function ($scope, $stateParams, AuthService, AreaOrderService) {
+    $scope.importBtns = [];
+    $scope.order_number = $stateParams.order_number;
+    $scope.location = window.location;
+    $scope.$on('suggest.import.changed', function (event, data) {
+      $scope.importBtns = data.btns;
+      $scope.title = data.title;
+    });
+
+    $scope.orders = [];
+    $scope.getAreaOrderDetail = function () {
+      AreaOrderService.getAreaOrderDetail($scope.order_number).then(function (data) {
+        if (data && !data.err) {
+          $scope.orders = data;
+        }
+        console.log(data);
+      }, function (data) {
+        console.log(data);
+      });
+    };
+
+    $scope.user = AuthService.getUser() || {};
+    AuthService.onUserUpdated('AuthService', function (user) {
+      $scope.user = user;
+    });
+    $scope.getAreaOrderDetail();
 
   }]);
 /**

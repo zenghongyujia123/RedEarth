@@ -11,4 +11,5 @@ module.exports = function (appDb) {
   require('./hq_sales')(appDb);
   require('./hq_order')(appDb);
   require('./hq_submit_order')(appDb);
+  require('./re_log')(appDb);
 };

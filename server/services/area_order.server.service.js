@@ -325,7 +325,7 @@ exports.getAreaOrderList = function (user, callback) {
 };
 
 exports.getAreaOrderDetail = function (user, order_number, callback) {
-  if (user.account_type === '地区分公司') {
+  if (user.account_type === '地区分公司'||user.account_type === '地区总部') {
     AreaSales.find({order_number: order_number}).populate('product').exec(function (err, areaSales) {
       if (err || !areaSales) {
         return callback({err: error.system.db_error});

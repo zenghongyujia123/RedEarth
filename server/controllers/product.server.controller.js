@@ -3,6 +3,7 @@
  */
 'use strict';
 var productService = require('./../services/all').product;
+var logService = require('./../services/all').re_log;
 
 exports.getProducts = function (req, res, next) {
   productService.getProducts(req.user, function (err, result) {
@@ -14,6 +15,8 @@ exports.getProducts = function (req, res, next) {
 };
 
 exports.importProducts = function (req, res, next) {
+  logService.insertLog(req.user.username, '导入产品资料');
+
   productService.importProducts(req.user, req.body.products, function (err, result) {
     if (err) {
       return res.send(err);

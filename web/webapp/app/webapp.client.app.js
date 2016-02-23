@@ -134,6 +134,16 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
         url: '/suggest_hq_other_order',
         templateUrl: 'templates/suggest_hq_other_order.client.view.html',
         controller: "SuggestHqOtherOrderCtrl"
+      })
+      .state('order_hq_approve_area', {
+        url: '/order_hq_approve_area/:order_number',
+        templateUrl: 'templates/order_hq_approve_area.client.view.html',
+        controller: "OrderHqApproveAreaCtrl"
+      })
+      .state('order_re_approve_hq', {
+        url: '/order_re_approve_hq/:order_number',
+        templateUrl: 'templates/order_re_approve_hq.client.view.html',
+        controller: "OrderReApproveHqCtrl"
       });
 
     $urlRouterProvider.otherwise('/');

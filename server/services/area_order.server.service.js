@@ -281,7 +281,7 @@ exports.suggestOrderSubmit = function (user, sales, callback) {
           return eachCallback();
         }
         AreaSales.findOne({_id: sale._id}, function (err, areaSales) {
-          if (err || !AreaSales) {
+          if (err || !areaSales) {
             return eachCallback();
           }
 

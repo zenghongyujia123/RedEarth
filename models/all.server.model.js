@@ -10,4 +10,5 @@ module.exports = function (appDb) {
   require('./area_sales')(appDb);
   require('./hq_sales')(appDb);
   require('./hq_order')(appDb);
+  require('./hq_submit_order')(appDb);
 };

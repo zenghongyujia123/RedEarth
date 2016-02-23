@@ -80,7 +80,7 @@ module.exports = function (appDb) {
     },
     //工厂MOQ
     factory_moq: {
-      type: String
+      type: Number
     },
     //MOQ备注
     moq_remark: {

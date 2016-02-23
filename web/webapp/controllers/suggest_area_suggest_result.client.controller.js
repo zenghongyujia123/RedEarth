@@ -56,9 +56,14 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
             system_suggest_count: sale.system_suggest_count,
             system_suggest_count_modify: sale.system_suggest_count_modify,
             system_suggest_count_modify_percent: sale.system_suggest_count_modify_percent,
+            D01: sale.D01,
             D02: sale.D02,
             D03: sale.D03,
-            D04: sale.D04
+            D04: sale.D04,
+            D01_approve: sale.D01_approve,
+            D02_approve: sale.D02_approve,
+            D03_approve: sale.D03_approve,
+            D04_approve: sale.D04_approve
           });
         }
       });

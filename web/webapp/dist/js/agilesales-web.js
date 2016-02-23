@@ -813,15 +813,17 @@ angular.module('agilesales-web').factory('HqOrderService', ['HttpService', funct
       return HttpService.post('/webapp/hq/stocks/import', {stocks: stocks});
     },
     getHqOtherOrders: function (order_type) {
-      return HttpService.get('/webapp/hq/orders', {order_type:order_type||''});
+      return HttpService.get('/webapp/hq/orders', {order_type: order_type || ''});
     },
     hqOtherOrderImport: function (orders) {
       return HttpService.post('/webapp/hq/orders/import', {orders: orders});
     },
-    getHqSuggestOrders:function(){
+    getHqSuggestOrders: function () {
       return HttpService.get('/webapp/hq/orders/suggest', {});
+    },
+    hqSuggestOrderSubmit: function (sales) {
+      return HttpService.post('/webapp/hq/sales/submit', {sales: sales});
     }
-
   };
 }]);
 /**
@@ -1796,9 +1798,14 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
             system_suggest_count: sale.system_suggest_count,
             system_suggest_count_modify: sale.system_suggest_count_modify,
             system_suggest_count_modify_percent: sale.system_suggest_count_modify_percent,
+            D01: sale.D01,
             D02: sale.D02,
             D03: sale.D03,
-            D04: sale.D04
+            D04: sale.D04,
+            D01_approve: sale.D01_approve,
+            D02_approve: sale.D02_approve,
+            D03_approve: sale.D03_approve,
+            D04_approve: sale.D04_approve
           });
         }
       });
@@ -2401,7 +2408,8 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
       title: '建议订单 总部建议订单（SKU）=(地区已审批订单+其他订单)-(总部库存+在途-安全库存) +判断条件（是否TOP SKU? 是否MOQ之%必采购？）',
       btns: [
         {
-          text: '提交'
+          text: '提交',
+          clickCallback: suggestOrderSubmit
         }
       ]
     });
@@ -2432,6 +2440,50 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
     $scope.modifySystemAreaSuggestPercent = function (sale) {
       sale.system_suggest_count_modify_percent = parseInt((sale.system_suggest_count_modify) * 100 / sale.system_suggest_count)
     };
+
+    function suggestOrderSubmit() {
+      var sales = [];
+
+      $scope.suggests.forEach(function (sale) {
+        if (sale.status !== '已审核') {
+          sales.push({
+            _id: sale._id,
+            system_suggest_count: sale.system_suggest_count,
+            system_suggest_count_modify: sale.system_suggest_count_modify,
+            system_suggest_count_modify_percent: sale.system_suggest_count_modify_percent,
+            D01: sale.D01,
+            D02: sale.D02,
+            D03: sale.D03,
+            D04: sale.D04,
+            D01_approve: sale.D01_approve,
+            D02_approve: sale.D02_approve,
+            D03_approve: sale.D03_approve,
+            D04_approve: sale.D04_approve
+          });
+        }
+      });
+      var final_sales = [];
+      for (var i = 0, len = sales.length; i < len; i += 40) {
+        final_sales.push(sales.slice(i, i + 40));
+      }
+
+      upload(final_sales, 0);
+    };
+
+    function upload(sales, i) {
+      HqOrderService.hqSuggestOrderSubmit(sales[i++])
+        .then(function (data) {
+          console.log(data);
+          if (sales[i]) {
+            upload(sales, i);
+          }
+          else {
+            alert('ok');
+          }
+        }, function (err) {
+          console.log(err);
+        });
+    }
 
   }]);
 /**

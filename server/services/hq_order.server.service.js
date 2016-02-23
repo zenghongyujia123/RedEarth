@@ -12,6 +12,7 @@ var appDb = require('./../../libraries/mongoose').appDb,
   AreaSales = appDb.model('AreaSales'),
   Product = appDb.model('Product'),
   HqOrder = appDb.model('HqOrder'),
+  HqSubmitOrder = appDb.model('HqSubmitOrder'),
   HqSales = appDb.model('HqSales');
 
 exports.hqStockImport = function (user, stocks, callback) {
@@ -203,7 +204,58 @@ exports.getHqSuggestOrders = function (user, callback) {
 };
 
 exports.hqSuggestOrderSubmit = function (user, sales, callback) {
+  var month = getLastMonth(1);
+  HqSubmitOrder.findOne({month: month}, function (err, hqSubmitOrder) {
+    if (err) {
+      return callback({err: error.system.db_error});
+    }
+    if (!hqSubmitOrder) {
+      hqSubmitOrder = new HqSubmitOrder({});
+    }
+    if (hqSubmitOrder.status === '已审核') {
+      return callback(null, {});
+    }
+    hqSubmitOrder.month = month;
+    hqSubmitOrder.user_number = user.number;
+    hqSubmitOrder.order_number = month + user.username + user.number;
+    hqSubmitOrder.status = '未审核';
+    hqSubmitOrder.save(function (err, saveHqSubmitOrder) {
+      if (err || !saveHqSubmitOrder) {
+        return callback({err: error.system.db_error});
+      }
 
+      async.each(sales, function (sale, eachCallback) {
+        if (sale.status === '已审核') {
+          return eachCallback();
+        }
+
+        HqSales.findOne({_id: sale._id}, function (err, hqSales) {
+          if (err || !hqSales) {
+            return eachCallback();
+          }
+
+          hqSales.system_suggest_count = sale.system_suggest_count;
+          hqSales.system_suggest_count_modify = sale.system_suggest_count_modify;
+          hqSales.system_suggest_count_modify_percent = sale.system_suggest_count_modify_percent;
+          hqSales.status = '未审核';
+          hqSales.order_number = hqSubmitOrder.order_number;
+          hqSales.D01 = sale.D01;
+          hqSales.D01_approve = sale.D01_approve;
+          hqSales.D02 = sale.D02;
+          hqSales.D02_approve = sale.D02_approve;
+          hqSales.D03 = sale.D03;
+          hqSales.D03_approve = sale.D03_approve;
+          hqSales.D04 = sale.D04;
+          hqSales.D04_approve = sale.D04_approve;
+          hqSales.save(function () {
+            return eachCallback();
+          });
+        });
+      }, function (err) {
+        return callback(err, {});
+      });
+    });
+  });
 };
 
 function getOrderNumber(username) {

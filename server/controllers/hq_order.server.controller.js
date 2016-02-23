@@ -48,3 +48,12 @@ exports.getHqSuggestOrders = function (req, res, next) {
     return res.send(result);
   });
 };
+
+exports.hqSuggestOrderSubmit = function (req, res, next) {
+  hqOrderService.hqSuggestOrderSubmit(req.user,req.body.sales, function (err,result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};

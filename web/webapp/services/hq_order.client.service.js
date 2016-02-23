@@ -11,14 +11,16 @@ angular.module('agilesales-web').factory('HqOrderService', ['HttpService', funct
       return HttpService.post('/webapp/hq/stocks/import', {stocks: stocks});
     },
     getHqOtherOrders: function (order_type) {
-      return HttpService.get('/webapp/hq/orders', {order_type:order_type||''});
+      return HttpService.get('/webapp/hq/orders', {order_type: order_type || ''});
     },
     hqOtherOrderImport: function (orders) {
       return HttpService.post('/webapp/hq/orders/import', {orders: orders});
     },
-    getHqSuggestOrders:function(){
+    getHqSuggestOrders: function () {
       return HttpService.get('/webapp/hq/orders/suggest', {});
+    },
+    hqSuggestOrderSubmit: function (sales) {
+      return HttpService.post('/webapp/hq/sales/submit', {sales: sales});
     }
-
   };
 }]);

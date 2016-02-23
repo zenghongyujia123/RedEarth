@@ -11,4 +11,5 @@ module.exports = function (app) {
   app.route('/webapp/hq/orders').get(filter.requireUser, all.hq_order.getHqOtherOrders);
   app.route('/webapp/hq/orders/import').post(filter.requireUser, all.hq_order.hqOtherOrderImport);
   app.route('/webapp/hq/orders/suggest').get(filter.requireUser, all.hq_order.getHqSuggestOrders);
+  app.route('/webapp/hq/sales/submit').post(filter.requireUser, all.hq_order.hqSuggestOrderSubmit);
 };

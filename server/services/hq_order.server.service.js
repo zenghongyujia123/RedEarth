@@ -258,6 +258,15 @@ exports.hqSuggestOrderSubmit = function (user, sales, callback) {
   });
 };
 
+exports.getHqOrderList = function (user, callback) {
+  HqSubmitOrder.find({}).exec(function (err, hqSubmitOrders) {
+    if (err || !hqSubmitOrders) {
+      return callback({err: error.system.db_error});
+    }
+    return callback(null, hqSubmitOrders);
+  });
+};
+
 function getOrderNumber(username) {
   return getLastMonth(1) + username;
 }

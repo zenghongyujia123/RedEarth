@@ -41,7 +41,7 @@ exports.hqOtherOrderImport = function (req, res, next) {
 };
 
 exports.getHqSuggestOrders = function (req, res, next) {
-  hqOrderService.getHqSuggestOrders(req.user, function (err,result) {
+  hqOrderService.getHqSuggestOrders(req.user, function (err, result) {
     if (err) {
       return res.send(err);
     }
@@ -50,7 +50,16 @@ exports.getHqSuggestOrders = function (req, res, next) {
 };
 
 exports.hqSuggestOrderSubmit = function (req, res, next) {
-  hqOrderService.hqSuggestOrderSubmit(req.user,req.body.sales, function (err,result) {
+  hqOrderService.hqSuggestOrderSubmit(req.user, req.body.sales, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};
+
+exports.getHqOrderList = function (req, res, next) {
+  hqOrderService.getHqOrderList(req.user, function (err, result) {
     if (err) {
       return res.send(err);
     }

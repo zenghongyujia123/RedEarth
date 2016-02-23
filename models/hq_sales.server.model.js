@@ -120,6 +120,9 @@ module.exports = function (appDb) {
       type: String,
       defualt: ''
     },
+    order_number: {
+      type: String
+    },
     status: {
       type: String,
       enum: ['未提交', '未审核', '已审核'],

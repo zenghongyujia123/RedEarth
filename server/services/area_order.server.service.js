@@ -12,6 +12,8 @@ var appDb = require('./../../libraries/mongoose').appDb,
   AreaOrder = appDb.model('AreaOrder'),
   Product = appDb.model('Product'),
   AreaSubmitOrder = appDb.model('AreaSubmitOrder'),
+  HqSales = appDb.model('HqSales'),
+
   AreaSales = appDb.model('AreaSales');
 
 exports.areaSalesStockOnwayImport = function (user, sales, callback) {
@@ -323,12 +325,22 @@ exports.getAreaOrderList = function (user, callback) {
 };
 
 exports.getAreaOrderDetail = function (user, order_number, callback) {
-  AreaSales.find({order_number: order_number}).populate('product').exec(function (err, areaSales) {
-    if (err || !areaSales) {
-      return callback({err: error.system.db_error});
-    }
-    return callback(null, areaSales);
-  });
+  if (user.account_type === '地区总部') {
+    HqSales.find({order_number: order_number}).populate('product').exec(function (err, areaSales) {
+      if (err || !areaSales) {
+        return callback({err: error.system.db_error});
+      }
+      return callback(null, areaSales);
+    });
+  }
+  else {
+    AreaSales.find({order_number: order_number}).populate('product').exec(function (err, areaSales) {
+      if (err || !areaSales) {
+        return callback({err: error.system.db_error});
+      }
+      return callback(null, areaSales);
+    });
+  }
 };
 
 exports.approveAreaOrder = function (user, order, callback) {

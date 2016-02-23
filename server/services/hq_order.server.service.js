@@ -51,7 +51,8 @@ exports.hqStockImport = function (user, stocks, callback) {
           {
             $group: {
               _id: '$month',
-              count: {$sum: '$last_month_sales_count'},
+              sales_count: {$sum: '$last_month_sales_count'},
+              stock_count:{$sum: '$last_month_stock_count'},
               D_02: {$sum: '$D02'},
               D_03: {$sum: '$D03'},
               D_04: {$sum: '$D04'}
@@ -63,13 +64,16 @@ exports.hqStockImport = function (user, stocks, callback) {
               hqSales.D02 = item.D_02;
               hqSales.D03 = item.D_03;
               hqSales.D04 = item.D_04;
-              hqSales.last_month_sales_count_1 = item.count;
+              hqSales.last_month_sales_count_1 = item.sales_count;
+              hqSales.last_month_stock_count_1 = item.stock_count;
             }
             if (item._id === getLastMonth(2)) {
-              hqSales.last_month_sales_count_2 = item.count;
+              hqSales.last_month_sales_count_2 = item.sales_count;
+              hqSales.last_month_stock_count_2 = item.stock_count;
             }
             if (item._id === getLastMonth(3)) {
-              hqSales.last_month_sales_count_3 = item.count;
+              hqSales.last_month_sales_count_3 = item.sales_count;
+              hqSales.last_month_stock_count_3 = item.stock_count;
             }
           });
 

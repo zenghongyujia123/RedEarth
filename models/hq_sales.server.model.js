@@ -21,8 +21,8 @@ module.exports = function (appDb) {
       type: Number,
       default: 0
     },
-    month:{
-      type:String
+    month: {
+      type: String
     },
     //近效期
     validity: {
@@ -33,49 +33,77 @@ module.exports = function (appDb) {
       type: Number,
       default: 0
     },
-    Y01:{
-      type:Number,
-      default:0
+    safe_stock: {
+      type: Number,
+      default: 0
     },
-    Y02:{
-      type:Number,
-      default:0
+    Y01: {
+      type: Number,
+      default: 0
     },
-    Y03:{
-      type:Number,
-      default:0
+    Y02: {
+      type: Number,
+      default: 0
     },
-    Y04:{
-      type:Number,
-      default:0
+    Y03: {
+      type: Number,
+      default: 0
     },
-    Y05:{
-      type:Number,
-      default:0
+    Y04: {
+      type: Number,
+      default: 0
     },
-    Y06:{
-      type:Number,
-      default:0
+    Y05: {
+      type: Number,
+      default: 0
     },
-    Y07:{
-      type:Number,
-      default:0
+    Y06: {
+      type: Number,
+      default: 0
     },
-    D02:{
-      type:Number,
-      default:0
+    Y07: {
+      type: Number,
+      default: 0
     },
-    D03:{
-      type:Number,
-      default:0
+    D02: {
+      type: Number,
+      default: 0
     },
-    D04:{
-      type:Number,
-      default:0
+    D03: {
+      type: Number,
+      default: 0
+    },
+    D04: {
+      type: Number,
+      default: 0
     },
     product: {
       type: Schema.Types.ObjectId,
       ref: 'Product'
+    },
+    system_suggest_count: {
+      type: Number,
+      default: 0
+    },
+    //修改后的系统建议订单
+    system_suggest_count_modify: {
+      type: Number,
+      default: 0
+    },
+    //修改后的系统建议订单%
+    system_suggest_count_modify_percent: {
+      type: Number,
+      default: 0
+    },
+    //备注
+    remark: {
+      type: String,
+      defualt: ''
+    },
+    status: {
+      type: String,
+      enum: ['未提交', '未审核', '已审核'],
+      default: '未提交'
     },
     next_month_sales_forecast_0: {
       type: Number,
@@ -107,27 +135,27 @@ module.exports = function (appDb) {
     },
     last_month_sales_count_1: {
       type: Number,
-      default:0
+      default: 0
     },
     last_month_sales_count_2: {
       type: Number,
-      default:0
+      default: 0
     },
     last_month_sales_count_3: {
       type: Number,
-      default:0
+      default: 0
     },
     last_month_stock_count_1: {
       type: Number,
-      default:0
+      default: 0
     },
     last_month_stock_count_2: {
       type: Number,
-      default:0
+      default: 0
     },
     last_month_stock_count_3: {
       type: Number,
-      default:0
+      default: 0
     }
   });
 
@@ -145,6 +173,14 @@ module.exports = function (appDb) {
       this.next_month_sales_forecast_4 = parseInt((this.next_month_sales_forecast_1 + this.next_month_sales_forecast_2 + this.next_month_sales_forecast_3) / 3);
       this.next_month_sales_forecast_5 = parseInt((this.next_month_sales_forecast_2 + this.next_month_sales_forecast_3 + this.next_month_sales_forecast_4 ) / 3);
       this.next_month_sales_forecast_6 = parseInt((this.next_month_sales_forecast_3 + this.next_month_sales_forecast_4 + this.next_month_sales_forecast_5 ) / 3);
+    }
+
+    if (this.last_month_stock_count_1 !== 0 || this.last_month_stock_count_2 !== 0 || this.last_month_stock_count_3 !== 0) {
+      this.safe_stock = parseInt(( this.last_month_stock_count_1 + this.last_month_stock_count_2 + this.last_month_stock_count_3) / 3) * 2
+    }
+
+    if (this.system_suggest_count !== 0 && this.system_suggest_count_modify === 0) {
+      this.system_suggest_count_modify = this.system_suggest_count;
     }
 
     next();

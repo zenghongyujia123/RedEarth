@@ -325,16 +325,16 @@ exports.getAreaOrderList = function (user, callback) {
 };
 
 exports.getAreaOrderDetail = function (user, order_number, callback) {
-  if (user.account_type === '地区总部') {
-    HqSales.find({order_number: order_number}).populate('product').exec(function (err, areaSales) {
+  if (user.account_type === '地区分公司') {
+    AreaSales.find({order_number: order_number}).populate('product').exec(function (err, areaSales) {
       if (err || !areaSales) {
         return callback({err: error.system.db_error});
       }
       return callback(null, areaSales);
     });
   }
-  else {
-    AreaSales.find({order_number: order_number}).populate('product').exec(function (err, areaSales) {
+  else{
+    HqSales.find({order_number: order_number}).populate('product').exec(function (err, areaSales) {
       if (err || !areaSales) {
         return callback({err: error.system.db_error});
       }

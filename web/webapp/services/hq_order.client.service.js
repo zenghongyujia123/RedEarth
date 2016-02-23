@@ -15,6 +15,9 @@ angular.module('agilesales-web').factory('HqOrderService', ['HttpService', funct
     },
     hqOtherOrderImport: function (orders) {
       return HttpService.post('/webapp/hq/orders/import', {orders: orders});
+    },
+    getHqSuggestOrders:function(){
+      return HttpService.get('/webapp/hq/orders/suggest', {});
     }
 
   };

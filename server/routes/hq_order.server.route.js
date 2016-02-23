@@ -10,4 +10,5 @@ module.exports = function (app) {
   app.route('/webapp/hq/stocks').get(filter.requireUser, all.hq_order.getHqCurrentStocks);
   app.route('/webapp/hq/orders').get(filter.requireUser, all.hq_order.getHqOtherOrders);
   app.route('/webapp/hq/orders/import').post(filter.requireUser, all.hq_order.hqOtherOrderImport);
+  app.route('/webapp/hq/orders/suggest').get(filter.requireUser, all.hq_order.getHqSuggestOrders);
 };

@@ -40,43 +40,37 @@
     </div>
   </div>
   <div class="re-table-body" style="width: 7840px;min-width: 100%;">
-    <div class="re-table-row">
-      <div class="body-col">SKU编码</div>
-      <div class="body-col">产品名称</div>
-      <div class="body-col">产品条码</div>
-      <div class="body-col">品类</div>
-      <div class="body-col">中分类名称</div>
-      <div class="body-col">销售价格</div>
-      <div class="body-col">晋颖成本价</div>
-      <div class="body-col">ABC分类</div>
-      <div class="body-col">ABC类说明</div>
-      <div class="body-col">ABC类别%</div>
-      <div class="body-col">上月月结库存总部正品库存</div>
-      <div class="body-col">在途以录入交货為准</div>
-      <div class="body-col">月均销售前3个月平均</div>
-      <div class="body-col">安全库存2个月</div>
-      <div class="body-col">1月销售</div>
-      <div class="body-col">2月销售</div>
-      <div class="body-col">3月销售</div>
-      <div class="body-col">4月销售</div>
-      <div class="body-col">5月销售</div>
-      <div class="body-col">6月销售</div>
-      <div class="body-col">当月汇总地区已审批订单</div>
-      <div class="body-col">当月汇总地区使用装</div>
-      <div class="body-col">当月汇总地区陈列</div>
-      <div class="body-col">上月上传其他订单批发</div>
-      <div class="body-col">上月上传其他订单试用装</div>
-      <div class="body-col">上月上传其他订单陈列</div>
-      <div class="body-col">上月上传其他订单经销商</div>
-      <div class="body-col">上月上传其他订单电商</div>
-      <div class="body-col">上月上传其他订单茂姿</div>
-      <div class="body-col">当月总部订单系统建议</div>
-      <div class="body-col">修改</div>
-      <div class="body-col">修改%</div>
-      <div class="body-col">备注</div>
-      <div class="body-col">已取得上级核准</div>
-      <div class="body-col">澳妆最终审批采购量</div>
-      <div class="body-col">澳妆最终审批采购金额</div>
+    <div class="re-table-row" ng-repeat="s in suggests">
+      <div class="body-col">{{s.product_number}}</div>
+      <div class="body-col">{{s.product.product_name}}</div>
+      <div class="body-col">{{s.product.product_barcode}}</div>
+      <div class="body-col">{{s.product.category}}</div>
+      <div class="body-col">{{s.product.mid_classify}}</div>
+      <div class="body-col">{{s.product.sales_price}}</div>
+      <div class="body-col">{{s.product.jinyi_cost}}</div>
+      <div class="body-col">{{s.product.abc_classify}}</div>
+      <div class="body-col">{{s.product.abc_classify_explain}}</div>
+      <div class="body-col">{{s.product.abc_category}}</div>
+      <div class="body-col">{{s.genuine_goods}}</div>
+      <div class="body-col">{{s.next_month_sales_forecast_0}}</div>
+      <div class="body-col">{{''}}</div>
+      <div class="body-col">{{s.next_month_sales_forecast_0}}</div>
+      <div class="body-col">{{s.next_month_sales_forecast_1}}</div>
+      <div class="body-col">{{s.next_month_sales_forecast_2}}</div>
+      <div class="body-col">{{s.next_month_sales_forecast_3}}</div>
+      <div class="body-col">{{s.next_month_sales_forecast_4}}</div>
+      <div class="body-col">{{s.next_month_sales_forecast_5}}</div>
+      <div class="body-col">{{s.next_month_sales_forecast_6}}</div>
+      <div class="body-col">当月已审批订单</div>
+      <div class="body-col">{{s.D03}}</div>
+      <div class="body-col">{{s.D04}}</div>
+      <div class="body-col">{{s.Y02}}</div>
+      <div class="body-col">{{s.Y03}}</div>
+      <div class="body-col">{{s.Y04}}</div>
+      <div class="body-col">{{s.Y05}}</div>
+      <div class="body-col">{{s.Y06}}</div>
+      <div class="body-col">{{s.Y07}}</div>
+
     </div>
   </div>
 </div>

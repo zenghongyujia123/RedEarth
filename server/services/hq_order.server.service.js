@@ -38,6 +38,7 @@ exports.hqStockImport = function (user, stocks, callback) {
         hqSales.genuine_goods = stock.genuine_goods;
         hqSales.ungenuine_goods = stock.ungenuine_goods;
         hqSales.validity = stock.validity;
+        hqSales.product = product;
         hqSales.month = month;
 
         AreaSales.aggregate([
@@ -50,18 +51,24 @@ exports.hqStockImport = function (user, stocks, callback) {
           {
             $group: {
               _id: '$month',
-              count: {$sum: '$last_month_sales_count'}
+              count: {$sum: '$last_month_sales_count'},
+              D_02: {$sum: '$D02'},
+              D_03: {$sum: '$D03'},
+              D_04: {$sum: '$D04'}
             }
           }
         ]).exec(function (err, result) {
           result.forEach(function (item) {
-            if (item._id===getLastMonth(1)) {
+            if (item._id === getLastMonth(1)) {
+              hqSales.D02 = item.D_02;
+              hqSales.D03 = item.D_03;
+              hqSales.D04 = item.D_04;
               hqSales.last_month_sales_count_1 = item.count;
             }
-            if (item._id===getLastMonth(2)) {
+            if (item._id === getLastMonth(2)) {
               hqSales.last_month_sales_count_2 = item.count;
             }
-            if (item._id===getLastMonth(3)) {
+            if (item._id === getLastMonth(3)) {
               hqSales.last_month_sales_count_3 = item.count;
             }
           });
@@ -134,12 +141,33 @@ exports.hqOtherOrderImport = function (user, orders, callback) {
       hqOrder.order_type = order.order_type;
       hqOrder.jinyi_total_price = isNaN(parseFloat(order.jinyi_total_price)) ? 0 : parseFloat(order.jinyi_total_price);
       hqOrder.save(function (err) {
-        return eachCallback();
+        HqSales.findOne({product_number: hqOrder.product_number, month: getLastMonth(1)}, function (err, hqSales) {
+          if (err || !hqSales) {
+            return eachCallback();
+          }
+          hqSales[hqOrder.order_type] = hqOrder.order_count;
+          hqSales.save(function(err){
+            return eachCallback();
+          })
+        });
       });
     });
   }, function (err) {
     return callback(err, {});
   });
+};
+
+exports.getHqSuggestOrders = function (user, callback) {
+  HqSales.find({month: getLastMonth(1)}).populate('product').exec(function (err, hqSales) {
+    if (err || !hqSales) {
+      return callback({err: error.system.db_error});
+    }
+    return callback(null, hqSales);
+  });
+};
+
+exports.hqSuggestOrderSubmit = function (user, sales, callback) {
+
 };
 
 function getOrderNumber(username) {

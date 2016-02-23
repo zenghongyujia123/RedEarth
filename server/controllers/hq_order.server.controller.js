@@ -23,7 +23,7 @@ exports.getHqCurrentStocks = function (req, res, next) {
 };
 
 exports.getHqOtherOrders = function (req, res, next) {
-  hqOrderService.getHqOtherOrders (req.user, {order_type:req.query.order_type||''}, function (err, result) {
+  hqOrderService.getHqOtherOrders (req.user, {order_type: req.query.order_type || ''}, function (err, result) {
     if (err) {
       return res.send(err);
     }
@@ -33,6 +33,15 @@ exports.getHqOtherOrders = function (req, res, next) {
 
 exports.hqOtherOrderImport = function (req, res, next) {
   hqOrderService.hqOtherOrderImport (req.user, req.body.orders, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};
+
+exports.getHqSuggestOrders = function (req, res, next) {
+  hqOrderService.getHqSuggestOrders(req.user, function (err,result) {
     if (err) {
       return res.send(err);
     }

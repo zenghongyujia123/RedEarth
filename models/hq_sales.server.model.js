@@ -33,6 +33,50 @@ module.exports = function (appDb) {
       type: Number,
       default: 0
     },
+    Y01:{
+      type:Number,
+      default:0
+    },
+    Y02:{
+      type:Number,
+      default:0
+    },
+    Y03:{
+      type:Number,
+      default:0
+    },
+    Y04:{
+      type:Number,
+      default:0
+    },
+    Y05:{
+      type:Number,
+      default:0
+    },
+    Y06:{
+      type:Number,
+      default:0
+    },
+    Y07:{
+      type:Number,
+      default:0
+    },
+    D02:{
+      type:Number,
+      default:0
+    },
+    D03:{
+      type:Number,
+      default:0
+    },
+    D04:{
+      type:Number,
+      default:0
+    },
+    product: {
+      type: Schema.Types.ObjectId,
+      ref: 'Product'
+    },
     next_month_sales_forecast_0: {
       type: Number,
       default: 0
@@ -90,6 +134,20 @@ module.exports = function (appDb) {
   HqSalesSchema.plugin(timestamps, {
     createdAt: 'created',
     updatedAt: 'updated'
+  });
+
+  HqSalesSchema.pre('save', function (next) {
+    if (this.last_month_sales_count_3 !== 0 || this.last_month_sales_count_2 !== 0 || this.last_month_sales_count_1 !== 0) {
+      this.next_month_sales_forecast_0 = parseInt((this.last_month_sales_count_3 + this.last_month_sales_count_2 + this.last_month_sales_count_1) / 3);
+      this.next_month_sales_forecast_1 = parseInt((this.last_month_sales_count_2 + this.last_month_sales_count_1 + this.next_month_sales_forecast_0 ) / 3);
+      this.next_month_sales_forecast_2 = parseInt((this.last_month_sales_count_1 + this.next_month_sales_forecast_0 + this.next_month_sales_forecast_1 ) / 3);
+      this.next_month_sales_forecast_3 = parseInt((this.next_month_sales_forecast_0 + this.next_month_sales_forecast_1 + this.next_month_sales_forecast_2 ) / 3);
+      this.next_month_sales_forecast_4 = parseInt((this.next_month_sales_forecast_1 + this.next_month_sales_forecast_2 + this.next_month_sales_forecast_3) / 3);
+      this.next_month_sales_forecast_5 = parseInt((this.next_month_sales_forecast_2 + this.next_month_sales_forecast_3 + this.next_month_sales_forecast_4 ) / 3);
+      this.next_month_sales_forecast_6 = parseInt((this.next_month_sales_forecast_3 + this.next_month_sales_forecast_4 + this.next_month_sales_forecast_5 ) / 3);
+    }
+
+    next();
   });
   appDb.model('HqSales', HqSalesSchema);
 };

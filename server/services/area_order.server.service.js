@@ -311,7 +311,7 @@ exports.suggestOrderSubmit = function (user, sales, callback) {
 
 exports.getAreaOrderList = function (user, callback) {
   var condition = {};
-  if (user.account_type === 'account_type') {
+  if (user.account_type === '地区分公司') {
     condition.user_number = user.number;
   }
   AreaSubmitOrder.find(condition).sort('month').exec(function (err, aresSales) {

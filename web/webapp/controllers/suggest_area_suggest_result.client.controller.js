@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$scope', '$rootScope', 'AreaOrderService',
-  function ($scope, $rootScope, AreaOrderService) {
+angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService',
+  function ($scope, $rootScope, $state, AreaOrderService) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单 地区建议订单（SKU）=当月预测-[地区库存(包括店柜库存) +在途-未来6月销售预测-其他订单(批发)-安全库存）] * 产品分类（ABC）?%',
       btns: [
@@ -84,6 +84,7 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
           }
           else {
             alert('ok');
+            $state.go('order_suggest.suggest_area_suggest_result', {}, {reload: true});
           }
         }, function (err) {
           console.log(err);

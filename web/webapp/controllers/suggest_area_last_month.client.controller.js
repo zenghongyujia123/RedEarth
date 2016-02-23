@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope', '$rootScope', 'AreaOrderService',
-  function ($scope, $rootScope, AreaOrderService) {
+angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService',
+  function ($scope, $rootScope, $state, AreaOrderService) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单',
       btns: [
@@ -16,7 +16,7 @@ angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope
     $scope.sales = [];
     $scope.getSalesByArea = function () {
       AreaOrderService.getSalesByArea().then(function (data) {
-        if(!data.err){
+        if (!data.err) {
           $scope.sales = data;
         }
         console.log(data);
@@ -40,6 +40,9 @@ angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope
             console.log(data);
             if (saleses[i]) {
               upload(saleses, i);
+            }
+            else {
+              $state.go('order_suggest.suggest_area_last_month', {}, {reload: true});
             }
           }, function (err) {
             console.log(err);

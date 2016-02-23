@@ -1431,10 +1431,6 @@ angular.module('agilesales-web').controller('OrderDetailCtrl', ['$scope', '$stat
   function ($scope, $stateParams, $state, AreaOrderService, AuthService) {
     $scope.order_number = $stateParams.order_number;
     $scope.orders = [];
-    $scope.user = AuthService.getUser() || {};
-    $scope.signOut = function () {
-      AuthService.signOut();
-    };
     $scope.getAreaOrderDetail = function () {
       AreaOrderService.getAreaOrderDetail($scope.order_number).then(function (data) {
         if (data && !data.err) {
@@ -1525,9 +1521,16 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state
 
     if ($scope.user.account_type === '地区总部') {
       $scope.getHqOrderList();
+      $scope.getAreaOrderList();
     }
-    $scope.getAreaOrderList();
 
+    if ($scope.user.account_type === '地区分公司') {
+      $scope.getAreaOrderList();
+    }
+
+    if ($scope.user.account_type === '澳妆供应链') {
+      $scope.getHqOrderList();
+    }
 
   }]);
 /**

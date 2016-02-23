@@ -39,8 +39,15 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state
 
     if ($scope.user.account_type === '地区总部') {
       $scope.getHqOrderList();
+      $scope.getAreaOrderList();
     }
-    $scope.getAreaOrderList();
 
+    if ($scope.user.account_type === '地区分公司') {
+      $scope.getAreaOrderList();
+    }
+
+    if ($scope.user.account_type === '澳妆供应链') {
+      $scope.getHqOrderList();
+    }
 
   }]);

@@ -173,5 +173,92 @@
     </div>
 
   </div>
+  <div ng-if="user.account_type==='澳妆供应链'" class="re-child-body">
+    <div class="re-table">
+      <div class="re-table-header" style="width: 8240px;min-width: 100%;">
+        <div class="re-table-row">
+          <div class="header-col">SKU编码</div>
+          <div class="header-col">产品名称</div>
+          <div class="header-col">产品条码</div>
+          <div class="header-col">品类</div>
+          <div class="header-col">中分类名称</div>
+          <div class="header-col">销售价格</div>
+          <div class="header-col">晋颖成本价</div>
+          <div class="header-col">ABC分类</div>
+          <div class="header-col">ABC类说明</div>
+          <div class="header-col">ABC类别%</div>
+          <div class="header-col">上月月结库存总部正品库存</div>
+          <div class="header-col">在途以采购地区在途</div>
+          <div class="header-col">地区月结库存包括店柜库存</div>
+          <div class="header-col">地区在途</div>
+          <div class="header-col">月均销售前3个月平均</div>
+          <div class="header-col">安全库存2个月</div>
+          <div class="header-col">1月销售</div>
+          <div class="header-col">2月销售</div>
+          <div class="header-col">3月销售</div>
+          <div class="header-col">4月销售</div>
+          <div class="header-col">5月销售</div>
+          <div class="header-col">6月销售</div>
+          <div class="header-col">当月汇总地区已审批订单</div>
+          <div class="header-col">当月汇总地区使用装</div>
+          <div class="header-col">当月汇总地区陈列</div>
+          <div class="header-col">上月上传其他订单批发</div>
+          <div class="header-col">上月上传其他订单试用装</div>
+          <div class="header-col">上月上传其他订单陈列</div>
+          <div class="header-col">上月上传其他订单经销商</div>
+          <div class="header-col">上月上传其他订单电商</div>
+          <div class="header-col">上月上传其他订单茂姿</div>
+          <div class="header-col">当月总部订单系统建议</div>
+          <div class="header-col">修改</div>
+          <div class="header-col">修改%</div>
+          <div class="header-col">备注</div>
+          <div class="header-col">已取得上级核准</div>
+          <div class="header-col">工厂MOQ</div>
+          <div class="header-col">MOQ备注</div>
+          <div class="header-col">订单达MOQ%必采购</div>
+          <div class="header-col">澳妆最终审批采购量</div>
+          <div class="header-col">澳妆最终审批采购金额</div>
+        </div>
+      </div>
+      <div class="re-table-body" style="width: 8240px;min-width: 100%;">
+        <div class="re-table-row" ng-repeat="s in orders">
+          <div class="body-col">{{s.product_number}}</div>
+          <div class="body-col">{{s.product.product_name}}</div>
+          <div class="body-col">{{s.product.product_barcode}}</div>
+          <div class="body-col">{{s.product.category}}</div>
+          <div class="body-col">{{s.product.mid_classify}}</div>
+          <div class="body-col">{{s.product.sales_price}}</div>
+          <div class="body-col">{{s.product.jinyi_cost}}</div>
+          <div class="body-col">{{s.product.abc_classify}}</div>
+          <div class="body-col">{{s.product.abc_classify_explain}}</div>
+          <div class="body-col">{{s.product.abc_category}}</div>
+          <div class="body-col">{{s.genuine_goods}}</div>
+          <div class="body-col">{{''}}</div>
+          <div class="body-col">{{s.next_month_sales_forecast_0}}</div>
+          <div class="body-col">{{s.safe_stock}}</div>
+          <div class="body-col">{{s.next_month_sales_forecast_1}}</div>
+          <div class="body-col">{{s.next_month_sales_forecast_2}}</div>
+          <div class="body-col">{{s.next_month_sales_forecast_3}}</div>
+          <div class="body-col">{{s.next_month_sales_forecast_4}}</div>
+          <div class="body-col">{{s.next_month_sales_forecast_5}}</div>
+          <div class="body-col">{{s.next_month_sales_forecast_6}}</div>
+          <div class="body-col">{{s.D01_approve}}</div>
+          <div class="body-col">{{s.D03}}</div>
+          <div class="body-col">{{s.D04}}</div>
+          <div class="body-col">{{s.Y02}}</div>
+          <div class="body-col">{{s.Y03}}</div>
+          <div class="body-col">{{s.Y04}}</div>
+          <div class="body-col">{{s.Y05}}</div>
+          <div class="body-col">{{s.Y06}}</div>
+          <div class="body-col">{{s.Y07}}</div>
+          <div class="body-col">{{getSystemAreaSuggest(s)}}</div>
+          <div class="body-col" ng-keyup="modifySystemAreaSuggestPercent(s)">{{s.system_suggest_count_modify}}</div>
+          <div class="body-col">{{s.system_suggest_count_modify_percent}}</div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
 </div>

@@ -4,7 +4,7 @@
 angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$scope', '$rootScope', 'AreaOrderService',
   function ($scope, $rootScope, AreaOrderService) {
     $scope.$emit('suggest.import.changed', {
-      title: '建议订单',
+      title: '建议订单 地区建议订单（SKU）=当月预测-[地区库存(包括店柜库存) +在途-未来6月销售预测-其他订单(批发)-安全库存）] * 产品分类（ABC）?%',
       btns: [
         {
           text: '提交',

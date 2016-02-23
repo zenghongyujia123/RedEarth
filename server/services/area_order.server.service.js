@@ -79,7 +79,7 @@ exports.areaSalesStockOnwayImport = function (user, sales, callback) {
 
 
   }, function (err, result) {
-    return callback(err, result);
+    return callback(err, {});
   });
 };
 
@@ -131,7 +131,7 @@ exports.otherOrderImport = function (user, orders, callback) {
       });
     });
   }, function (err, result) {
-    return callback(err, result);
+    return callback(err, {});
   });
 };
 
@@ -303,15 +303,10 @@ exports.suggestOrderSubmit = function (user, sales, callback) {
           });
         });
       }, function (err, result) {
-
         return callback(err, {});
       });
-
-
     });
   });
-
-
 };
 
 exports.getAreaOrderList = function (user, callback) {

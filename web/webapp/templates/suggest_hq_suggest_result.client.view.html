@@ -55,7 +55,6 @@
       <div class="body-col">{{''}}</div>
       <div class="body-col">{{s.next_month_sales_forecast_0}}</div>
       <div class="body-col">{{s.safe_stock}}</div>
-      <div class="body-col">{{s.next_month_sales_forecast_0}}</div>
       <div class="body-col">{{s.next_month_sales_forecast_1}}</div>
       <div class="body-col">{{s.next_month_sales_forecast_2}}</div>
       <div class="body-col">{{s.next_month_sales_forecast_3}}</div>
@@ -71,8 +70,8 @@
       <div class="body-col">{{s.Y05}}</div>
       <div class="body-col">{{s.Y06}}</div>
       <div class="body-col">{{s.Y07}}</div>
-      <div class="body-col">{{s.system_suggest_count}}</div>
-      <div class="body-col">{{s.system_suggest_count_modify}}</div>
+      <div class="body-col">{{getSystemAreaSuggest(s)}}</div>
+      <div class="body-col" ng-keyup="modifySystemAreaSuggestPercent(s)">{{s.system_suggest_count_modify}}</div>
       <div class="body-col">{{s.system_suggest_count_modify_percent}}</div>
 
     </div>

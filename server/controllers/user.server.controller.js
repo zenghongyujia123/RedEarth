@@ -11,7 +11,7 @@ var cryptoLib = require('./../../libraries/crypto');
 var cookieLib = require('./../../libraries/cookie');
 
 exports.signin = function (req, res, next) {
-  logService.insertLog(req.user.username, '登录');
+  logService.insertLog(req.body.username, '登录');
 
   var username = req.body.username;
   var password = req.body.password;
@@ -35,6 +35,15 @@ exports.getLogs = function (req, res, next) {
   });
 };
 
+exports.changePassword = function (req, res, next) {
+  userService.changePassword(req.user, req.body.old_p, req.body.new_p, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    logService.insertLog(req.user.username, '修改密码');
+    return res.send(result);
+  });
+};
 exports.getMe = function (req, res, next) {
   return res.send(req.user);
 };

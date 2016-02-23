@@ -1,0 +1,18 @@
+<div class="re-table">
+  <div class="re-table-header" style="width: 840px;min-width: 100%;">
+    <div class="re-table-row">
+      <div class="header-col">序号</div>
+      <div class="header-col">用户</div>
+      <div class="header-col">操作内容</div>
+      <div class="header-col">提交日期</div>
+    </div>
+  </div>
+  <div class="re-table-body" style="width: 840px;min-width: 100%;">
+    <div class="re-table-row" ng-repeat="l in logs">
+      <div class="body-col">{{$index}}</div>
+      <div class="body-col">{{l.username}}</div>
+      <div class="body-col">{{l.operation}}</div>
+      <div class="body-col">{{l.date}}</div>
+    </div>
+  </div>
+</div>

@@ -9,4 +9,5 @@ module.exports = function (app) {
   app.route('/webapp/signin').post(all.user.signin);
   app.route('/webapp/user/me').get(filter.requireUser,all.user.getMe);
   app.route('/webapp/user/log').get(filter.requireUser,all.user.getLogs);
+  app.route('/webapp/user/password').post(filter.requireUser,all.user.changePassword);
 };

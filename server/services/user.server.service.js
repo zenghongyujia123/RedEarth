@@ -27,6 +27,20 @@ exports.signin = function (username, password, callback) {
   });
 };
 
+exports.changePassword = function (user, old_p, new_p, callback) {
+  if (user.password !== cryptoLib.toMd5(old_p)) {
+    return callback({err: error.business.user_account_password_error});
+  }
+
+  user.password = cryptoLib.toMd5(new_p);
+  user.save(function (err, saveUser) {
+    if (err || !saveUser) {
+      return callback({err: error.system.db_error});
+    }
+    return callback(null, saveUser);
+  });
+};
+
 function initUser() {
   User.count({}, function (err, count) {
     if (count > 0) {
@@ -559,7 +573,7 @@ function initUser() {
     ];
 
     async.each(users, function (user, callback) {
-      User.findOne({username: user.username}, function (err,findUser) {
+      User.findOne({username: user.username}, function (err, findUser) {
         if (!findUser) {
           findUser = new User(user);
         }

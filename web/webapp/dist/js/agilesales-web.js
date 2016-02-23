@@ -897,10 +897,16 @@ angular.module('agilesales-web').factory('UploadService', ['HttpService', functi
 /**
  * Created by zenghong on 16/1/21.
  */
-angular.module('agilesales-web').factory('UserService', [ 'HttpService', function (HttpService) {
+angular.module('agilesales-web').factory('UserService', ['HttpService', function (HttpService) {
   return {
     getMe: function () {
       return HttpService.get('/webapp/user/me', {});
+    },
+    getLog: function () {
+      return HttpService.get('/webapp/user/log', {});
+    },
+    changePassword: function (oldP, newP) {
+      return HttpService.post('/webapp/user/password', {old_p: oldP, new_p: newP});
     }
   };
 }]);
@@ -1640,9 +1646,20 @@ angular.module('agilesales-web').controller('OrderSuggestCtrl', ['$scope', '$sta
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SettingHistoryCtrl', function () {
-
-});
+angular.module('agilesales-web').controller('SettingHistoryCtrl', ['$scope', 'UserService', function ($scope, UserService) {
+  $scope.logs = [];
+  $scope.getLog = function () {
+    UserService.getLog().then(function (data) {
+      console.log(data);
+      if (data && !data.err) {
+        $scope.logs = data;
+      }
+    }, function (data) {
+      console.log(data);
+    });
+  };
+  $scope.getLog();
+}]);
 /**
  * Created by zenghong on 16/1/15.
  */
@@ -1652,9 +1669,44 @@ angular.module('agilesales-web').controller('SettingHomeCtrl', function () {
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SettingPasswordCtrl', function () {
+angular.module('agilesales-web').controller('SettingPasswordCtrl', ['$scope', 'UserService', function ($scope, UserService) {
+  $scope.info = {
+    old_password: '',
+    new_password: '',
+    re_password: ''
+  };
 
-});
+
+  $scope.changePassword = function () {
+    if (!$scope.info.old_password) {
+     return alert('请输入原始密码');
+    }
+    if (!$scope.info.new_password) {
+      return alert('请输入新密码');
+    }
+    if (!$scope.info.re_password) {
+      return alert('请确认密码');
+    }
+
+    if ($scope.info.re_password !== $scope.info.new_password) {
+      return alert('确认密码不一致');
+    }
+
+    UserService.changePassword($scope.info.old_password, $scope.info.new_password).then(function (data) {
+      console.log(data);
+      if (data && !data.err) {
+        alert('修改成功');
+        $scope.info = {
+          old_password: '',
+          new_password: '',
+          re_password: ''
+        };
+      }
+    }, function (data) {
+      console.log(data);
+    });
+  }
+}]);
 /**
  * Created by zenghong on 16/1/15.
  */

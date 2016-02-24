@@ -227,5 +227,10 @@ module.exports = function (appDb) {
     updatedAt: 'updated'
   });
 
+  Productchema.pre('save', function (next) {
+    this.onway_count = this.plan_delivery_count - this.real_delivery_count;
+    next();
+  });
+
   appDb.model('Product', Productchema);
 };

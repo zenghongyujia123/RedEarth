@@ -325,7 +325,7 @@ exports.getAreaOrderList = function (user, callback) {
 };
 
 exports.getAreaOrderDetail = function (user, order_number, callback) {
-  if (user.account_type === '地区分公司'||user.account_type === '地区总部') {
+  if (user.account_type === '地区分公司' || user.account_type === '地区总部') {
     AreaSales.find({order_number: order_number}).populate('product').exec(function (err, areaSales) {
       if (err || !areaSales) {
         return callback({err: error.system.db_error});
@@ -333,7 +333,7 @@ exports.getAreaOrderDetail = function (user, order_number, callback) {
       return callback(null, areaSales);
     });
   }
-  else{
+  else {
     HqSales.find({order_number: order_number}).populate('product').exec(function (err, areaSales) {
       if (err || !areaSales) {
         return callback({err: error.system.db_error});
@@ -361,6 +361,37 @@ exports.approveAreaOrder = function (user, order, callback) {
         return callback({err: error.system.db_error});
       }
       return callback(null, saveAreaSales)
+    });
+  });
+};
+
+exports.approveAreaOrders = function (user, orders, callback) {
+  if (!orders || orders.length === 0) {
+    return callback(null, {});
+  }
+  AreaSubmitOrder.findOne({order_number: orders[0].order_number}, function (err, areaSubmitOrder) {
+    if (err || !areaSubmitOrder) {
+      return callback(null, {});
+    }
+
+    areaSubmitOrder.status = '已审核';
+    async.each(orders, function (order, eachCallback) {
+      AreaSales.findOne({_id: order._id}, function (err, areaSales) {
+        if (err || !areaSales) {
+          return eachCallback();
+        }
+        areaSales.D02_approve = order.D02_approve;
+        areaSales.D03_approve = order.D03_approve;
+        areaSales.D04_approve = order.D04_approve;
+        areaSales.status = '已审核';
+        areaSales.save(function (err) {
+          return eachCallback();
+        });
+      });
+    }, function (err) {
+      areaSubmitOrder.save(function (err, saveHqSubmitOrder) {
+        return callback(err, {});
+      });
     });
   });
 };

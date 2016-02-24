@@ -109,5 +109,15 @@ exports.approveAreaOrder = function (req, res, next) {
   });
 };
 
+exports.approveAreaOrders = function (req, res, next) {
+  logService.insertLog(req.user.username,'审批地区订单');
+  areaOrderService.approveAreaOrders(req.user, req.body.orders, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};
+
 
 

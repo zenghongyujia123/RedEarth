@@ -4,6 +4,7 @@
       <i class="fa fa-angle-left"></i>
       订单详情
     </span>
+    <div class="re-header-right" ng-if="orders&&orders.length>0" ng-click="approveHqOrders()">{{orders[0].status==='已审核'?'继续审核':'审核'}}</div>
   </div>
   <div ng-if="user.account_type==='澳妆供应链'" class="re-child-body">
     <div class="re-table">
@@ -51,10 +52,6 @@
           <div class="header-col">澳妆最终审批采购量</div>
           <div class="header-col">澳妆最终审批采购金额</div>
           <div class="header-col">状态</div>
-          <button ng-if="orders&&orders.length>0" class="header-col" ng-click="approveHqOrders()">
-            {{orders[0].status==='已审核'?'继续审核':'审核'}}
-          </button>
-
         </div>
       </div>
       <div class="re-table-body" style="width: 8840px;min-width: 100%;">

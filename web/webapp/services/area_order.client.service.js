@@ -35,6 +35,9 @@ angular.module('agilesales-web').factory('AreaOrderService', ['HttpService', fun
     },
     approveAreaOrder: function (order) {
       return HttpService.post('/webapp/area/sales/approve', {order: order});
+    },
+    approveAreaOrders: function (orders) {
+      return HttpService.post('/webapp/area/sales/approve/multi', {orders: orders});
     }
   };
 }]);

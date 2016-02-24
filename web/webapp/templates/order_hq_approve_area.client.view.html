@@ -4,10 +4,11 @@
       <i class="fa fa-angle-left"></i>
       订单详情 : {{order_number}}
     </span>
+    <div class="re-header-right" ng-if="orders&&orders.length>0" ng-click="approveAreaOrders()">{{orders[0].status}}</div>
   </div>
   <div class="re-child-body">
     <div class="re-table">
-      <div class="re-table-header" style="min-width: 6800px;">
+      <div class="re-table-header" style="min-width: 7000px;">
         <div class="re-table-row">
           <div class="header-col">SKU编码</div>
           <div class="header-col">产品名称</div>
@@ -43,7 +44,7 @@
           <div class="header-col">审批状态</div>
         </div>
       </div>
-      <div class="re-table-body" style="min-width: 6800px;">
+      <div class="re-table-body" style="min-width: 7000px;">
         <div class="re-table-row" ng-repeat="o in orders">
           <div class="body-col">{{o.product.product_number}}</div>
           <div class="body-col">{{o.product.product_name}}</div>
@@ -75,14 +76,13 @@
           <div class="body-col"></div>
           <div class="body-col">{{o['D03']}}</div>
           <input type="number" class="body-col" ng-model="o.D03_approve" ng-show="user.account_type==='地区总部'">
+
           <div class="body-col">{{o['D04']}}</div>
           <input type="number" class="body-col" ng-model="o.D04_approve" ng-show="user.account_type==='地区总部'">
+
           <div class="body-col">{{''}}</div>
           <div class="body-col">{{''}}</div>
           <div class="body-col red" ng-class="{green:o.status==='已审核'}">{{o.status}}</div>
-          <button class="body-col" ng-show="user.account_type==='地区总部'" ng-click="approveAreaOrder(o)">
-            {{o.status==='已审核'?'继续审核':'审核'}}
-          </button>
         </div>
       </div>
     </div>

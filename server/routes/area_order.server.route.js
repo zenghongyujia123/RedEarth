@@ -19,5 +19,6 @@ module.exports = function (app) {
   app.route('/webapp/area/sales/submit').post(filter.requireUser, all.area_order.suggestOrderSubmit);
 
   app.route('/webapp/area/sales/approve').post(filter.requireUser, all.area_order.approveAreaOrder);
+  app.route('/webapp/area/sales/approve/multi').post(filter.requireUser, all.area_order.approveAreaOrders);
 
 };

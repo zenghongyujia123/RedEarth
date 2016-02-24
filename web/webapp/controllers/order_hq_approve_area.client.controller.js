@@ -8,7 +8,7 @@ angular.module('agilesales-web').controller('OrderHqApproveAreaCtrl', ['$scope',
     $scope.location = window.location;
     $scope.$on('suggest.import.changed', function (event, data) {
       $scope.importBtns = data.btns;
-      $scope.title = data.title;
+      $scope.title;
     });
 
     $scope.orders = [];
@@ -31,12 +31,10 @@ angular.module('agilesales-web').controller('OrderHqApproveAreaCtrl', ['$scope',
 
 
     $scope.approveAreaOrder = function (o) {
-      if (o.status === '已审核') {
-        return;
-      }
       AreaOrderService.approveAreaOrder(o).then(function (data) {
         if (data && !data.err) {
           o.status = data.status;
+          alert('ok');
         }
         console.log(data);
       }, function (data) {

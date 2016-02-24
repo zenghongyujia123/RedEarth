@@ -2,7 +2,7 @@
   <div class="re-child-header">
     <span ui-sref="home">
       <i class="fa fa-angle-left"></i>
-      订单详情
+      订单详情 : {{order_number}}
     </span>
   </div>
   <div class="re-child-body">
@@ -71,22 +71,18 @@
           <div class="body-col" ng-class="{yellow:o.system_suggest_count_modify_percent>100}">
             {{o.system_suggest_count_modify_percent}}%
           </div>
-          <input class="body-col" ng-model="o.remark" ng-show="user.account_type==='地区分公司'">
-
-          <div class="body-col" ng-show="user.account_type==='地区总部'">{{o.remark}}</div>
+          <div class="body-col">{{o.remark}}</div>
           <div class="body-col"></div>
           <div class="body-col">{{o['D03']}}</div>
-          <div type="number" class="body-col" ng-show="user.account_type==='地区分公司'">{{o.D03_approve}}</div>
           <input type="number" class="body-col" ng-model="o.D03_approve" ng-show="user.account_type==='地区总部'">
-
           <div class="body-col">{{o['D04']}}</div>
-          <div type="number" class="body-col" ng-show="user.account_type==='地区分公司'">{{o.D04_approve}}</div>
           <input type="number" class="body-col" ng-model="o.D04_approve" ng-show="user.account_type==='地区总部'">
-
           <div class="body-col">{{''}}</div>
           <div class="body-col">{{''}}</div>
           <div class="body-col red" ng-class="{green:o.status==='已审核'}">{{o.status}}</div>
-          <button class="body-col" ng-show="user.account_type==='地区总部'" ng-click="approveAreaOrder(o)">{{o.status==='已审核'?'已审核':'审核'}}</button>
+          <button class="body-col" ng-show="user.account_type==='地区总部'" ng-click="approveAreaOrder(o)">
+            {{o.status==='已审核'?'继续审核':'审核'}}
+          </button>
         </div>
       </div>
     </div>

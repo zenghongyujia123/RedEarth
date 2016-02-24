@@ -834,8 +834,11 @@ angular.module('agilesales-web').factory('HqOrderService', ['HttpService', funct
     hqSuggestOrderSubmit: function (sales) {
       return HttpService.post('/webapp/hq/sales/submit', {sales: sales});
     },
-    getHqOrderList:function(){
+    getHqOrderList: function () {
       return HttpService.get('/webapp/hq/sales/query', {});
+    },
+    approveHqOrder: function (order) {
+      return HttpService.post('/webapp/hq/sales/approve', {order: order});
     }
   };
 }]);
@@ -1491,7 +1494,7 @@ angular.module('agilesales-web').controller('OrderHqApproveAreaCtrl', ['$scope',
     $scope.location = window.location;
     $scope.$on('suggest.import.changed', function (event, data) {
       $scope.importBtns = data.btns;
-      $scope.title = data.title;
+      $scope.title;
     });
 
     $scope.orders = [];
@@ -1514,12 +1517,10 @@ angular.module('agilesales-web').controller('OrderHqApproveAreaCtrl', ['$scope',
 
 
     $scope.approveAreaOrder = function (o) {
-      if (o.status === '已审核') {
-        return;
-      }
       AreaOrderService.approveAreaOrder(o).then(function (data) {
         if (data && !data.err) {
           o.status = data.status;
+          alert('ok');
         }
         console.log(data);
       }, function (data) {
@@ -1594,8 +1595,8 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderReApproveHqCtrl', ['$scope', '$stateParams', 'AuthService', 'AreaOrderService',
-  function ($scope, $stateParams, AuthService, AreaOrderService) {
+angular.module('agilesales-web').controller('OrderReApproveHqCtrl', ['$scope', '$stateParams', 'AuthService', 'AreaOrderService', 'HqOrderService',
+  function ($scope, $stateParams, AuthService, AreaOrderService, HqOrderService) {
     $scope.importBtns = [];
     $scope.order_number = $stateParams.order_number;
     $scope.location = window.location;
@@ -1622,6 +1623,20 @@ angular.module('agilesales-web').controller('OrderReApproveHqCtrl', ['$scope', '
     });
     $scope.getAreaOrderDetail();
 
+    $scope.approveHqOrder = function (o) {
+      HqOrderService.approveHqOrder(o).then(function (data) {
+        console.log(data);
+        if (data && !data.err) {
+          o.status = data.status;
+          alert('ok');
+        }
+      }, function (data) {
+        console.log(data);
+      });
+    };
+    $scope.inputPurchaseCount = function (order) {
+      order.final_purchased_price = order.final_purchased_count * order.product.sales_price;
+    };
   }]);
 /**
  * Created by zenghong on 16/1/15.

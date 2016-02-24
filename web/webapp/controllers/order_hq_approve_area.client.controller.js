@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderHqApproveAreaCtrl', ['$scope', '$state', '$stateParams', 'AuthService', 'AreaOrderService',
-  function ($scope, $state, $stateParams, AuthService, AreaOrderService) {
+angular.module('agilesales-web').controller('OrderHqApproveAreaCtrl', ['$scope', '$state', '$stateParams', 'AuthService', 'AreaOrderService', 'Loading',
+  function ($scope, $state, $stateParams, AuthService, AreaOrderService, Loading) {
     $scope.importBtns = [];
     $scope.order_number = $stateParams.order_number;
     $scope.location = window.location;
@@ -13,12 +13,15 @@ angular.module('agilesales-web').controller('OrderHqApproveAreaCtrl', ['$scope',
 
     $scope.orders = [];
     $scope.getAreaOrderDetail = function () {
+      Loading.show();
       AreaOrderService.getAreaOrderDetail($scope.order_number).then(function (data) {
         if (data && !data.err) {
           $scope.orders = data;
         }
+        Loading.hide();
         console.log(data);
       }, function (data) {
+        Loading.hide();
         console.log(data);
       });
     };
@@ -43,6 +46,7 @@ angular.module('agilesales-web').controller('OrderHqApproveAreaCtrl', ['$scope',
     };
 
     $scope.approveAreaOrders = function () {
+      Loading.show();
       var sales = [];
 
       $scope.orders.forEach(function (sale) {
@@ -71,9 +75,11 @@ angular.module('agilesales-web').controller('OrderHqApproveAreaCtrl', ['$scope',
             upload(orders, i);
           }
           else {
+            Loading.hide();
             $state.go('order_hq_approve_area', {}, {reload: true});
           }
         }, function (err) {
+          Loading.hide();
           console.log(err);
         });
     }

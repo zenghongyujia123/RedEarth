@@ -1,17 +1,20 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderDetailCtrl', ['$scope', '$stateParams', '$state', 'AreaOrderService', 'AuthService',
-  function ($scope, $stateParams, $state, AreaOrderService, AuthService) {
+angular.module('agilesales-web').controller('OrderDetailCtrl', ['$scope', '$stateParams', '$state', 'AreaOrderService', 'AuthService','Loading',
+  function ($scope, $stateParams, $state, AreaOrderService, AuthService,Loading) {
     $scope.order_number = $stateParams.order_number;
     $scope.orders = [];
     $scope.getAreaOrderDetail = function () {
+      Loading.show();
       AreaOrderService.getAreaOrderDetail($scope.order_number).then(function (data) {
         if (data && !data.err) {
           $scope.orders = data;
         }
+        Loading.hide();
         console.log(data);
       }, function (data) {
+        Loading.hide();
         console.log(data);
       });
     };

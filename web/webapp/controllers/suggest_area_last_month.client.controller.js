@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService',
-  function ($scope, $rootScope, $state, AreaOrderService) {
+angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService','Loading',
+  function ($scope, $rootScope, $state, AreaOrderService,Loading) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单',
       btns: [
@@ -15,12 +15,15 @@ angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope
 
     $scope.sales = [];
     $scope.getSalesByArea = function () {
+      Loading.show();
       AreaOrderService.getSalesByArea().then(function (data) {
         if (!data.err) {
           $scope.sales = data;
         }
+        Loading.hide();
         console.log(data);
       }, function (data) {
+        Loading.hide();
         console.log(data);
       });
     };
@@ -42,14 +45,17 @@ angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope
               upload(saleses, i);
             }
             else {
+              Loading.hide();
               $state.go('order_suggest.suggest_area_last_month', {}, {reload: true});
             }
           }, function (err) {
+            Loading.hide();
             console.log(err);
           });
       }
 
       $scope.areaSalesStockOnwayImport = function (saleses) {
+        Loading.show();
         var i = 0;
         upload(saleses, i);
       };

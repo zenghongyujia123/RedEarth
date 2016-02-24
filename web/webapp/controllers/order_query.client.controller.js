@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state', 'AreaOrderService', 'HqOrderService', 'AuthService',
-  function ($scope, $state, AreaOrderService, HqOrderService, AuthService) {
+angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state', 'AreaOrderService', 'HqOrderService', 'AuthService', 'Loading',
+  function ($scope, $state, AreaOrderService, HqOrderService, AuthService, Loading) {
     $scope.goDetail = function (o) {
       if ($scope.user.account_type === '地区总部') {
         $state.go('order_hq_approve_area', {order_number: o.order_number});
@@ -25,6 +25,7 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state
 
     $scope.orders = [];
     $scope.getAreaOrderList = function (callback) {
+      Loading.show();
       AreaOrderService.getAreaOrderList().then(function (data) {
         console.log(data);
         if (data && !data.err) {
@@ -33,18 +34,23 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state
         if (callback) {
           return callback();
         }
+        Loading.hide();
       }, function (data) {
+        Loading.hide();
         console.log(data);
       });
     };
 
     $scope.getHqOrderList = function () {
+      Loading.show();
       HqOrderService.getHqOrderList().then(function (data) {
         console.log(data);
         if (data && !data.err) {
           $scope.orders = $scope.orders.concat(data);
         }
+        Loading.hide();
       }, function (data) {
+        Loading.hide();
         console.log(data);
       });
     };

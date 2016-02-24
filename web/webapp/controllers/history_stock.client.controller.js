@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HistoryStockCtrl', ['$scope', 'AreaOrderService',
-  function ($scope, AreaOrderService) {
+angular.module('agilesales-web').controller('HistoryStockCtrl', ['$scope', 'AreaOrderService','Loading',
+  function ($scope, AreaOrderService,Loading) {
     $scope.$emit('suggest.import.changed', {
       title: '历史数据',
       btns: [
@@ -19,12 +19,15 @@ angular.module('agilesales-web').controller('HistoryStockCtrl', ['$scope', 'Area
     $scope.sales = [];
 
     $scope.getHistorySales = function () {
+      Loading.show();
       AreaOrderService.getHistorySales().then(function (data) {
         console.log(data);
         if (data && !data.err) {
           $scope.sales = data;
         }
+        Loading.hide();
       }, function (data) {
+        Loading.hide();
         console.log(data);
       });
     };
@@ -88,13 +91,18 @@ angular.module('agilesales-web').controller('HistoryStockCtrl', ['$scope', 'Area
             if (products[i]) {
               upload(products, i);
             }
+            else {
+              Loading.hide();
+            }
           }, function (err) {
+            Loading.hide();
             console.log(err);
           });
       }
 
       $scope.importProducts = function (products) {
         var i = 0;
+        Loading.show();
         upload(products, i);
       };
 

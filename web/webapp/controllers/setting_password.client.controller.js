@@ -1,7 +1,7 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SettingPasswordCtrl', ['$scope', 'UserService', function ($scope, UserService) {
+angular.module('agilesales-web').controller('SettingPasswordCtrl', ['$scope', 'UserService','Loading', function ($scope, UserService,Loading) {
   $scope.info = {
     old_password: '',
     new_password: '',
@@ -25,6 +25,7 @@ angular.module('agilesales-web').controller('SettingPasswordCtrl', ['$scope', 'U
     }
 
     UserService.changePassword($scope.info.old_password, $scope.info.new_password).then(function (data) {
+      Loading.show();
       console.log(data);
       if (data && !data.err) {
         alert('修改成功');
@@ -34,7 +35,9 @@ angular.module('agilesales-web').controller('SettingPasswordCtrl', ['$scope', 'U
           re_password: ''
         };
       }
+      Loading.hide();
     }, function (data) {
+      Loading.hide();
       console.log(data);
     });
   }

@@ -1166,8 +1166,8 @@ angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$r
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$rootScope', 'AreaOrderService',
-  function ($scope, $rootScope, AreaOrderService) {
+angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$rootScope', 'AreaOrderService', 'Loading',
+  function ($scope, $rootScope, AreaOrderService, Loading) {
     $scope.$emit('suggest.import.changed', {
       title: '历史数据',
       btns: [
@@ -1181,12 +1181,15 @@ angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$roo
     $scope.sales = [];
 
     $scope.getHistorySales = function () {
+      Loading.show();
       AreaOrderService.getHistorySales().then(function (data) {
         console.log(data);
         if (data && !data.err) {
           $scope.sales = data;
         }
+        Loading.hide();
       }, function (data) {
+        Loading.hide();
         console.log(data);
       });
     };
@@ -1209,13 +1212,18 @@ angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$roo
             if (sales[i]) {
               upload(sales, i);
             }
+            else{
+              Loading.hide();
+            }
           }, function (err) {
+            Loading.hide();
             console.log(err);
           });
       }
 
       $scope.importsHistorySales = function (sales) {
         var i = 0;
+        Loading.show();
         upload(sales, i);
       };
 
@@ -1258,8 +1266,8 @@ angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$roo
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HistoryStockCtrl', ['$scope', 'AreaOrderService',
-  function ($scope, AreaOrderService) {
+angular.module('agilesales-web').controller('HistoryStockCtrl', ['$scope', 'AreaOrderService','Loading',
+  function ($scope, AreaOrderService,Loading) {
     $scope.$emit('suggest.import.changed', {
       title: '历史数据',
       btns: [
@@ -1276,12 +1284,15 @@ angular.module('agilesales-web').controller('HistoryStockCtrl', ['$scope', 'Area
     $scope.sales = [];
 
     $scope.getHistorySales = function () {
+      Loading.show();
       AreaOrderService.getHistorySales().then(function (data) {
         console.log(data);
         if (data && !data.err) {
           $scope.sales = data;
         }
+        Loading.hide();
       }, function (data) {
+        Loading.hide();
         console.log(data);
       });
     };
@@ -1345,13 +1356,18 @@ angular.module('agilesales-web').controller('HistoryStockCtrl', ['$scope', 'Area
             if (products[i]) {
               upload(products, i);
             }
+            else {
+              Loading.hide();
+            }
           }, function (err) {
+            Loading.hide();
             console.log(err);
           });
       }
 
       $scope.importProducts = function (products) {
         var i = 0;
+        Loading.show();
         upload(products, i);
       };
 
@@ -1469,17 +1485,20 @@ angular.module('agilesales-web').controller('IndexCtrl', ['$scope', '$rootScope'
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderDetailCtrl', ['$scope', '$stateParams', '$state', 'AreaOrderService', 'AuthService',
-  function ($scope, $stateParams, $state, AreaOrderService, AuthService) {
+angular.module('agilesales-web').controller('OrderDetailCtrl', ['$scope', '$stateParams', '$state', 'AreaOrderService', 'AuthService','Loading',
+  function ($scope, $stateParams, $state, AreaOrderService, AuthService,Loading) {
     $scope.order_number = $stateParams.order_number;
     $scope.orders = [];
     $scope.getAreaOrderDetail = function () {
+      Loading.show();
       AreaOrderService.getAreaOrderDetail($scope.order_number).then(function (data) {
         if (data && !data.err) {
           $scope.orders = data;
         }
+        Loading.hide();
         console.log(data);
       }, function (data) {
+        Loading.hide();
         console.log(data);
       });
     };
@@ -1525,8 +1544,8 @@ angular.module('agilesales-web').controller('OrderHistoryCtrl', ['$scope', 'Auth
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderHqApproveAreaCtrl', ['$scope', '$state', '$stateParams', 'AuthService', 'AreaOrderService',
-  function ($scope, $state, $stateParams, AuthService, AreaOrderService) {
+angular.module('agilesales-web').controller('OrderHqApproveAreaCtrl', ['$scope', '$state', '$stateParams', 'AuthService', 'AreaOrderService', 'Loading',
+  function ($scope, $state, $stateParams, AuthService, AreaOrderService, Loading) {
     $scope.importBtns = [];
     $scope.order_number = $stateParams.order_number;
     $scope.location = window.location;
@@ -1537,12 +1556,15 @@ angular.module('agilesales-web').controller('OrderHqApproveAreaCtrl', ['$scope',
 
     $scope.orders = [];
     $scope.getAreaOrderDetail = function () {
+      Loading.show();
       AreaOrderService.getAreaOrderDetail($scope.order_number).then(function (data) {
         if (data && !data.err) {
           $scope.orders = data;
         }
+        Loading.hide();
         console.log(data);
       }, function (data) {
+        Loading.hide();
         console.log(data);
       });
     };
@@ -1567,6 +1589,7 @@ angular.module('agilesales-web').controller('OrderHqApproveAreaCtrl', ['$scope',
     };
 
     $scope.approveAreaOrders = function () {
+      Loading.show();
       var sales = [];
 
       $scope.orders.forEach(function (sale) {
@@ -1595,9 +1618,11 @@ angular.module('agilesales-web').controller('OrderHqApproveAreaCtrl', ['$scope',
             upload(orders, i);
           }
           else {
+            Loading.hide();
             $state.go('order_hq_approve_area', {}, {reload: true});
           }
         }, function (err) {
+          Loading.hide();
           console.log(err);
         });
     }

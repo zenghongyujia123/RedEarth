@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaOtherOrderCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService',
-  function ($scope, $rootScope, $state, AreaOrderService) {
+angular.module('agilesales-web').controller('SuggestAreaOtherOrderCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService','Loading',
+  function ($scope, $rootScope, $state, AreaOrderService,Loading) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单',
       btns: [
@@ -28,12 +28,15 @@ angular.module('agilesales-web').controller('SuggestAreaOtherOrderCtrl', ['$scop
     });
     $scope.orders = [];
     $scope.getOrdersByArea = function () {
+      Loading.show();
       AreaOrderService.getOrdersByArea().then(function (data) {
         if (!data.err) {
           $scope.orders = data;
         }
+        Loading.hide();
         console.log(data);
       }, function (data) {
+        Loading.hide();
         console.log(data);
       });
     };
@@ -59,9 +62,11 @@ angular.module('agilesales-web').controller('SuggestAreaOtherOrderCtrl', ['$scop
               upload(orders, i);
             }
             else {
+              Loading.hide();
               $state.go('order_suggest.suggest_area_other_order', {}, {reload: true});
             }
           }, function (err) {
+            Loading.hide();
             console.log(err);
           });
       }
@@ -80,6 +85,7 @@ angular.module('agilesales-web').controller('SuggestAreaOtherOrderCtrl', ['$scop
 
       $scope.otherOrderImport = function (orders) {
         var i = 0;
+        Loading.show();
         upload(orders, i);
       };
 

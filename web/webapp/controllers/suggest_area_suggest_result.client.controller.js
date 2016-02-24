@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService',
-  function ($scope, $rootScope, $state, AreaOrderService) {
+angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService','Loading',
+  function ($scope, $rootScope, $state, AreaOrderService,Loading) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单 地区建议订单（SKU）=当月预测-[地区库存(包括店柜库存) +在途-未来6月销售预测-其他订单(批发)-安全库存）] * 产品分类（ABC）?%',
       btns: [
@@ -14,12 +14,15 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
     });
     $scope.orders = [];
     $scope.getAreaSuggestOrder = function () {
+      Loading.show();
       AreaOrderService.getAreaSuggestOrder().then(function (data) {
         console.log(data);
         if (data && !data.err) {
           $scope.orders = data;
         }
+        Loading.hide();
       }, function (data) {
+        Loading.hide();
         console.log(data);
       });
     };
@@ -77,7 +80,7 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
       for (var i = 0, len = sales.length; i < len; i += 40) {
         final_sales.push(sales.slice(i, i + 40));
       }
-
+      Loading.show();
       upload(final_sales, 0);
     };
 
@@ -90,9 +93,11 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
           }
           else {
             alert('ok');
+            Loading.hide();
             $state.go('order_suggest.suggest_area_suggest_result', {}, {reload: true});
           }
         }, function (err) {
+          Loading.hide();
           console.log(err);
         });
     }

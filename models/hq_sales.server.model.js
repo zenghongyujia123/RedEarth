@@ -179,6 +179,14 @@ module.exports = function (appDb) {
     last_month_stock_count_3: {
       type: Number,
       default: 0
+    },
+    final_purchased_count:{
+      type:Number,
+      default:0
+    },
+    final_purchased_price:{
+      type:Number,
+      default:0
     }
   });
 

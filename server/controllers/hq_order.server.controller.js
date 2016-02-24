@@ -90,3 +90,12 @@ exports.getHqOrderList = function (req, res, next) {
     return res.send(result);
   });
 };
+
+exports.approveHqOrder = function (req, res, next) {
+  hqOrderService.approveHqOrder(req.user, req.body.order, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};

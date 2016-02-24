@@ -267,6 +267,28 @@ exports.getHqOrderList = function (user, callback) {
   });
 };
 
+exports.approveHqOrder = function (user, order, callback) {
+  HqSales.findOne({_id: order._id}, function (err, hqSales) {
+    if (err) {
+      return callback({err: error.system.db_error});
+    }
+
+    if (!hqSales) {
+      return callback()
+    }
+
+    hqSales.status = '已审核';
+    hqSales.final_purchased_count = order.final_purchased_count;
+    hqSales.final_purchased_price = order.final_purchased_price;
+    hqSales.save(function (err, saveHqSales) {
+      if (err || !saveHqSales) {
+        return callback({err: error.system.db_error});
+      }
+      return callback(null, saveHqSales);
+    });
+  });
+};
+
 function getOrderNumber(username) {
   return getLastMonth(1) + username;
 }

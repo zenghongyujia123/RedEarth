@@ -201,6 +201,24 @@ module.exports = function (appDb) {
     //字段5
     field_5: {
       type: String
+    },
+    plan_delivery_count: {
+      type: Number,
+      default: 0
+    },
+    plan_delivery_date: {
+      type: String
+    },
+    real_delivery_count: {
+      type: Number,
+      default: 0
+    },
+    real_delivery_date: {
+      type: String
+    },
+    onway_count: {
+      type: Number,
+      default: 0
     }
   });
 
@@ -209,5 +227,5 @@ module.exports = function (appDb) {
     updatedAt: 'updated'
   });
 
-  appDb.model('Product', Productchema );
+  appDb.model('Product', Productchema);
 };

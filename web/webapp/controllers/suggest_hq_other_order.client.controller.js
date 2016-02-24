@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqOtherOrderCtrl', ['$scope', '$rootScope', 'HqOrderService',
-  function ($scope, $rootScope, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqOtherOrderCtrl', ['$scope','$state', '$rootScope', 'HqOrderService',
+  function ($scope, $state,$rootScope, HqOrderService) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单',
       btns: [
@@ -58,6 +58,9 @@ angular.module('agilesales-web').controller('SuggestHqOtherOrderCtrl', ['$scope'
             console.log(data);
             if (orders[i]) {
               upload(orders, i);
+            }
+            else {
+              $state.go('order_suggest.suggest_hq_other_order', {}, {reload: true});
             }
           }, function (err) {
             console.log(err);

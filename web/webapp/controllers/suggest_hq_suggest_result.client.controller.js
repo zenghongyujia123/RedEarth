@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$scope', '$rootScope', 'HqOrderService',
-  function ($scope, $rootScope, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$scope', '$state', '$rootScope', 'HqOrderService',
+  function ($scope, $state, $rootScope, HqOrderService) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单 总部建议订单（SKU）=(地区已审批订单+其他订单)-(总部库存+在途-安全库存) +判断条件（是否TOP SKU? 是否MOQ之%必采购？）',
       btns: [
@@ -78,6 +78,8 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
           }
           else {
             alert('ok');
+            $state.go('order_suggest.suggest_hq_suggest_result', {}, {reload: true});
+
           }
         }, function (err) {
           console.log(err);

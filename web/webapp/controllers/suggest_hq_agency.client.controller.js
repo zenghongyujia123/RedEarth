@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope', '$rootScope', 'AuthService', 'HqOrderService',
-  function ($scope, $rootScope, AuthService, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope','$state', '$rootScope', 'AuthService', 'HqOrderService',
+  function ($scope, $state,$rootScope, AuthService, HqOrderService) {
     $scope.user = AuthService.getUser() || {};
     AuthService.onUserUpdated('SuggestHqAgencyCtrl', function (user) {
       $scope.user = user;
@@ -55,6 +55,9 @@ angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope', '$
             console.log(data);
             if (orders[i]) {
               upload(orders, i);
+            }
+            else {
+              $state.go('order_suggest.suggest_hq_agency', {}, {reload: true});
             }
           }, function (err) {
             console.log(err);

@@ -53,7 +53,7 @@ function getOtherOrderText(type) {
 }
 
 exports.hqOtherOrderImport = function (req, res, next) {
-  var order = req.body.order[0] || {};
+  var order = req.body.orders[0] || {};
   logService.insertLog(req.user.username, '导入总部' + getOtherOrderText(order.order_type) + '订单');
   hqOrderService.hqOtherOrderImport (req.user, req.body.orders, function (err, result) {
     if (err) {

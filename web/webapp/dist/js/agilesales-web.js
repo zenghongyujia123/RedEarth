@@ -274,26 +274,17 @@ angular.module('agilesales-web').directive('agHoverShake', [function () {
 /**
  * Created by zenghong on 16/1/18.
  */
-angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'ExcelReaderService', function ($rootScope, ExcelReaderService) {
+angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',function ($rootScope) {
   return {
     restrict: 'AE',
-    templateUrl: 'directives/dialog_upload/dialog_upload.client.view.html',
+    templateUrl: 'directives/dialog_confirm/dialog_confirm.client.view.html',
     replace: true,
     scope: {},
     link: function ($scope, $element, $attrs) {
       $scope.info = {
         title: '',
-        contents: [{
-          key: '请输入拜访卡名称',
-          value: '点击输入名称'
-        }],
-        color: 'blue',
-        type: 'execel',
-        headers: [
-          {key: 'A1', value: '大区'},
-          {key: 'B1', value: '省区'},
-          {key: 'C1', value: '办事处'}
-        ]
+        content:'',
+        color: 'blue'
       };
 
       $scope.show = function () {
@@ -304,29 +295,14 @@ angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'Exc
       };
       $scope.submit = function () {
         $element.removeClass('show');
+        if ($scope.info.callback) {
+          $scope.info.callback($scope.info);
+        }
       };
-      $rootScope.$on('show.dialogUpload', function (event, data) {
+      $rootScope.$on('show.dialogConfirm', function (event, data) {
         setTheme(data);
         $scope.show();
       });
-
-      $scope.handleFile = function (ele) {
-        var excelReader = ExcelReaderService.getReader();
-
-        excelReader.getWorkSheet(ele,$scope.info.contents[0].sheetName, function (err, excelSheet) {
-          excelReader.checkHeader(excelSheet, $scope.info.headers, $scope.info.contents[0].sheetName,function (isOurTemplate) {
-            if (!isOurTemplate) {
-              var a = isOurTemplate;
-            }
-            excelReader.getSheetData(excelSheet, $scope.info.headers,$scope.info.contents[0].sheetName ,function (err, sheetData) {
-              if ($scope.info.callback) {
-                $scope.info.callback(sheetData);
-              }
-              $scope.hide();
-            });
-          });
-        });
-      };
 
       function setTheme(info) {
         $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
@@ -443,17 +419,26 @@ angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', func
 /**
  * Created by zenghong on 16/1/18.
  */
-angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',function ($rootScope) {
+angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'ExcelReaderService', function ($rootScope, ExcelReaderService) {
   return {
     restrict: 'AE',
-    templateUrl: 'directives/dialog_confirm/dialog_confirm.client.view.html',
+    templateUrl: 'directives/dialog_upload/dialog_upload.client.view.html',
     replace: true,
     scope: {},
     link: function ($scope, $element, $attrs) {
       $scope.info = {
         title: '',
-        content:'',
-        color: 'blue'
+        contents: [{
+          key: '请输入拜访卡名称',
+          value: '点击输入名称'
+        }],
+        color: 'blue',
+        type: 'execel',
+        headers: [
+          {key: 'A1', value: '大区'},
+          {key: 'B1', value: '省区'},
+          {key: 'C1', value: '办事处'}
+        ]
       };
 
       $scope.show = function () {
@@ -464,14 +449,29 @@ angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',func
       };
       $scope.submit = function () {
         $element.removeClass('show');
-        if ($scope.info.callback) {
-          $scope.info.callback($scope.info);
-        }
       };
-      $rootScope.$on('show.dialogConfirm', function (event, data) {
+      $rootScope.$on('show.dialogUpload', function (event, data) {
         setTheme(data);
         $scope.show();
       });
+
+      $scope.handleFile = function (ele) {
+        var excelReader = ExcelReaderService.getReader();
+
+        excelReader.getWorkSheet(ele,$scope.info.contents[0].sheetName, function (err, excelSheet) {
+          excelReader.checkHeader(excelSheet, $scope.info.headers, $scope.info.contents[0].sheetName,function (isOurTemplate) {
+            if (!isOurTemplate) {
+              var a = isOurTemplate;
+            }
+            excelReader.getSheetData(excelSheet, $scope.info.headers,$scope.info.contents[0].sheetName ,function (err, sheetData) {
+              if ($scope.info.callback) {
+                $scope.info.callback(sheetData);
+              }
+              $scope.hide();
+            });
+          });
+        });
+      };
 
       function setTheme(info) {
         $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
@@ -2027,8 +2027,8 @@ angular.module('agilesales-web').controller('SuggestHomeCtrl', ['$scope', 'AuthS
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope', '$rootScope', 'AuthService', 'HqOrderService',
-  function ($scope, $rootScope, AuthService, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope','$state', '$rootScope', 'AuthService', 'HqOrderService',
+  function ($scope, $state,$rootScope, AuthService, HqOrderService) {
     $scope.user = AuthService.getUser() || {};
     AuthService.onUserUpdated('SuggestHqAgencyCtrl', function (user) {
       $scope.user = user;
@@ -2081,6 +2081,9 @@ angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope', '$
             console.log(data);
             if (orders[i]) {
               upload(orders, i);
+            }
+            else {
+              $state.go('order_suggest.suggest_hq_agency', {}, {reload: true});
             }
           }, function (err) {
             console.log(err);
@@ -2144,8 +2147,8 @@ angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope', '$
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope', '$rootScope', 'HqOrderService',
-  function ($scope, $rootScope, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope','$state', '$rootScope', 'HqOrderService',
+  function ($scope,$state, $rootScope, HqOrderService) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单',
       btns: [{
@@ -2182,6 +2185,9 @@ angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope', '
             console.log(data);
             if (stocks[i]) {
               upload(stocks, i);
+            }
+            else {
+              $state.go('order_suggest.suggest_hq_current', {}, {reload: true});
             }
           }, function (err) {
             console.log(err);
@@ -2228,8 +2234,8 @@ angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope', '
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope', '$rootScope', 'AuthService','HqOrderService',
-  function ($scope, $rootScope, AuthService,HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope', '$state','$rootScope', 'AuthService','HqOrderService',
+  function ($scope, $state,$rootScope, AuthService,HqOrderService) {
     $scope.user = AuthService.getUser() || {};
     AuthService.onUserUpdated('SuggestHqAgencyCtrl', function (user) {
       $scope.user = user;
@@ -2282,6 +2288,9 @@ angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope',
             console.log(data);
             if (orders[i]) {
               upload(orders, i);
+            }
+            else {
+              $state.go('order_suggest.suggest_hq_e_commerce', {}, {reload: true});
             }
           }, function (err) {
             console.log(err);
@@ -2343,8 +2352,8 @@ angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope',
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqMaoziCtrl', ['$scope', '$rootScope', 'AuthService', 'HqOrderService',
-  function ($scope, $rootScope, AuthService, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqMaoziCtrl', ['$scope','$state', '$rootScope', 'AuthService', 'HqOrderService',
+  function ($scope, $state,$rootScope, AuthService, HqOrderService) {
     $scope.user = AuthService.getUser() || {};
     AuthService.onUserUpdated('SuggestHqMaoziCtrl', function (user) {
       $scope.user = user;
@@ -2397,6 +2406,9 @@ angular.module('agilesales-web').controller('SuggestHqMaoziCtrl', ['$scope', '$r
             console.log(data);
             if (orders[i]) {
               upload(orders, i);
+            }
+            else {
+              $state.go('order_suggest.suggest_hq_maozi', {}, {reload: true});
             }
           }, function (err) {
             console.log(err);
@@ -2458,8 +2470,8 @@ angular.module('agilesales-web').controller('SuggestHqMaoziCtrl', ['$scope', '$r
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqOtherOrderCtrl', ['$scope', '$rootScope', 'HqOrderService',
-  function ($scope, $rootScope, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqOtherOrderCtrl', ['$scope','$state', '$rootScope', 'HqOrderService',
+  function ($scope, $state,$rootScope, HqOrderService) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单',
       btns: [
@@ -2515,6 +2527,9 @@ angular.module('agilesales-web').controller('SuggestHqOtherOrderCtrl', ['$scope'
             console.log(data);
             if (orders[i]) {
               upload(orders, i);
+            }
+            else {
+              $state.go('order_suggest.suggest_hq_other_order', {}, {reload: true});
             }
           }, function (err) {
             console.log(err);
@@ -2580,8 +2595,8 @@ angular.module('agilesales-web').controller('SuggestHqOtherOrderCtrl', ['$scope'
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$scope', '$rootScope', 'HqOrderService',
-  function ($scope, $rootScope, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$scope', '$state', '$rootScope', 'HqOrderService',
+  function ($scope, $state, $rootScope, HqOrderService) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单 总部建议订单（SKU）=(地区已审批订单+其他订单)-(总部库存+在途-安全库存) +判断条件（是否TOP SKU? 是否MOQ之%必采购？）',
       btns: [
@@ -2657,6 +2672,8 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
           }
           else {
             alert('ok');
+            $state.go('order_suggest.suggest_hq_suggest_result', {}, {reload: true});
+
           }
         }, function (err) {
           console.log(err);

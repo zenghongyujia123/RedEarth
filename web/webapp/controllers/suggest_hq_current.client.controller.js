@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope','$state', '$rootScope', 'HqOrderService',
-  function ($scope,$state, $rootScope, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope','$state', '$rootScope', 'HqOrderService','Loading',
+  function ($scope,$state, $rootScope, HqOrderService,Loading) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单',
       btns: [{
@@ -41,14 +41,17 @@ angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope','$
               upload(stocks, i);
             }
             else {
+              Loading.hide();
               $state.go('order_suggest.suggest_hq_current', {}, {reload: true});
             }
           }, function (err) {
+            Loading.hide();
             console.log(err);
           });
       }
 
       $scope.hqStockImport = function (stocks) {
+        Loading.show();
         var i = 0;
         upload(stocks, i);
       };

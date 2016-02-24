@@ -267,6 +267,25 @@ angular.module('agilesales-web').directive('agHoverShake', [function () {
     }
   }
 }]);
+angular.module('agilesales-web').directive('zzLoading', ['$rootScope', function ($rootScope) {
+  return {
+    restrict: 'A',
+
+    template: '<div class="zz-loading-layer">' +
+    '<div class="zz-loading-info"> ' +
+    '<img ng-src="images/load.gif"/>' +
+    ' </div> </div>',
+    replace: true,
+    controller: function ($scope, $element) {
+      $rootScope.$on('loading.hide',function(){
+        $element.hide();
+      });
+      $rootScope.$on('loading.show',function(){
+        $element.show();
+      });
+    }
+  }
+}]);
 /**
  * Created by zenghong on 16/1/19.
  */
@@ -877,6 +896,19 @@ angular.module('agilesales-web').factory('HttpService', ['$http', '$q', function
           q.reject(data);
         });
       return q.promise;
+    }
+  };
+}]);
+/**
+ * Created by zenghong on 16/1/21.
+ */
+angular.module('agilesales-web').factory('Loading', ['$rootScope', function ($rootScope) {
+  return {
+    show: function () {
+      $rootScope.$broadcast('loading.show');
+    },
+    hide: function () {
+      $rootScope.$broadcast('loading.hide');
     }
   };
 }]);
@@ -2246,8 +2278,8 @@ angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope','$s
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope','$state', '$rootScope', 'HqOrderService',
-  function ($scope,$state, $rootScope, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope','$state', '$rootScope', 'HqOrderService','Loading',
+  function ($scope,$state, $rootScope, HqOrderService,Loading) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单',
       btns: [{
@@ -2286,14 +2318,17 @@ angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope','$
               upload(stocks, i);
             }
             else {
+              Loading.hide();
               $state.go('order_suggest.suggest_hq_current', {}, {reload: true});
             }
           }, function (err) {
+            Loading.hide();
             console.log(err);
           });
       }
 
       $scope.hqStockImport = function (stocks) {
+        Loading.show();
         var i = 0;
         upload(stocks, i);
       };

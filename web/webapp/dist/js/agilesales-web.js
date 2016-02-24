@@ -2755,7 +2755,7 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
 
     $scope.getSystemAreaSuggest = function (sale) {
       sale.system_suggest_count = (sale.D01_approve + sale.Y01 + sale.Y02 + sale.Y03 + sale.Y04 + sale.Y05 + sale.Y06 + sale.Y07);
-      sale.system_suggest_count = sale.system_suggest_count - (sale.genuine_goods - sale.safe_stock);
+      sale.system_suggest_count = sale.system_suggest_count - (sale.genuine_goods + sale.product.onway_count - sale.safe_stock);
 
       if (sale.system_suggest_count_modify === 0) {
         sale.system_suggest_count_modify = sale.system_suggest_count;

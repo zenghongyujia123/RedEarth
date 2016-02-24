@@ -4,7 +4,9 @@
       <i class="fa fa-angle-left"></i>
       订单详情 : {{order_number}}
     </span>
-    <div class="re-header-right" ng-if="orders&&orders.length>0" ng-click="approveAreaOrders()">{{orders[0].status}}</div>
+
+    <div class="re-header-right" ng-if="orders&&orders.length>0" ng-click="approveAreaOrders()">{{orders[0].status}}
+    </div>
   </div>
   <div class="re-child-body">
     <div class="re-table">
@@ -74,13 +76,13 @@
           </div>
           <div class="body-col">{{o.remark}}</div>
           <div class="body-col"></div>
-          <div class="body-col">{{o['D03']}}</div>
-          <input type="number" class="body-col" ng-model="o.D03_approve" ng-show="user.account_type==='地区总部'">
+          <div class="body-col">{{o.D03}}</div>
+          <input type="number" class="body-col" ng-model="o.D03_approve">
 
-          <div class="body-col">{{o['D04']}}</div>
-          <input type="number" class="body-col" ng-model="o.D04_approve" ng-show="user.account_type==='地区总部'">
+          <div class="body-col">{{o.D04}}</div>
+          <input type="number" class="body-col" ng-model="o.D04_approve">
+          <input type="number" class="body-col" ng-model="o.D01_approve">
 
-          <div class="body-col">{{''}}</div>
           <div class="body-col">{{''}}</div>
           <div class="body-col red" ng-class="{green:o.status==='已审核'}">{{o.status}}</div>
         </div>

@@ -36,7 +36,7 @@
     </div>
   </div>
   <div class="re-table-body" style="min-width: 6600px;">
-    <div class="re-table-row" ng-repeat="o in orders">
+    <div class="re-table-row" ng-repeat="o in orders" ng-if="o.product">
       <div class="body-col">{{o.product.product_number}}</div>
       <div class="body-col">{{o.product.product_name}}</div>
       <div class="body-col">{{o.product.product_barcode}}</div>
@@ -56,17 +56,17 @@
       <div class="body-col">{{o.next_month_sales_forecast_4}}</div>
       <div class="body-col">{{o.next_month_sales_forecast_5}}</div>
       <div class="body-col">{{o.next_month_sales_forecast_6}}</div>
-      <div class="body-col">{{ o['D02']}}</div>
+      <div class="body-col">{{o.D02}}</div>
       <div class="body-col">{{getSystemAreaSuggest(o)}}</div>
       <input class="body-col" ng-model="o.system_suggest_count_modify" ng-keyup="modifySystemAreaSuggestPercent(o)">
 
       <div class="body-col" ng-class="{yellow:o.system_suggest_count_modify_percent>100}">
         {{o.system_suggest_count_modify_percent}}%
       </div>
-      <div class="body-col">{{o.remark}}</div>
+      <input class="body-col" ng-model="o.remark" placeholder="超额订购请点击备注">
       <div class="body-col"></div>
-      <div class="body-col">{{o['D03']}}</div>
-      <div class="body-col">{{o['D04']}}</div>
+      <div class="body-col">{{o.D03}}</div>
+      <div class="body-col">{{o.D04}}</div>
       <div class="body-col">{{o.D01_approve}}</div>
       <div class="body-col">{{o.D03_approve}}</div>
       <div class="body-col">{{o.D04_approve}}</div>

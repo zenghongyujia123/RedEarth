@@ -49,24 +49,30 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
     function suggestOrderSubmit() {
       var sales = [];
 
-      $scope.orders.forEach(function (sale) {
-        if (sale.status !== '已审核') {
-          sales.push({
-            _id: sale._id,
-            system_suggest_count: sale.system_suggest_count,
-            system_suggest_count_modify: sale.system_suggest_count_modify,
-            system_suggest_count_modify_percent: sale.system_suggest_count_modify_percent,
-            D01: sale.D01,
-            D02: sale.D02,
-            D03: sale.D03,
-            D04: sale.D04,
-            D01_approve: sale.D01_approve,
-            D02_approve: sale.D02_approve,
-            D03_approve: sale.D03_approve,
-            D04_approve: sale.D04_approve
-          });
+      for (var i = 0; i < $scope.orders.length; i++) {
+        var sale = $scope.orders[i];
+        if (sale.system_suggest_count_modify > sale.system_suggest_count) {
+          if (!sale.remark) {
+            return alert('产品编码:' + sale.product.product_number + '超额订购需填写备注');
+          }
         }
-      });
+
+        sales.push({
+          _id: sale._id,
+          system_suggest_count: sale.system_suggest_count,
+          system_suggest_count_modify: sale.system_suggest_count_modify,
+          system_suggest_count_modify_percent: sale.system_suggest_count_modify_percent,
+          D01: sale.D01,
+          remark:sale.remark,
+          D02: sale.D02,
+          D03: sale.D03,
+          D04: sale.D04,
+          D01_approve: sale.D01_approve,
+          D02_approve: sale.D02_approve,
+          D03_approve: sale.D03_approve,
+          D04_approve: sale.D04_approve
+        });
+      }
       var final_sales = [];
       for (var i = 0, len = sales.length; i < len; i += 40) {
         final_sales.push(sales.slice(i, i + 40));

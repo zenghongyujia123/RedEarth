@@ -73,20 +73,15 @@
           </div>
           <input class="body-col" ng-model="o.remark" ng-show="user.account_type==='地区分公司'">
 
-          <div class="body-col" ng-show="user.account_type==='地区总部'">{{o.remark}}</div>
           <div class="body-col"></div>
-          <div class="body-col">{{o['D03']}}</div>
-          <div type="number" class="body-col" ng-show="user.account_type==='地区分公司'">{{o.D03_approve}}</div>
-          <input type="number" class="body-col" ng-model="o.D03_approve" ng-show="user.account_type==='地区总部'">
+          <div class="body-col">{{o.D03}}</div>
+          <div type="number" class="body-col">{{o.D03_approve}}</div>
 
-          <div class="body-col">{{o['D04']}}</div>
-          <div type="number" class="body-col" ng-show="user.account_type==='地区分公司'">{{o.D04_approve}}</div>
-          <input type="number" class="body-col" ng-model="o.D04_approve" ng-show="user.account_type==='地区总部'">
-
-          <div class="body-col">{{''}}</div>
+          <div class="body-col">{{o.D04}}</div>
+          <div type="number" class="body-col">{{o.D04_approve}}</div>
+          <div class="body-col">{{o.D01_approve}}</div>
           <div class="body-col">{{''}}</div>
           <div class="body-col red" ng-class="{green:o.status==='已审核'}">{{o.status}}</div>
-          <button class="body-col" ng-show="user.account_type==='地区总部'" ng-click="approveAreaOrder(o)">{{o.status==='已审核'?'已审核':'审核'}}</button>
         </div>
       </div>
     </div>

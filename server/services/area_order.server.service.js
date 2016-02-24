@@ -286,7 +286,7 @@ exports.suggestOrderSubmit = function (user, sales, callback) {
           if (err || !areaSales) {
             return eachCallback();
           }
-
+          areaSales.remark = sale.remark;
           areaSales.system_suggest_count = sale.system_suggest_count;
           areaSales.system_suggest_count_modify = sale.system_suggest_count_modify;
           areaSales.system_suggest_count_modify_percent = sale.system_suggest_count_modify_percent;
@@ -383,6 +383,7 @@ exports.approveAreaOrders = function (user, orders, callback) {
         areaSales.D02_approve = order.D02_approve;
         areaSales.D03_approve = order.D03_approve;
         areaSales.D04_approve = order.D04_approve;
+        areaSales.D01_approve = order.D01_approve;
         areaSales.status = '已审核';
         areaSales.save(function (err) {
           return eachCallback();

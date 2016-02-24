@@ -20,21 +20,6 @@ angular.module('agilesales-web').controller('IndexCtrl', ['$scope', '$rootScope'
     {
       text: '快速开始',
       location:'#/'
-    },
-    {
-      text: '建议订单'
-    },
-    {
-      text: '查看订单'
-    },
-    {
-      text: '历史数据'
-    },
-    {
-      text: '系统设置'
-    },
-    {
-      text: '查看报表'
     }
   ]
 }]);

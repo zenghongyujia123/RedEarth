@@ -265,6 +265,7 @@ exports.suggestOrderSubmit = function (user, sales, callback) {
     if (err) {
       return callback({err: error.system.db_error});
     }
+
     if (!areaSubmitOrder) {
       areaSubmitOrder = new AreaSubmitOrder({
         month: month,
@@ -273,6 +274,11 @@ exports.suggestOrderSubmit = function (user, sales, callback) {
         status: '未审核'
       });
     }
+
+    if (areaSubmitOrder.status === '已审核') {
+      return callback(null, {});
+    }
+
     areaSubmitOrder.order_number = month + user.username + user.number;
     areaSubmitOrder.save(function (err, saveAreaSubmitOrder) {
       if (err || !saveAreaSubmitOrder) {

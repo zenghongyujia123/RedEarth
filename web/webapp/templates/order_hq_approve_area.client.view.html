@@ -5,7 +5,7 @@
       订单详情 : {{order_number}}
     </span>
 
-    <div class="re-header-right" ng-if="orders&&orders.length>0" ng-click="approveAreaOrders()">{{orders[0].status}}
+    <div class="re-header-right" ng-if="orders&&orders.length>0" ng-click="approveAreaOrders()">{{orders[0].status==='已审核'?'已审核':'审核'}}
     </div>
   </div>
   <div class="re-child-body">

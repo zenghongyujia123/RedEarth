@@ -27,6 +27,9 @@ angular.module('agilesales-web').factory('HqOrderService', ['HttpService', funct
     },
     approveHqOrder: function (order) {
       return HttpService.post('/webapp/hq/sales/approve', {order: order});
+    },
+    approveHqOrders: function (orders) {
+      return HttpService.post('/webapp/hq/sales/approve/multi', {orders: orders});
     }
   };
 }]);

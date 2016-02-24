@@ -7,7 +7,7 @@
   </div>
   <div ng-if="user.account_type==='澳妆供应链'" class="re-child-body">
     <div class="re-table">
-      <div class="re-table-header" style="width: 8640px;min-width: 100%;">
+      <div class="re-table-header" style="width: 8840px;min-width: 100%;">
         <div class="re-table-row">
           <div class="header-col">SKU编码</div>
           <div class="header-col">产品名称</div>
@@ -51,9 +51,13 @@
           <div class="header-col">澳妆最终审批采购量</div>
           <div class="header-col">澳妆最终审批采购金额</div>
           <div class="header-col">状态</div>
+          <button ng-if="orders&&orders.length>0" class="header-col" ng-click="approveHqOrders()">
+            {{orders[0].status==='已审核'?'继续审核':'审核'}}
+          </button>
+
         </div>
       </div>
-      <div class="re-table-body" style="width: 8640px;min-width: 100%;">
+      <div class="re-table-body" style="width: 8840px;min-width: 100%;">
         <div class="re-table-row" ng-repeat="s in orders">
           <div class="body-col">{{s.product_number}}</div>
           <div class="body-col">{{s.product.product_name}}</div>
@@ -95,11 +99,9 @@
           <div class="body-col">{{s.product.moq_remark}}</div>
           <div class="body-col">{{s.product.order_count_exceed_moq}}</div>
           <input class="body-col" type="number" ng-model="s.final_purchased_count" ng-keyup="inputPurchaseCount(s)">
+
           <div class="body-col" type="number">{{s.final_purchased_price}}</div>
           <div class="body-col red" ng-class="{green:s.status==='已审核'}">{{s.status}}</div>
-          <button class="body-col" ng-click="approveHqOrder(s)">
-            {{s.status==='已审核'?'继续审核':'审核'}}
-          </button>
         </div>
       </div>
     </div>

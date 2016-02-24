@@ -99,3 +99,12 @@ exports.approveHqOrder = function (req, res, next) {
     return res.send(result);
   });
 };
+
+exports.approveHqOrders =function (req, res, next) {
+  hqOrderService.approveHqOrders(req.user, req.body.orders, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};

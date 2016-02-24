@@ -839,6 +839,9 @@ angular.module('agilesales-web').factory('HqOrderService', ['HttpService', funct
     },
     approveHqOrder: function (order) {
       return HttpService.post('/webapp/hq/sales/approve', {order: order});
+    },
+    approveHqOrders: function (orders) {
+      return HttpService.post('/webapp/hq/sales/approve/multi', {orders: orders});
     }
   };
 }]);
@@ -1595,8 +1598,8 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderReApproveHqCtrl', ['$scope', '$stateParams', 'AuthService', 'AreaOrderService', 'HqOrderService',
-  function ($scope, $stateParams, AuthService, AreaOrderService, HqOrderService) {
+angular.module('agilesales-web').controller('OrderReApproveHqCtrl', ['$scope', '$state', '$stateParams', 'AuthService', 'AreaOrderService', 'HqOrderService',
+  function ($scope, $state, $stateParams, AuthService, AreaOrderService, HqOrderService) {
     $scope.importBtns = [];
     $scope.order_number = $stateParams.order_number;
     $scope.location = window.location;
@@ -1623,6 +1626,41 @@ angular.module('agilesales-web').controller('OrderReApproveHqCtrl', ['$scope', '
     });
     $scope.getAreaOrderDetail();
 
+    $scope.approveHqOrders = function () {
+      var sales = [];
+
+      $scope.orders.forEach(function (sale) {
+        sales.push({
+          _id: sale._id,
+          order_number: sale.order_number,
+          final_purchased_count: sale.final_purchased_count,
+          final_purchased_price: sale.final_purchased_price
+        });
+      });
+      var final_sales = [];
+      for (var i = 0, len = sales.length; i < len; i += 40) {
+        final_sales.push(sales.slice(i, i + 40));
+      }
+
+      upload(final_sales, 0);
+    };
+
+
+    function upload(orders, i) {
+      HqOrderService.approveHqOrders(orders[i++])
+        .then(function (data) {
+          console.log(data);
+          if (orders[i]) {
+            upload(orders, i);
+          }
+          else {
+            $state.go('order_re_approve_hq', {}, {reload: true});
+          }
+        }, function (err) {
+          console.log(err);
+        });
+    }
+
     $scope.approveHqOrder = function (o) {
       HqOrderService.approveHqOrder(o).then(function (data) {
         console.log(data);
@@ -1634,6 +1672,7 @@ angular.module('agilesales-web').controller('OrderReApproveHqCtrl', ['$scope', '
         console.log(data);
       });
     };
+
     $scope.inputPurchaseCount = function (order) {
       order.final_purchased_price = order.final_purchased_count * order.product.sales_price;
     };

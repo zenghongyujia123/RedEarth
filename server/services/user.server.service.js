@@ -703,9 +703,9 @@ function initDesk() {
     });
   })
 }
-
-initUser();
-initDesk();
+//
+//initUser();
+//initDesk();
 
 
 

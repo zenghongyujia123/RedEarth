@@ -234,6 +234,7 @@ exports.hqSuggestOrderSubmit = function (user, sales, callback) {
             return eachCallback();
           }
 
+          hqSales.remark = sale.remark;
           hqSales.system_suggest_count = sale.system_suggest_count;
           hqSales.system_suggest_count_modify = sale.system_suggest_count_modify;
           hqSales.system_suggest_count_modify_percent = sale.system_suggest_count_modify_percent;

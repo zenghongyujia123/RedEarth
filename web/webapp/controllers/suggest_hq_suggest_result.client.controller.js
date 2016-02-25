@@ -47,6 +47,7 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
         if (sale.status !== '已审核') {
           sales.push({
             _id: sale._id,
+            remark:sale.remark,
             system_suggest_count: sale.system_suggest_count,
             system_suggest_count_modify: sale.system_suggest_count_modify,
             system_suggest_count_modify_percent: sale.system_suggest_count_modify_percent,

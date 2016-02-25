@@ -46,7 +46,7 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
     };
 
     $scope.modifySystemAreaSuggestPercent = function (sale) {
-      sale.system_suggest_count_modify_percent = parseInt((sale.system_suggest_count_modify) * 100 / sale.system_suggest_count)
+      sale.system_suggest_count_modify_percent = parseInt((sale.system_suggest_count_modify - sale.system_suggest_count) * 100 / sale.system_suggest_count)
     };
 
     function suggestOrderSubmit() {
@@ -54,7 +54,7 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
 
       for (var i = 0; i < $scope.orders.length; i++) {
         var sale = $scope.orders[i];
-        if (sale.system_suggest_count_modify > sale.system_suggest_count) {
+        if (sale.system_suggest_count_modify_percent >= 50) {
           if (!sale.remark) {
             return alert('产品编码:' + sale.product.product_number + '超额订购需填写备注');
           }

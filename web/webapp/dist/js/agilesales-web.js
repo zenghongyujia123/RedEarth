@@ -1630,8 +1630,8 @@ angular.module('agilesales-web').controller('OrderHqApproveAreaCtrl', ['$scope',
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state', 'AreaOrderService', 'HqOrderService', 'AuthService',
-  function ($scope, $state, AreaOrderService, HqOrderService, AuthService) {
+angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state', 'AreaOrderService', 'HqOrderService', 'AuthService', 'Loading',
+  function ($scope, $state, AreaOrderService, HqOrderService, AuthService, Loading) {
     $scope.goDetail = function (o) {
       if ($scope.user.account_type === '地区总部') {
         $state.go('order_hq_approve_area', {order_number: o.order_number});
@@ -1654,6 +1654,7 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state
 
     $scope.orders = [];
     $scope.getAreaOrderList = function (callback) {
+      Loading.show();
       AreaOrderService.getAreaOrderList().then(function (data) {
         console.log(data);
         if (data && !data.err) {
@@ -1662,18 +1663,23 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state
         if (callback) {
           return callback();
         }
+        Loading.hide();
       }, function (data) {
+        Loading.hide();
         console.log(data);
       });
     };
 
     $scope.getHqOrderList = function () {
+      Loading.show();
       HqOrderService.getHqOrderList().then(function (data) {
         console.log(data);
         if (data && !data.err) {
           $scope.orders = $scope.orders.concat(data);
         }
+        Loading.hide();
       }, function (data) {
+        Loading.hide();
         console.log(data);
       });
     };
@@ -1694,8 +1700,8 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderReApproveHqCtrl', ['$scope', '$state', '$stateParams', 'AuthService', 'AreaOrderService', 'HqOrderService',
-  function ($scope, $state, $stateParams, AuthService, AreaOrderService, HqOrderService) {
+angular.module('agilesales-web').controller('OrderReApproveHqCtrl', ['$scope', '$state', '$stateParams', 'AuthService', 'AreaOrderService', 'HqOrderService','Loading',
+  function ($scope, $state, $stateParams, AuthService, AreaOrderService, HqOrderService,Loading) {
     $scope.importBtns = [];
     $scope.order_number = $stateParams.order_number;
     $scope.location = window.location;
@@ -1706,12 +1712,15 @@ angular.module('agilesales-web').controller('OrderReApproveHqCtrl', ['$scope', '
 
     $scope.orders = [];
     $scope.getAreaOrderDetail = function () {
+      Loading.show();
       AreaOrderService.getAreaOrderDetail($scope.order_number).then(function (data) {
         if (data && !data.err) {
           $scope.orders = data;
         }
+        Loading.hide();
         console.log(data);
       }, function (data) {
+        Loading.hide();
         console.log(data);
       });
     };
@@ -1724,6 +1733,7 @@ angular.module('agilesales-web').controller('OrderReApproveHqCtrl', ['$scope', '
 
     $scope.approveHqOrders = function () {
       var sales = [];
+      Loading.show();
 
       $scope.orders.forEach(function (sale) {
         sales.push({
@@ -1750,10 +1760,12 @@ angular.module('agilesales-web').controller('OrderReApproveHqCtrl', ['$scope', '
             upload(orders, i);
           }
           else {
+            Loading.hide();
             $state.go('order_re_approve_hq', {}, {reload: true});
           }
         }, function (err) {
           console.log(err);
+          Loading.hide();
         });
     }
 
@@ -1818,7 +1830,7 @@ angular.module('agilesales-web').controller('SettingHomeCtrl', function () {
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SettingPasswordCtrl', ['$scope', 'UserService', function ($scope, UserService) {
+angular.module('agilesales-web').controller('SettingPasswordCtrl', ['$scope', 'UserService','Loading', function ($scope, UserService,Loading) {
   $scope.info = {
     old_password: '',
     new_password: '',
@@ -1842,6 +1854,7 @@ angular.module('agilesales-web').controller('SettingPasswordCtrl', ['$scope', 'U
     }
 
     UserService.changePassword($scope.info.old_password, $scope.info.new_password).then(function (data) {
+      Loading.show();
       console.log(data);
       if (data && !data.err) {
         alert('修改成功');
@@ -1851,7 +1864,9 @@ angular.module('agilesales-web').controller('SettingPasswordCtrl', ['$scope', 'U
           re_password: ''
         };
       }
+      Loading.hide();
     }, function (data) {
+      Loading.hide();
       console.log(data);
     });
   }
@@ -1859,8 +1874,8 @@ angular.module('agilesales-web').controller('SettingPasswordCtrl', ['$scope', 'U
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService',
-  function ($scope, $rootScope, $state, AreaOrderService) {
+angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService','Loading',
+  function ($scope, $rootScope, $state, AreaOrderService,Loading) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单',
       btns: [
@@ -1873,12 +1888,15 @@ angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope
 
     $scope.sales = [];
     $scope.getSalesByArea = function () {
+      Loading.show();
       AreaOrderService.getSalesByArea().then(function (data) {
         if (!data.err) {
           $scope.sales = data;
         }
+        Loading.hide();
         console.log(data);
       }, function (data) {
+        Loading.hide();
         console.log(data);
       });
     };
@@ -1900,14 +1918,17 @@ angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope
               upload(saleses, i);
             }
             else {
+              Loading.hide();
               $state.go('order_suggest.suggest_area_last_month', {}, {reload: true});
             }
           }, function (err) {
+            Loading.hide();
             console.log(err);
           });
       }
 
       $scope.areaSalesStockOnwayImport = function (saleses) {
+        Loading.show();
         var i = 0;
         upload(saleses, i);
       };
@@ -1948,8 +1969,8 @@ angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaOtherOrderCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService',
-  function ($scope, $rootScope, $state, AreaOrderService) {
+angular.module('agilesales-web').controller('SuggestAreaOtherOrderCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService','Loading',
+  function ($scope, $rootScope, $state, AreaOrderService,Loading) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单',
       btns: [
@@ -1975,12 +1996,15 @@ angular.module('agilesales-web').controller('SuggestAreaOtherOrderCtrl', ['$scop
     });
     $scope.orders = [];
     $scope.getOrdersByArea = function () {
+      Loading.show();
       AreaOrderService.getOrdersByArea().then(function (data) {
         if (!data.err) {
           $scope.orders = data;
         }
+        Loading.hide();
         console.log(data);
       }, function (data) {
+        Loading.hide();
         console.log(data);
       });
     };
@@ -2006,9 +2030,11 @@ angular.module('agilesales-web').controller('SuggestAreaOtherOrderCtrl', ['$scop
               upload(orders, i);
             }
             else {
+              Loading.hide();
               $state.go('order_suggest.suggest_area_other_order', {}, {reload: true});
             }
           }, function (err) {
+            Loading.hide();
             console.log(err);
           });
       }
@@ -2027,6 +2053,7 @@ angular.module('agilesales-web').controller('SuggestAreaOtherOrderCtrl', ['$scop
 
       $scope.otherOrderImport = function (orders) {
         var i = 0;
+        Loading.show();
         upload(orders, i);
       };
 
@@ -2070,8 +2097,8 @@ angular.module('agilesales-web').controller('SuggestAreaOtherOrderCtrl', ['$scop
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService',
-  function ($scope, $rootScope, $state, AreaOrderService) {
+angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService','Loading',
+  function ($scope, $rootScope, $state, AreaOrderService,Loading) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单 地区建议订单（SKU）=当月预测-[地区库存(包括店柜库存) +在途-未来6月销售预测-其他订单(批发)-安全库存）] * 产品分类（ABC）?%',
       btns: [
@@ -2083,12 +2110,15 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
     });
     $scope.orders = [];
     $scope.getAreaSuggestOrder = function () {
+      Loading.show();
       AreaOrderService.getAreaSuggestOrder().then(function (data) {
         console.log(data);
         if (data && !data.err) {
           $scope.orders = data;
         }
+        Loading.hide();
       }, function (data) {
+        Loading.hide();
         console.log(data);
       });
     };
@@ -2112,7 +2142,7 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
     };
 
     $scope.modifySystemAreaSuggestPercent = function (sale) {
-      sale.system_suggest_count_modify_percent = parseInt((sale.system_suggest_count_modify) * 100 / sale.system_suggest_count)
+      sale.system_suggest_count_modify_percent = parseInt((sale.system_suggest_count_modify - sale.system_suggest_count) * 100 / sale.system_suggest_count)
     };
 
     function suggestOrderSubmit() {
@@ -2120,7 +2150,7 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
 
       for (var i = 0; i < $scope.orders.length; i++) {
         var sale = $scope.orders[i];
-        if (sale.system_suggest_count_modify > sale.system_suggest_count) {
+        if (sale.system_suggest_count_modify_percent >= 50) {
           if (!sale.remark) {
             return alert('产品编码:' + sale.product.product_number + '超额订购需填写备注');
           }
@@ -2146,7 +2176,7 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
       for (var i = 0, len = sales.length; i < len; i += 40) {
         final_sales.push(sales.slice(i, i + 40));
       }
-
+      Loading.show();
       upload(final_sales, 0);
     };
 
@@ -2159,9 +2189,11 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
           }
           else {
             alert('ok');
+            Loading.hide();
             $state.go('order_suggest.suggest_area_suggest_result', {}, {reload: true});
           }
         }, function (err) {
+          Loading.hide();
           console.log(err);
         });
     }

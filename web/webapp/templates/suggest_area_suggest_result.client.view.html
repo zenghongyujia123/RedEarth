@@ -60,17 +60,18 @@
       <div class="body-col">{{getSystemAreaSuggest(o)}}</div>
       <input class="body-col" ng-model="o.system_suggest_count_modify" ng-keyup="modifySystemAreaSuggestPercent(o)">
 
-      <div class="body-col" ng-class="{yellow:o.system_suggest_count_modify_percent>100}">
+      <div class="body-col" ng-class="{yellow:o.system_suggest_count_modify_percent>=30}">
         {{o.system_suggest_count_modify_percent}}%
       </div>
       <input class="body-col" ng-model="o.remark" placeholder="超额订购请点击备注">
+
       <div class="body-col"></div>
       <div class="body-col">{{o.D03}}</div>
       <div class="body-col">{{o.D04}}</div>
       <div class="body-col">{{o.D01_approve}}</div>
       <div class="body-col">{{o.D03_approve}}</div>
       <div class="body-col">{{o.D04_approve}}</div>
-      <div class="body-col">{{''}}</div>
+      <div class="body-col">{{(o.D01_approve+o.D01_approve+o.D01_approve)*o.product.sales_price}}</div>
       <div class="body-col">{{o.status}}</div>
     </div>
   </div>

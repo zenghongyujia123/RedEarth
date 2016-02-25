@@ -13,7 +13,7 @@ module.exports = _.extend(
     require('./env/all'),
     require('./env/' + process.env.NODE_ENV) || {}
 );
-
+console.log(process.env.PORT );
 /**
  * Get files by glob patterns
  */

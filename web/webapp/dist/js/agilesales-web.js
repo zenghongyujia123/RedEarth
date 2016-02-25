@@ -2822,7 +2822,7 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
     };
 
     $scope.modifySystemAreaSuggestPercent = function (sale) {
-      sale.system_suggest_count_modify_percent = parseInt((sale.system_suggest_count_modify) * 100 / sale.system_suggest_count)
+      sale.system_suggest_count_modify_percent = parseInt((sale.system_suggest_count_modify - sale.system_suggest_count) * 100 / sale.system_suggest_count)
     };
 
     function suggestOrderSubmit() {

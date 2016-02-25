@@ -6,5 +6,5 @@ module.exports = {
     app: {
         title: 'zhuzhuqs - Development Environment'
     },
-    port: process.env.PORT || 3002
+    port: process.env.PORT || 80
 };

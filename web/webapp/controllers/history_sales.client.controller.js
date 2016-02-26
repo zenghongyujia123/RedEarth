@@ -7,7 +7,7 @@ angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$roo
       title: '历史数据',
       btns: [
         {
-          text: '导入历史销售',
+          text: '导入历史销售,库存',
           clickCallback: importClickCallback
         }
       ]

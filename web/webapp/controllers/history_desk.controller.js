@@ -5,12 +5,7 @@ angular.module('agilesales-web').controller('HistoryDeskCtrl', ['$scope', 'Produ
   function ($scope, ProductService, Loading) {
     $scope.$emit('suggest.import.changed', {
       title: '历史数据',
-      btns: [
-        {
-          text: '导入柜台资料',
-          clickCallback: importClickCallback
-        }
-      ]
+      btns: []
     });
 
     $scope.desks = [];

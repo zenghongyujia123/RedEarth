@@ -14,7 +14,7 @@
       </div>
       <div class="suggest-left-item"
            ng-class="{'select':location.hash==='#/system_setting/setting_history'}"
-           ui-sref="system_setting.setting_history">
+           ui-sref="system_setting.setting_history"  ng-show="user.account_type==='澳妆供应链'">
         查看历史
       </div>
     </div>

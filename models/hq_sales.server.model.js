@@ -115,6 +115,10 @@ module.exports = function (appDb) {
       type: Number,
       default: 0
     },
+    final_system_suggest_count: {
+      type: Number,
+      default: 0
+    },
     //备注
     remark: {
       type: String,
@@ -180,13 +184,13 @@ module.exports = function (appDb) {
       type: Number,
       default: 0
     },
-    final_purchased_count:{
-      type:Number,
-      default:0
+    final_purchased_count: {
+      type: Number,
+      default: 0
     },
-    final_purchased_price:{
-      type:Number,
-      default:0
+    final_purchased_price: {
+      type: Number,
+      default: 0
     }
   });
 

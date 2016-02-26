@@ -31,6 +31,7 @@
       <div class="header-col">上月上传其他订单电商</div>
       <div class="header-col">上月上传其他订单茂姿</div>
       <div class="header-col">当月总部订单系统建议</div>
+      <div class="header-col">当月总部订单moq系统建议</div>
       <div class="header-col">修改</div>
       <div class="header-col">修改%</div>
       <div class="header-col">备注</div>
@@ -71,9 +72,14 @@
       <div class="body-col">{{s.Y06}}</div>
       <div class="body-col">{{s.Y07}}</div>
       <div class="body-col">{{getSystemAreaSuggest(s)}}</div>
+      <div class="body-col">{{s.final_system_suggest_count}}</div>
       <input class="body-col" ng-keyup="modifySystemAreaSuggestPercent(s)" ng-model="s.system_suggest_count_modify">
-      <div class="body-col" ng-class="{green:s.system_suggest_count_modify_percent>30}">{{s.system_suggest_count_modify_percent}}%</div>
+
+      <div class="body-col" ng-class="{green:s.system_suggest_count_modify_percent>30}">
+        {{s.system_suggest_count_modify_percent}}%
+      </div>
       <input class="body-col" ng-model="s.remark" placeholder="超额采购需填写备注">
+
       <div class="body-col">{{''}}</div>
       <div class="body-col">{{s.final_purchased_count}}</div>
       <div class="body-col">{{s.final_purchased_price}}</div>

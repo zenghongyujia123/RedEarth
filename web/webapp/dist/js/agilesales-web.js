@@ -2818,6 +2818,17 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
         sale.system_suggest_count_modify = sale.system_suggest_count;
       }
 
+      var factory_moq = parseInt(sale.product.factory_moq);
+      var order_count_exceed_moq = parseInt(sale.product.order_count_exceed_moq);
+      var min_factory_moq = parseInt(factory_moq * order_count_exceed_moq / 100);
+
+      sale.final_system_suggest_count = sale.system_suggest_count_modify;
+      if (sale.system_suggest_count_modify < min_factory_moq) {
+        sale.final_system_suggest_count = 0;
+      }
+      if (sale.system_suggest_count_modify > min_factory_moq && sale.system_suggest_count_modify < factory_moq) {
+        sale.final_system_suggest_count = factory_moq;
+      }
       return sale.system_suggest_count;
     };
 
@@ -2832,7 +2843,9 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
         if (sale.status !== '已审核') {
           sales.push({
             _id: sale._id,
+            remark: sale.remark,
             system_suggest_count: sale.system_suggest_count,
+            final_system_suggest_count: sale.final_system_suggest_count,
             system_suggest_count_modify: sale.system_suggest_count_modify,
             system_suggest_count_modify_percent: sale.system_suggest_count_modify_percent,
             D01: sale.D01,

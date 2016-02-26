@@ -1,7 +1,4 @@
 /**
- * Created by zenghong on 16/2/16.
- */
-/**
  * Created by zenghong on 16/1/20.
  */
 'use strict';

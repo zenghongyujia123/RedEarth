@@ -24,3 +24,13 @@ exports.importProducts = function (req, res, next) {
     return res.send(result);
   });
 };
+
+exports.getDesks = function (req, res, next) {
+  productService.getDesks(req.user, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};
+

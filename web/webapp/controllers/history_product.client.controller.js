@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$rootScope', 'ProductService',
-  function ($scope, $rootScope, ProductService) {
+angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$rootScope', 'ProductService', 'Loading',
+  function ($scope, $rootScope, ProductService, Loading) {
     $scope.$emit('suggest.import.changed', {
       title: '历史数据',
       btns: [
@@ -15,12 +15,15 @@ angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$r
 
     $scope.products = [];
     $scope.getProducts = function () {
+      Loading.show();
       ProductService.getProducts().then(function (data) {
         if (!data.err) {
           $scope.products = data;
         }
+        Loading.hide();
         console.log(data);
       }, function (data) {
+        Loading.hide();
         console.log(data);
       });
     };
@@ -84,13 +87,19 @@ angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$r
             if (products[i]) {
               upload(products, i);
             }
+            else {
+              Loading.hide();
+              $state.go('history_product', {}, {reload: true});
+            }
           }, function (err) {
+            Loading.hide();
             console.log(err);
           });
       }
 
       $scope.importProducts = function (products) {
         var i = 0;
+        Loading.show();
         upload(products, i);
       };
 

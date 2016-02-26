@@ -1,0 +1,18 @@
+<div class="re-table">
+  <div class="re-table-header" style="width: 1240px;min-width: 100%">
+    <div class="re-table-row">
+      <div class="header-col">所属地区</div>
+      <div class="header-col">地区</div>
+      <div class="header-col">柜台号</div>
+      <div class="header-col">柜台名</div>
+    </div>
+  </div>
+  <div class="re-table-body" style="width: 1240px;min-width: 100%">
+    <div class="re-table-row" ng-repeat="d in desks">
+      <div class="body-col">{{d.area}}</div>
+      <div class="body-col">{{d.child_area}}</div>
+      <div class="body-col">{{d.desk_number}}</div>
+      <div class="body-col">{{d.desk_name}}</div>
+    </div>
+  </div>
+</div>

@@ -47,8 +47,9 @@ angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$roo
             if (sales[i]) {
               upload(sales, i);
             }
-            else{
+            else {
               Loading.hide();
+              $state.go('history_sales', {}, {reload: true});
             }
           }, function (err) {
             Loading.hide();

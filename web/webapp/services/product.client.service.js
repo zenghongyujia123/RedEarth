@@ -8,6 +8,9 @@ angular.module('agilesales-web').factory('ProductService', ['HttpService', funct
     },
     importProducts: function (products) {
       return HttpService.post('/webapp/product/import', {products: products});
+    },
+    getDesks: function () {
+      return HttpService.get('/webapp/desk', {});
     }
   };
 }]);

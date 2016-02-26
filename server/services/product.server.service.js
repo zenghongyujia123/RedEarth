@@ -5,8 +5,8 @@
 
 var appDb = require('./../../libraries/mongoose').appDb,
   error = require('./../../errors/all'),
-  cryptoLib = require('./../../libraries/crypto'),
   async = require('async'),
+  Desk = appDb.model('Desk'),
   Product = appDb.model('Product');
 
 exports.getProducts = function (user, callback) {
@@ -87,7 +87,12 @@ exports.importProducts = function (user, products, callback) {
 };
 
 exports.getDesks = function (user, callback) {
-
+  Desk.find({}, function (err, desks) {
+    if (err || !desks) {
+      return callback({err: error.system.db_error});
+    }
+    return callback(null, desks)
+  });
 };
 
 exports.importDesks = function (user, callback) {

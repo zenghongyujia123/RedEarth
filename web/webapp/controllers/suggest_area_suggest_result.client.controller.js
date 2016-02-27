@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService','Loading',
-  function ($scope, $rootScope, $state, AreaOrderService,Loading) {
+angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService', 'Loading',
+  function ($scope, $rootScope, $state, AreaOrderService, Loading) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单 地区建议订单（SKU）=当月预测-[地区库存(包括店柜库存) +在途-未来6月销售预测-其他订单(批发)-安全库存）] * 产品分类（ABC）?%',
       btns: [
@@ -41,12 +41,29 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
       if (sale.system_suggest_count_modify === 0) {
         sale.system_suggest_count_modify = sale.system_suggest_count;
       }
+      if (sale.D01_approve === 0) {
+        sale.D01_approve = sale.system_suggest_count_modify;
+      }
+
+      if (sale.D02_approve === 0) {
+        sale.D02_approve = sale.D02;
+      }
+
+      if (sale.D03_approve === 0) {
+        sale.D03_approve = sale.D03;
+      }
+
+      if (sale.D04_approve === 0) {
+        sale.D04_approve = sale.D04;
+      }
+
 
       return sale.system_suggest_count;
     };
 
     $scope.modifySystemAreaSuggestPercent = function (sale) {
-      sale.system_suggest_count_modify_percent = parseInt((sale.system_suggest_count_modify - sale.system_suggest_count) * 100 / sale.system_suggest_count)
+      sale.system_suggest_count_modify_percent = parseInt((sale.system_suggest_count_modify - sale.system_suggest_count) * 100 / sale.system_suggest_count);
+      sale.D01_approve = sale.system_suggest_count_modify;
     };
 
     function suggestOrderSubmit() {
@@ -66,7 +83,7 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
           system_suggest_count_modify: sale.system_suggest_count_modify,
           system_suggest_count_modify_percent: sale.system_suggest_count_modify_percent,
           D01: sale.D01,
-          remark:sale.remark,
+          remark: sale.remark,
           D02: sale.D02,
           D03: sale.D03,
           D04: sale.D04,

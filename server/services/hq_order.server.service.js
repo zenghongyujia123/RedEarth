@@ -15,6 +15,50 @@ var appDb = require('./../../libraries/mongoose').appDb,
   HqSubmitOrder = appDb.model('HqSubmitOrder'),
   HqSales = appDb.model('HqSales');
 
+
+exports.getCurrentHqSubmitOrder = function (user, callback) {
+  var month = getLastMonth(1);
+  HqSubmitOrder.findOne({month: month}, function (err, hqSubmitOrder) {
+    if (err) {
+      return callback({err: error.system.db_error});
+    }
+    if (!hqSubmitOrder) {
+      return callback(null, hqSubmitOrder);
+    }
+    else {
+      hqSubmitOrder = new HqSubmitOrder({});
+      hqSubmitOrder.month = month;
+      hqSubmitOrder.user_number = user.number;
+      hqSubmitOrder.order_number = month + user.username + user.number;
+      hqSubmitOrder.save(function (err, saveHqSubmitOrder) {
+        if (err || !saveHqSubmitOrder) {
+          return callback({err: error.system.db_error});
+        }
+      });
+    }
+  });
+};
+exports.updateSubmitOtherOrderStatus = function (user, submitOrder, callback) {
+  HqSubmitOrder.findOne({_id: submitOrder._id}, function (err, order) {
+    if (err || !order) {
+      return callback({err: error.system.db_error});
+    }
+    order.has_Y02 = submitOrder.has_D02;
+    order.has_Y03 = submitOrder.has_D03;
+    order.has_Y04 = submitOrder.has_D04;
+    order.has_Y05 = submitOrder.has_D05;
+    order.has_Y06 = submitOrder.has_D06;
+    order.has_Y07 = submitOrder.has_D07;
+    order.save(function (err, saveOrder) {
+      if (err) {
+        return callback({err: error.system.db_error});
+      }
+      return callback(null, saveOrder);
+    });
+  })
+
+};
+
 exports.hqStockImport = function (user, stocks, callback) {
   var month = getLastMonth(1);
 
@@ -236,7 +280,7 @@ exports.hqSuggestOrderSubmit = function (user, sales, callback) {
 
           hqSales.remark = sale.remark;
           hqSales.system_suggest_count = sale.system_suggest_count;
-          hqSales.final_system_suggest_count= sale.final_system_suggest_count;
+          hqSales.final_system_suggest_count = sale.final_system_suggest_count;
           hqSales.system_suggest_count_modify = sale.system_suggest_count_modify;
           hqSales.system_suggest_count_modify_percent = sale.system_suggest_count_modify_percent;
           hqSales.status = '未审核';

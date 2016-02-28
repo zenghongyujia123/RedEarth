@@ -30,6 +30,13 @@ angular.module('agilesales-web').factory('HqOrderService', ['HttpService', funct
     },
     approveHqOrders: function (orders) {
       return HttpService.post('/webapp/hq/sales/approve/multi', {orders: orders});
+    },
+    getCurrentHqSubmitOrder: function (orders) {
+      return HttpService.get('/webapp/hq/sales/submit', {});
+    },
+    updateSubmitOtherOrderStatus: function (submit_order) {
+      return HttpService.post('/webapp/hq/sales/submit_order/update', {submit_order: submit_order});
     }
+
   };
 }]);

@@ -65,7 +65,7 @@ angular.module('agilesales-web').controller('SuggestHqOtherY02Ctrl', ['$scope', 
 
     $scope.orders = [];
     $scope.getHqOtherOrders = function () {
-      HqOrderService.getHqOtherOrders().then(function (data) {
+      HqOrderService.getHqOtherOrders('Y02').then(function (data) {
         if (!data.err) {
           $scope.orders = data;
         }
@@ -97,7 +97,7 @@ angular.module('agilesales-web').controller('SuggestHqOtherY02Ctrl', ['$scope', 
               upload(orders, i);
             }
             else {
-              $state.go('order_suggest.suggest_hq_other_order', {}, {reload: true});
+              $state.go('order_suggest.suggest_hq_other_Y02', {}, {reload: true});
             }
           }, function (err) {
             console.log(err);

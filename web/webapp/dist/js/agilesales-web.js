@@ -363,50 +363,6 @@ angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',func
 /**
  * Created by zenghong on 16/1/18.
  */
-angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
-  return {
-    restrict: 'AE',
-    templateUrl: 'directives/dialog_input/dialog_input.client.view.html',
-    replace: true,
-    scope: {},
-    link: function ($scope, $element, $attrs) {
-      $scope.info = {
-        title: '',
-        contents: [{
-          key: '请输入拜访卡名称',
-          tip: '点击输入名称',
-          value: ''
-        }],
-        color: 'blue'
-      };
-
-      $scope.show = function () {
-        $element.addClass('show');
-      };
-      $scope.hide = function () {
-        $element.removeClass('show');
-      };
-      $scope.submit = function () {
-        $element.removeClass('show');
-        if ($scope.info.callback) {
-          $scope.info.callback($scope.info);
-        }
-      };
-      $rootScope.$on('show.dialogInput', function (event, data) {
-        setTheme(data);
-        $scope.show();
-      });
-
-      function setTheme(info) {
-        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
-        $scope.info = info;
-      }
-    }
-  }
-}]);
-/**
- * Created by zenghong on 16/1/18.
- */
 angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', function ($rootScope) {
   return {
     restrict: 'AE',
@@ -521,6 +477,50 @@ angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'Exc
           });
         });
       };
+
+      function setTheme(info) {
+        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
+        $scope.info = info;
+      }
+    }
+  }
+}]);
+/**
+ * Created by zenghong on 16/1/18.
+ */
+angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
+  return {
+    restrict: 'AE',
+    templateUrl: 'directives/dialog_input/dialog_input.client.view.html',
+    replace: true,
+    scope: {},
+    link: function ($scope, $element, $attrs) {
+      $scope.info = {
+        title: '',
+        contents: [{
+          key: '请输入拜访卡名称',
+          tip: '点击输入名称',
+          value: ''
+        }],
+        color: 'blue'
+      };
+
+      $scope.show = function () {
+        $element.addClass('show');
+      };
+      $scope.hide = function () {
+        $element.removeClass('show');
+      };
+      $scope.submit = function () {
+        $element.removeClass('show');
+        if ($scope.info.callback) {
+          $scope.info.callback($scope.info);
+        }
+      };
+      $rootScope.$on('show.dialogInput', function (event, data) {
+        setTheme(data);
+        $scope.show();
+      });
 
       function setTheme(info) {
         $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
@@ -3456,7 +3456,7 @@ angular.module('agilesales-web').controller('SuggestHqOtherY02Ctrl', ['$scope', 
 
     $scope.orders = [];
     $scope.getHqOtherOrders = function () {
-      HqOrderService.getHqOtherOrders().then(function (data) {
+      HqOrderService.getHqOtherOrders('Y02').then(function (data) {
         if (!data.err) {
           $scope.orders = data;
         }
@@ -3488,7 +3488,7 @@ angular.module('agilesales-web').controller('SuggestHqOtherY02Ctrl', ['$scope', 
               upload(orders, i);
             }
             else {
-              $state.go('order_suggest.suggest_hq_other_order', {}, {reload: true});
+              $state.go('order_suggest.suggest_hq_other_Y02', {}, {reload: true});
             }
           }, function (err) {
             console.log(err);
@@ -3618,7 +3618,7 @@ angular.module('agilesales-web').controller('SuggestHqOtherY03Ctrl', ['$scope','
 
     $scope.orders = [];
     $scope.getHqOtherOrders = function () {
-      HqOrderService.getHqOtherOrders().then(function (data) {
+      HqOrderService.getHqOtherOrders('Y03').then(function (data) {
         if (!data.err) {
           $scope.orders = data;
         }
@@ -3650,7 +3650,7 @@ angular.module('agilesales-web').controller('SuggestHqOtherY03Ctrl', ['$scope','
               upload(orders, i);
             }
             else {
-              $state.go('order_suggest.suggest_hq_other_order', {}, {reload: true});
+              $state.go('order_suggest.suggest_hq_other_Y03', {}, {reload: true});
             }
           }, function (err) {
             console.log(err);
@@ -3781,7 +3781,7 @@ angular.module('agilesales-web').controller('SuggestHqOtherY04Ctrl', ['$scope','
 
     $scope.orders = [];
     $scope.getHqOtherOrders = function () {
-      HqOrderService.getHqOtherOrders().then(function (data) {
+      HqOrderService.getHqOtherOrders('Y04').then(function (data) {
         if (!data.err) {
           $scope.orders = data;
         }
@@ -3813,7 +3813,7 @@ angular.module('agilesales-web').controller('SuggestHqOtherY04Ctrl', ['$scope','
               upload(orders, i);
             }
             else {
-              $state.go('order_suggest.suggest_hq_other_order', {}, {reload: true});
+              $state.go('order_suggest.suggest_hq_other_Y04', {}, {reload: true});
             }
           }, function (err) {
             console.log(err);

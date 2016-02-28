@@ -34,6 +34,7 @@ exports.getCurrentHqSubmitOrder = function (user, callback) {
         if (err || !saveHqSubmitOrder) {
           return callback({err: error.system.db_error});
         }
+        return callback(null, saveHqSubmitOrder);
       });
     }
   });
@@ -43,12 +44,12 @@ exports.updateSubmitOtherOrderStatus = function (user, submitOrder, callback) {
     if (err || !order) {
       return callback({err: error.system.db_error});
     }
-    order.has_Y02 = submitOrder.has_D02;
-    order.has_Y03 = submitOrder.has_D03;
-    order.has_Y04 = submitOrder.has_D04;
-    order.has_Y05 = submitOrder.has_D05;
-    order.has_Y06 = submitOrder.has_D06;
-    order.has_Y07 = submitOrder.has_D07;
+    order.has_Y02 = submitOrder.has_Y02;
+    order.has_Y03 = submitOrder.has_Y03;
+    order.has_Y04 = submitOrder.has_Y04;
+    order.has_Y05 = submitOrder.has_Y05;
+    order.has_Y06 = submitOrder.has_Y06;
+    order.has_Y07 = submitOrder.has_Y07;
     order.save(function (err, saveOrder) {
       if (err) {
         return callback({err: error.system.db_error});

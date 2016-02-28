@@ -2811,8 +2811,8 @@ angular.module('agilesales-web').controller('SuggestHomeCtrl', ['$scope', 'AuthS
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope','$state', '$rootScope', 'AuthService', 'HqOrderService',
-  function ($scope, $state,$rootScope, AuthService, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope', '$state', '$rootScope', 'AuthService', 'HqOrderService',
+  function ($scope, $state, $rootScope, AuthService, HqOrderService) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentHqSubmitOrder = function () {
       HqOrderService.getCurrentHqSubmitOrder().then(function (data) {
@@ -2825,6 +2825,7 @@ angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope','$s
         console.log(data);
       });
     };
+    $scope.getCurrentHqSubmitOrder();
 
     $scope.changeImportBtn = function (text) {
       if (text === '有') {
@@ -2850,7 +2851,27 @@ angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope','$s
 
     $scope.clickOrderStatus = function (status) {
       $scope.curSubmitOrder.has_Y05 = status;
-      //$scope.updateSubmitOrderStatus();
+      $scope.updateSubmitOrderStatus();
+    };
+
+    $scope.updateSubmitOrderStatus = function () {
+      HqOrderService.updateSubmitOtherOrderStatus({
+        _id: $scope.curSubmitOrder._id,
+        has_Y02: $scope.curSubmitOrder.has_Y02,
+        has_Y03: $scope.curSubmitOrder.has_Y03,
+        has_Y04: $scope.curSubmitOrder.has_Y04,
+        has_Y05: $scope.curSubmitOrder.has_Y05,
+        has_Y06: $scope.curSubmitOrder.has_Y06,
+        has_Y07: $scope.curSubmitOrder.has_Y07
+      }).then(function (data) {
+        console.log(data);
+        if (data && !data.err) {
+          $scope.curSubmitOrder = data;
+          $scope.changeImportBtn(data.has_Y05);
+        }
+      }, function (data) {
+        console.log(data);
+      });
     };
 
     $scope.user = AuthService.getUser() || {};
@@ -3060,7 +3081,7 @@ angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope',
         console.log(data);
       });
     };
-
+    $scope.getCurrentHqSubmitOrder();
     $scope.changeImportBtn = function (text) {
       if (text === '有') {
         $scope.$emit('suggest.import.changed', {
@@ -3085,7 +3106,26 @@ angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope',
 
     $scope.clickOrderStatus = function (status) {
       $scope.curSubmitOrder.has_Y06 = status;
-      //$scope.updateSubmitOrderStatus();
+      $scope.updateSubmitOrderStatus();
+    };
+    $scope.updateSubmitOrderStatus = function () {
+      HqOrderService.updateSubmitOtherOrderStatus({
+        _id: $scope.curSubmitOrder._id,
+        has_Y02: $scope.curSubmitOrder.has_Y02,
+        has_Y03: $scope.curSubmitOrder.has_Y03,
+        has_Y04: $scope.curSubmitOrder.has_Y04,
+        has_Y05: $scope.curSubmitOrder.has_Y05,
+        has_Y06: $scope.curSubmitOrder.has_Y06,
+        has_Y07: $scope.curSubmitOrder.has_Y07
+      }).then(function (data) {
+        console.log(data);
+        if (data && !data.err) {
+          $scope.curSubmitOrder = data;
+          $scope.changeImportBtn(data.has_Y06);
+        }
+      }, function (data) {
+        console.log(data);
+      });
     };
 
 
@@ -3204,7 +3244,7 @@ angular.module('agilesales-web').controller('SuggestHqMaoziCtrl', ['$scope','$st
         console.log(data);
       });
     };
-
+    $scope.getCurrentHqSubmitOrder();
     $scope.changeImportBtn = function (text) {
       if (text === '有') {
         $scope.$emit('suggest.import.changed', {
@@ -3229,8 +3269,28 @@ angular.module('agilesales-web').controller('SuggestHqMaoziCtrl', ['$scope','$st
 
     $scope.clickOrderStatus = function (status) {
       $scope.curSubmitOrder.has_Y07 = status;
-      //$scope.updateSubmitOrderStatus();
+      $scope.updateSubmitOrderStatus();
     };
+    $scope.updateSubmitOrderStatus = function () {
+      HqOrderService.updateSubmitOtherOrderStatus({
+        _id: $scope.curSubmitOrder._id,
+        has_Y02: $scope.curSubmitOrder.has_Y02,
+        has_Y03: $scope.curSubmitOrder.has_Y03,
+        has_Y04: $scope.curSubmitOrder.has_Y04,
+        has_Y05: $scope.curSubmitOrder.has_Y05,
+        has_Y06: $scope.curSubmitOrder.has_Y06,
+        has_Y07: $scope.curSubmitOrder.has_Y07
+      }).then(function (data) {
+        console.log(data);
+        if (data && !data.err) {
+          $scope.curSubmitOrder = data;
+          $scope.changeImportBtn(data.has_Y07);
+        }
+      }, function (data) {
+        console.log(data);
+      });
+    };
+
     $scope.user = AuthService.getUser() || {};
     AuthService.onUserUpdated('SuggestHqMaoziCtrl', function (user) {
       $scope.user = user;
@@ -3346,7 +3406,7 @@ angular.module('agilesales-web').controller('SuggestHqOtherY02Ctrl', ['$scope', 
         console.log(data);
       });
     };
-
+    $scope.getCurrentHqSubmitOrder();
     $scope.changeImportBtn = function (text) {
       if (text === '有') {
         $scope.$emit('suggest.import.changed', {
@@ -3371,7 +3431,26 @@ angular.module('agilesales-web').controller('SuggestHqOtherY02Ctrl', ['$scope', 
 
     $scope.clickOrderStatus = function (status) {
       $scope.curSubmitOrder.has_Y02 = status;
-      //$scope.updateSubmitOrderStatus();
+      $scope.updateSubmitOrderStatus();
+    };
+    $scope.updateSubmitOrderStatus = function () {
+      HqOrderService.updateSubmitOtherOrderStatus({
+        _id: $scope.curSubmitOrder._id,
+        has_Y02: $scope.curSubmitOrder.has_Y02,
+        has_Y03: $scope.curSubmitOrder.has_Y03,
+        has_Y04: $scope.curSubmitOrder.has_Y04,
+        has_Y05: $scope.curSubmitOrder.has_Y05,
+        has_Y06: $scope.curSubmitOrder.has_Y06,
+        has_Y07: $scope.curSubmitOrder.has_Y07
+      }).then(function (data) {
+        console.log(data);
+        if (data && !data.err) {
+          $scope.curSubmitOrder = data;
+          $scope.changeImportBtn(data.has_Y02);
+        }
+      }, function (data) {
+        console.log(data);
+      });
     };
 
 
@@ -3489,7 +3568,7 @@ angular.module('agilesales-web').controller('SuggestHqOtherY03Ctrl', ['$scope','
         console.log(data);
       });
     };
-
+    $scope.getCurrentHqSubmitOrder();
     $scope.changeImportBtn = function (text) {
       if (text === '有') {
         $scope.$emit('suggest.import.changed', {
@@ -3514,7 +3593,27 @@ angular.module('agilesales-web').controller('SuggestHqOtherY03Ctrl', ['$scope','
 
     $scope.clickOrderStatus = function (status) {
       $scope.curSubmitOrder.has_Y03 = status;
-      //$scope.updateSubmitOrderStatus();
+      $scope.updateSubmitOrderStatus();
+    };
+
+    $scope.updateSubmitOrderStatus = function () {
+      HqOrderService.updateSubmitOtherOrderStatus({
+        _id: $scope.curSubmitOrder._id,
+        has_Y02: $scope.curSubmitOrder.has_Y02,
+        has_Y03: $scope.curSubmitOrder.has_Y03,
+        has_Y04: $scope.curSubmitOrder.has_Y04,
+        has_Y05: $scope.curSubmitOrder.has_Y05,
+        has_Y06: $scope.curSubmitOrder.has_Y06,
+        has_Y07: $scope.curSubmitOrder.has_Y07
+      }).then(function (data) {
+        console.log(data);
+        if (data && !data.err) {
+          $scope.curSubmitOrder = data;
+          $scope.changeImportBtn(data.has_Y03);
+        }
+      }, function (data) {
+        console.log(data);
+      });
     };
 
     $scope.orders = [];
@@ -3632,7 +3731,7 @@ angular.module('agilesales-web').controller('SuggestHqOtherY04Ctrl', ['$scope','
         console.log(data);
       });
     };
-
+    $scope.getCurrentHqSubmitOrder();
     $scope.changeImportBtn = function (text) {
       if (text === '有') {
         $scope.$emit('suggest.import.changed', {
@@ -3657,7 +3756,27 @@ angular.module('agilesales-web').controller('SuggestHqOtherY04Ctrl', ['$scope','
 
     $scope.clickOrderStatus = function (status) {
       $scope.curSubmitOrder.has_Y04 = status;
-      //$scope.updateSubmitOrderStatus();
+      $scope.updateSubmitOrderStatus();
+    };
+
+    $scope.updateSubmitOrderStatus = function () {
+      HqOrderService.updateSubmitOtherOrderStatus({
+        _id: $scope.curSubmitOrder._id,
+        has_Y02: $scope.curSubmitOrder.has_Y02,
+        has_Y03: $scope.curSubmitOrder.has_Y03,
+        has_Y04: $scope.curSubmitOrder.has_Y04,
+        has_Y05: $scope.curSubmitOrder.has_Y05,
+        has_Y06: $scope.curSubmitOrder.has_Y06,
+        has_Y07: $scope.curSubmitOrder.has_Y07
+      }).then(function (data) {
+        console.log(data);
+        if (data && !data.err) {
+          $scope.curSubmitOrder = data;
+          $scope.changeImportBtn(data.has_Y04);
+        }
+      }, function (data) {
+        console.log(data);
+      });
     };
 
     $scope.orders = [];

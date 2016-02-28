@@ -22,7 +22,7 @@ exports.getCurrentHqSubmitOrder = function (user, callback) {
     if (err) {
       return callback({err: error.system.db_error});
     }
-    if (!hqSubmitOrder) {
+    if (hqSubmitOrder) {
       return callback(null, hqSubmitOrder);
     }
     else {

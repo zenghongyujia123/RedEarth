@@ -16,7 +16,7 @@ angular.module('agilesales-web').controller('SuggestHqOtherY04Ctrl', ['$scope','
         console.log(data);
       });
     };
-
+    $scope.getCurrentHqSubmitOrder();
     $scope.changeImportBtn = function (text) {
       if (text === '有') {
         $scope.$emit('suggest.import.changed', {
@@ -41,7 +41,27 @@ angular.module('agilesales-web').controller('SuggestHqOtherY04Ctrl', ['$scope','
 
     $scope.clickOrderStatus = function (status) {
       $scope.curSubmitOrder.has_Y04 = status;
-      //$scope.updateSubmitOrderStatus();
+      $scope.updateSubmitOrderStatus();
+    };
+
+    $scope.updateSubmitOrderStatus = function () {
+      HqOrderService.updateSubmitOtherOrderStatus({
+        _id: $scope.curSubmitOrder._id,
+        has_Y02: $scope.curSubmitOrder.has_Y02,
+        has_Y03: $scope.curSubmitOrder.has_Y03,
+        has_Y04: $scope.curSubmitOrder.has_Y04,
+        has_Y05: $scope.curSubmitOrder.has_Y05,
+        has_Y06: $scope.curSubmitOrder.has_Y06,
+        has_Y07: $scope.curSubmitOrder.has_Y07
+      }).then(function (data) {
+        console.log(data);
+        if (data && !data.err) {
+          $scope.curSubmitOrder = data;
+          $scope.changeImportBtn(data.has_Y04);
+        }
+      }, function (data) {
+        console.log(data);
+      });
     };
 
     $scope.orders = [];

@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope','$state', '$rootScope', 'AuthService', 'HqOrderService',
-  function ($scope, $state,$rootScope, AuthService, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope', '$state', '$rootScope', 'AuthService', 'HqOrderService',
+  function ($scope, $state, $rootScope, AuthService, HqOrderService) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentHqSubmitOrder = function () {
       HqOrderService.getCurrentHqSubmitOrder().then(function (data) {
@@ -15,6 +15,7 @@ angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope','$s
         console.log(data);
       });
     };
+    $scope.getCurrentHqSubmitOrder();
 
     $scope.changeImportBtn = function (text) {
       if (text === '有') {
@@ -40,7 +41,27 @@ angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope','$s
 
     $scope.clickOrderStatus = function (status) {
       $scope.curSubmitOrder.has_Y05 = status;
-      //$scope.updateSubmitOrderStatus();
+      $scope.updateSubmitOrderStatus();
+    };
+
+    $scope.updateSubmitOrderStatus = function () {
+      HqOrderService.updateSubmitOtherOrderStatus({
+        _id: $scope.curSubmitOrder._id,
+        has_Y02: $scope.curSubmitOrder.has_Y02,
+        has_Y03: $scope.curSubmitOrder.has_Y03,
+        has_Y04: $scope.curSubmitOrder.has_Y04,
+        has_Y05: $scope.curSubmitOrder.has_Y05,
+        has_Y06: $scope.curSubmitOrder.has_Y06,
+        has_Y07: $scope.curSubmitOrder.has_Y07
+      }).then(function (data) {
+        console.log(data);
+        if (data && !data.err) {
+          $scope.curSubmitOrder = data;
+          $scope.changeImportBtn(data.has_Y05);
+        }
+      }, function (data) {
+        console.log(data);
+      });
     };
 
     $scope.user = AuthService.getUser() || {};

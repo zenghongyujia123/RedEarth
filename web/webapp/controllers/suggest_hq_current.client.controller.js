@@ -29,8 +29,9 @@ angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope','$
       var headers = [
         {key: 'A1', value: 'SKU编码'},
         {key: 'B1', value: '正品'},
-        {key: 'C1', value: '近效期'},
-        {key: 'D1', value: '次品'}
+        {key: 'C1', value: '在途'},
+        {key: 'D1', value: '近效期'},
+        {key: 'E1', value: '次品'}
       ];
 
       function upload(stocks, i) {
@@ -73,6 +74,7 @@ angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope','$
               product_number: item['SKU编码'],
               genuine_goods: item['正品'],
               validity: item['近效期'],
+              onway_goods: item['在途'],
               ungenuine_goods: item['次品']
             });
           });

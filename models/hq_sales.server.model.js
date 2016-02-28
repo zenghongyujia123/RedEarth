@@ -21,6 +21,10 @@ module.exports = function (appDb) {
       type: Number,
       default: 0
     },
+    onway_goods: {
+      type: Number,
+      default: 0
+    },
     month: {
       type: String
     },

@@ -84,6 +84,7 @@ exports.hqStockImport = function (user, stocks, callback) {
         hqSales.genuine_goods = stock.genuine_goods;
         hqSales.ungenuine_goods = stock.ungenuine_goods;
         hqSales.validity = stock.validity;
+        hqSales.onway_goods = stock.onway_goods;
         hqSales.product = product;
         hqSales.month = month;
 

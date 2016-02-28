@@ -5,6 +5,24 @@
 var hqOrderService = require('./../services/all').hq_order;
 var logService = require('./../services/all').re_log;
 
+exports.getCurrentHqSubmitOrder = function (req, res, next) {
+  hqOrderService.getCurrentHqSubmitOrder(req.user, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};
+
+exports.updateSubmitOtherOrderStatus = function (req, res, next) {
+  hqOrderService.updateSubmitOtherOrderStatus(req.user, req.body.submit_order, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};
+
 exports.hqStockImport = function (req, res, next) {
   logService.insertLog(req.user.username, '导入总部库存');
   hqOrderService.hqStockImport(req.user, req.body.stocks, function (err, result) {
@@ -100,7 +118,7 @@ exports.approveHqOrder = function (req, res, next) {
   });
 };
 
-exports.approveHqOrders =function (req, res, next) {
+exports.approveHqOrders = function (req, res, next) {
   hqOrderService.approveHqOrders(req.user, req.body.orders, function (err, result) {
     if (err) {
       return res.send(err);

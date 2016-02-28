@@ -16,10 +16,22 @@
         导入上月数据
       </div>
       <div class="suggest-left-item"
-           ng-class="{'select':location.hash==='#/order_suggest/suggest_area_other_order'}"
-           ui-sref="order_suggest.suggest_area_other_order"
+           ng-class="{'select':location.hash==='#/order_suggest/suggest_area_other_D02'}"
+           ui-sref="order_suggest.suggest_area_other_D02"
            ng-show="user.account_type==='地区分公司'">
-        导入其他订单
+        导入其他订单(批发)
+      </div>
+      <div class="suggest-left-item"
+           ng-class="{'select':location.hash==='#/order_suggest/suggest_area_other_D03'}"
+           ui-sref="order_suggest.suggest_area_other_D03"
+           ng-show="user.account_type==='地区分公司'">
+        导入其他订单(试用装)
+      </div>
+      <div class="suggest-left-item"
+           ng-class="{'select':location.hash==='#/order_suggest/suggest_area_other_D04'}"
+           ui-sref="order_suggest.suggest_area_other_D04"
+           ng-show="user.account_type==='地区分公司'">
+        导入其他订单(陈列)
       </div>
       <div class="suggest-left-item"
            ng-class="{'select':location.hash==='#/order_suggest/suggest_area_suggest_result'}"

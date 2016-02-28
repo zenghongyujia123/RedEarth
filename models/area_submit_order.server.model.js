@@ -19,8 +19,8 @@ module.exports = function (appDb) {
     month: {
       type: String
     },
-    user_number:{
-      type:String
+    user_number: {
+      type: String
     },
     order_number: {
       type: String,
@@ -28,6 +28,19 @@ module.exports = function (appDb) {
     },
     status: {
       type: String
+    },
+    //未选择,没有,有
+    has_D02: {
+      type: String,
+      default: '未选择'
+    },
+    has_D03: {
+      type: String,
+      default: '未选择'
+    },
+    has_D04: {
+      type: String,
+      default: '未选择'
     }
   });
 

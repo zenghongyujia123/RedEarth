@@ -16,6 +16,47 @@ var appDb = require('./../../libraries/mongoose').appDb,
 
   AreaSales = appDb.model('AreaSales');
 
+exports.getCurrentAreaSubmitOrder = function (user, callback) {
+  var month = getLastMonth(1);
+
+  AreaSubmitOrder.findOne({month: month, user_number: user.number}, function (err, areaSubmitOrder) {
+    if (err) {
+      return callback({err: error.system.db_error});
+    }
+
+    if (!areaSubmitOrder) {
+      areaSubmitOrder = new AreaSubmitOrder({
+        month: month,
+        user_number: user.number,
+        order_number: month + user.username + user.number,
+        status: '未审核'
+      });
+      areaSubmitOrder.save(function (err, saveAreaSubmitOrder) {
+        return callback(null, saveAreaSubmitOrder);
+      });
+    } else {
+      return callback(null, areaSubmitOrder);
+    }
+  });
+};
+
+exports.updateSubmitOhterOrderStatus = function (user, submitOrder, callback) {
+  AreaSubmitOrder.findOne({_id: submitOrder._id}, function (err, order) {
+    if (err || !order) {
+      return callback({err: error.system.db_error});
+    }
+    order.has_D02 = submitOrder.has_D02;
+    order.has_D03 = submitOrder.has_D03;
+    order.has_D04 = submitOrder.has_D04;
+    order.save(function (err, saveOrder) {
+      if (err) {
+        return callback({err: error.system.db_error});
+      }
+      return callback(null, saveOrder);
+    });
+  })
+};
+
 exports.areaSalesStockOnwayImport = function (user, sales, callback) {
   var month = getLastMonth(1);
 
@@ -209,7 +250,7 @@ exports.getHistoryAreaSalesStockOnway = function (user, callback) {
     condition.department = user.department;
   }
 
-  AreaSales.find(condition).limit(400).exec( function (err, areaSales) {
+  AreaSales.find(condition).limit(400).exec(function (err, areaSales) {
     if (err || !areaSales) {
       return callback({err: error.system.db_error});
     }

@@ -95,6 +95,21 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'templates/suggest_area_other_order.client.view.html',
         controller: "SuggestAreaOtherOrderCtrl"
       })
+      .state('order_suggest.suggest_area_other_D02', {
+        url: '/suggest_area_other_D02',
+        templateUrl: 'templates/suggest_area_other_D02.client.view.html',
+        controller: "SuggestAreaOtherD02Ctrl"
+      })
+      .state('order_suggest.suggest_area_other_D03', {
+        url: '/suggest_area_other_D03',
+        templateUrl: 'templates/suggest_area_other_D03.client.view.html',
+        controller: "SuggestAreaOtherD03Ctrl"
+      })
+      .state('order_suggest.suggest_area_other_D04', {
+        url: '/suggest_area_other_D04',
+        templateUrl: 'templates/suggest_area_other_D04.client.view.html',
+        controller: "SuggestAreaOtherD04Ctrl"
+      })
       .state('order_suggest.suggest_area_suggest_result', {
         url: '/suggest_area_suggest_result',
         templateUrl: 'templates/suggest_area_suggest_result.client.view.html',

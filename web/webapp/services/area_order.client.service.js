@@ -39,11 +39,11 @@ angular.module('agilesales-web').factory('AreaOrderService', ['HttpService', fun
     approveAreaOrders: function (orders) {
       return HttpService.post('/webapp/area/sales/approve/multi', {orders: orders});
     },
-    updateSubmitOhterOrderStatus: function (orders) {
-      return HttpService.post('/webapp/area/sales/submit_order/update', {orders: orders});
+    updateSubmitOhterOrderStatus: function (submit_order) {
+      return HttpService.post('/webapp/area/sales/submit_order/update', {submit_order: submit_order});
     },
-    getCurrentAreaSubmitOrder: function (orders) {
-      return HttpService.get('/webapp/area/sales/submit', {orders: orders});
+    getCurrentAreaSubmitOrder: function () {
+      return HttpService.get('/webapp/area/sales/submit', {});
     }
   };
 }]);

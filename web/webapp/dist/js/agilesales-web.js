@@ -578,11 +578,11 @@ angular.module('agilesales-web').factory('AreaOrderService', ['HttpService', fun
     approveAreaOrders: function (orders) {
       return HttpService.post('/webapp/area/sales/approve/multi', {orders: orders});
     },
-    updateSubmitOhterOrderStatus: function (orders) {
-      return HttpService.post('/webapp/area/sales/submit_order/update', {orders: orders});
+    updateSubmitOhterOrderStatus: function (submit_order) {
+      return HttpService.post('/webapp/area/sales/submit_order/update', {submit_order: submit_order});
     },
-    getCurrentAreaSubmitOrder: function (orders) {
-      return HttpService.get('/webapp/area/sales/submit', {orders: orders});
+    getCurrentAreaSubmitOrder: function () {
+      return HttpService.get('/webapp/area/sales/submit', {});
     }
   };
 }]);
@@ -2016,8 +2016,8 @@ angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaOtherD02Ctrl', ['$scope', '$rootScope', '$state', 'AreaOrderService','Loading',
-  function ($scope, $rootScope, $state, AreaOrderService,Loading) {
+angular.module('agilesales-web').controller('SuggestAreaOtherD02Ctrl', ['$scope', '$rootScope', '$state', 'AreaOrderService', 'Loading',
+  function ($scope, $rootScope, $state, AreaOrderService, Loading) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentAreaSubmitOrder = function () {
       AreaOrderService.getCurrentAreaSubmitOrder().then(function (data) {
@@ -2041,6 +2041,28 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD02Ctrl', ['$scope'
         }
       ]
     });
+
+    $scope.clickOrderStatus = function (status) {
+      $scope.curSubmitOrder.has_D02 = status;
+      $scope.updateSubmitOrderStatus();
+    };
+
+    $scope.updateSubmitOrderStatus = function () {
+      AreaOrderService.updateSubmitOhterOrderStatus({
+        _id: $scope.curSubmitOrder._id,
+        has_D02: $scope.curSubmitOrder.has_D02,
+        has_D03: $scope.curSubmitOrder.has_D03,
+        has_D04: $scope.curSubmitOrder.has_D04
+      }).then(function (data) {
+        console.log(data);
+        if (data && !data.err) {
+          $scope.curSubmitOrder = data;
+        }
+      }, function (data) {
+        console.log(data);
+      });
+    };
+
     $scope.orders = [];
     $scope.getOrdersByArea = function () {
       Loading.show();

@@ -9,23 +9,35 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD04Ctrl', ['$scope'
         console.log(data);
         if (data && !data.err) {
           $scope.curSubmitOrder = data;
+          $scope.changeImportBtn(data.has_D04);
         }
       }, function (data) {
         console.log(data);
       });
     };
     $scope.getCurrentAreaSubmitOrder();
-    $scope.$emit('suggest.import.changed', {
-      title: '建议订单',
-      btns: [
-        {
-          text: '上传陈列订单',
-          clickCallback: function () {
-            orderClickCallback('D04');
-          }
-        }
-      ]
-    });
+    $scope.changeImportBtn = function (text) {
+      if (text === '有') {
+        $scope.$emit('suggest.import.changed', {
+          title: '建议订单',
+          btns: [
+            {
+              text: '上传陈列订单',
+              clickCallback: function () {
+                orderClickCallback('D04');
+              }
+            }
+          ]
+        });
+      }
+      else {
+        $scope.$emit('suggest.import.changed', {
+          title: '建议订单',
+          btns: []
+        });
+      }
+    };
+
 
     $scope.clickOrderStatus = function (status) {
       $scope.curSubmitOrder.has_D04 = status;
@@ -42,6 +54,7 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD04Ctrl', ['$scope'
         console.log(data);
         if (data && !data.err) {
           $scope.curSubmitOrder = data;
+          $scope.changeImportBtn(data.has_D04);
         }
       }, function (data) {
         console.log(data);

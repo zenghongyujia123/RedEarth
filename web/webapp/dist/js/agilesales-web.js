@@ -2024,23 +2024,34 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD02Ctrl', ['$scope'
         console.log(data);
         if (data && !data.err) {
           $scope.curSubmitOrder = data;
+          $scope.changeImportBtn(data.has_D02);
         }
       }, function (data) {
         console.log(data);
       });
     };
     $scope.getCurrentAreaSubmitOrder();
-    $scope.$emit('suggest.import.changed', {
-      title: '建议订单',
-      btns: [
-        {
-          text: '上传批发订单',
-          clickCallback: function () {
-            orderClickCallback('D02');
-          }
-        }
-      ]
-    });
+    $scope.changeImportBtn = function (text) {
+      if (text === '有') {
+        $scope.$emit('suggest.import.changed', {
+          title: '建议订单',
+          btns: [
+            {
+              text: '上传批发订单',
+              clickCallback: function () {
+                orderClickCallback('D02');
+              }
+            }
+          ]
+        });
+      }
+      else {
+        $scope.$emit('suggest.import.changed', {
+          title: '建议订单',
+          btns: []
+        });
+      }
+    };
 
     $scope.clickOrderStatus = function (status) {
       $scope.curSubmitOrder.has_D02 = status;
@@ -2057,6 +2068,7 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD02Ctrl', ['$scope'
         console.log(data);
         if (data && !data.err) {
           $scope.curSubmitOrder = data;
+          $scope.changeImportBtn(data.has_D02);
         }
       }, function (data) {
         console.log(data);
@@ -2166,36 +2178,48 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD02Ctrl', ['$scope'
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaOtherD03Ctrl', ['$scope', '$rootScope', '$state', 'AreaOrderService','Loading',
-  function ($scope, $rootScope, $state, AreaOrderService,Loading) {
+angular.module('agilesales-web').controller('SuggestAreaOtherD03Ctrl', ['$scope', '$rootScope', '$state', 'AreaOrderService', 'Loading',
+  function ($scope, $rootScope, $state, AreaOrderService, Loading) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentAreaSubmitOrder = function () {
       AreaOrderService.getCurrentAreaSubmitOrder().then(function (data) {
         console.log(data);
         if (data && !data.err) {
           $scope.curSubmitOrder = data;
+          $scope.changeImportBtn(data.has_D03);
         }
       }, function (data) {
         console.log(data);
       });
     };
     $scope.getCurrentAreaSubmitOrder();
-    $scope.$emit('suggest.import.changed', {
-      title: '建议订单',
-      btns: [
-        {
-          text: '上传试用订单',
-          clickCallback: function () {
-            orderClickCallback('D03');
-          }
-        }
-      ]
-    });
-
     $scope.clickOrderStatus = function (status) {
       $scope.curSubmitOrder.has_D03 = status;
       $scope.updateSubmitOrderStatus();
     };
+
+    $scope.changeImportBtn = function (text) {
+      if (text === '有') {
+        $scope.$emit('suggest.import.changed', {
+          title: '建议订单',
+          btns: [
+            {
+              text: '上传试用订单',
+              clickCallback: function () {
+                orderClickCallback('D03');
+              }
+            }
+          ]
+        });
+      }
+      else {
+        $scope.$emit('suggest.import.changed', {
+          title: '建议订单',
+          btns: []
+        });
+      }
+    };
+
 
     $scope.updateSubmitOrderStatus = function () {
       AreaOrderService.updateSubmitOhterOrderStatus({
@@ -2207,6 +2231,7 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD03Ctrl', ['$scope'
         console.log(data);
         if (data && !data.err) {
           $scope.curSubmitOrder = data;
+          $scope.changeImportBtn(data.has_D03);
         }
       }, function (data) {
         console.log(data);
@@ -2323,23 +2348,35 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD04Ctrl', ['$scope'
         console.log(data);
         if (data && !data.err) {
           $scope.curSubmitOrder = data;
+          $scope.changeImportBtn(data.has_D04);
         }
       }, function (data) {
         console.log(data);
       });
     };
     $scope.getCurrentAreaSubmitOrder();
-    $scope.$emit('suggest.import.changed', {
-      title: '建议订单',
-      btns: [
-        {
-          text: '上传陈列订单',
-          clickCallback: function () {
-            orderClickCallback('D04');
-          }
-        }
-      ]
-    });
+    $scope.changeImportBtn = function (text) {
+      if (text === '有') {
+        $scope.$emit('suggest.import.changed', {
+          title: '建议订单',
+          btns: [
+            {
+              text: '上传陈列订单',
+              clickCallback: function () {
+                orderClickCallback('D04');
+              }
+            }
+          ]
+        });
+      }
+      else {
+        $scope.$emit('suggest.import.changed', {
+          title: '建议订单',
+          btns: []
+        });
+      }
+    };
+
 
     $scope.clickOrderStatus = function (status) {
       $scope.curSubmitOrder.has_D04 = status;
@@ -2356,6 +2393,7 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD04Ctrl', ['$scope'
         console.log(data);
         if (data && !data.err) {
           $scope.curSubmitOrder = data;
+          $scope.changeImportBtn(data.has_D04);
         }
       }, function (data) {
         console.log(data);

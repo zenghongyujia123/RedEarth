@@ -3,17 +3,47 @@
  */
 angular.module('agilesales-web').controller('SuggestHqOtherY04Ctrl', ['$scope','$state', '$rootScope', 'HqOrderService',
   function ($scope, $state,$rootScope, HqOrderService) {
-    $scope.$emit('suggest.import.changed', {
-      title: '建议订单',
-      btns: [
-        {
-          text: '上传陈列订单',
-          clickCallback: function () {
-            orderClickCallback('Y04');
-          }
+
+    $scope.curSubmitOrder = {};
+    $scope.getCurrentHqSubmitOrder = function () {
+      HqOrderService.getCurrentHqSubmitOrder().then(function (data) {
+        if (data && !data.err) {
+          $scope.curSubmitOrder = data;
+          $scope.changeImportBtn(data.has_Y04);
         }
-      ]
-    });
+        console.log(data);
+      }, function (data) {
+        console.log(data);
+      });
+    };
+
+    $scope.changeImportBtn = function (text) {
+      if (text === '有') {
+        $scope.$emit('suggest.import.changed', {
+          title: '建议订单',
+          btns: [
+            {
+              text: '上传陈列订单',
+              clickCallback: function () {
+                orderClickCallback('Y04');
+              }
+            }
+          ]
+        });
+      }
+      else {
+        $scope.$emit('suggest.import.changed', {
+          title: '建议订单',
+          btns: []
+        });
+      }
+    };
+
+    $scope.clickOrderStatus = function (status) {
+      $scope.curSubmitOrder.has_Y04 = status;
+      //$scope.updateSubmitOrderStatus();
+    };
+
     $scope.orders = [];
     $scope.getHqOtherOrders = function () {
       HqOrderService.getHqOtherOrders().then(function (data) {

@@ -3,25 +3,49 @@
  */
 angular.module('agilesales-web').controller('SuggestHqMaoziCtrl', ['$scope','$state', '$rootScope', 'AuthService', 'HqOrderService',
   function ($scope, $state,$rootScope, AuthService, HqOrderService) {
+    $scope.curSubmitOrder = {};
+    $scope.getCurrentHqSubmitOrder = function () {
+      HqOrderService.getCurrentHqSubmitOrder().then(function (data) {
+        if (data && !data.err) {
+          $scope.curSubmitOrder = data;
+          $scope.changeImportBtn(data.has_Y07);
+        }
+        console.log(data);
+      }, function (data) {
+        console.log(data);
+      });
+    };
+
+    $scope.changeImportBtn = function (text) {
+      if (text === '有') {
+        $scope.$emit('suggest.import.changed', {
+          title: '建议订单',
+          btns: [
+            {
+              text: '导入茂姿订单',
+              clickCallback: function () {
+                orderClickCallback('Y07');
+              }
+            }
+          ]
+        });
+      }
+      else {
+        $scope.$emit('suggest.import.changed', {
+          title: '建议订单',
+          btns: []
+        });
+      }
+    };
+
+    $scope.clickOrderStatus = function (status) {
+      $scope.curSubmitOrder.has_Y07 = status;
+      //$scope.updateSubmitOrderStatus();
+    };
     $scope.user = AuthService.getUser() || {};
     AuthService.onUserUpdated('SuggestHqMaoziCtrl', function (user) {
       $scope.user = user;
-      btnsChange();
     });
-    btnsChange();
-    function btnsChange() {
-      $scope.$emit('suggest.import.changed', {
-        title: '建议订单',
-        btns: [
-          {
-            text: '导入茂姿订单',
-            clickCallback: function () {
-              orderClickCallback('Y07');
-            }
-          }
-        ]
-      });
-    }
 
     $scope.orders = [];
     $scope.getHqOtherOrders = function () {

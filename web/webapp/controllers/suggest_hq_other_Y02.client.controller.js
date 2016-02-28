@@ -1,19 +1,49 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqOtherY02Ctrl', ['$scope','$state', '$rootScope', 'HqOrderService',
-  function ($scope, $state,$rootScope, HqOrderService) {
-    $scope.$emit('suggest.import.changed', {
-      title: '建议订单',
-      btns: [
-        {
-          text: '上传批发订单',
-          clickCallback: function () {
-            orderClickCallback('Y02');
-          }
+angular.module('agilesales-web').controller('SuggestHqOtherY02Ctrl', ['$scope', '$state', '$rootScope', 'HqOrderService',
+  function ($scope, $state, $rootScope, HqOrderService) {
+    $scope.curSubmitOrder = {};
+    $scope.getCurrentHqSubmitOrder = function () {
+      HqOrderService.getCurrentHqSubmitOrder().then(function (data) {
+        if (data && !data.err) {
+          $scope.curSubmitOrder = data;
+          $scope.changeImportBtn(data.has_Y02);
         }
-      ]
-    });
+        console.log(data);
+      }, function (data) {
+        console.log(data);
+      });
+    };
+
+    $scope.changeImportBtn = function (text) {
+      if (text === '有') {
+        $scope.$emit('suggest.import.changed', {
+          title: '建议订单',
+          btns: [
+            {
+              text: '上传批发订单',
+              clickCallback: function () {
+                orderClickCallback('Y02');
+              }
+            }
+          ]
+        });
+      }
+      else {
+        $scope.$emit('suggest.import.changed', {
+          title: '建议订单',
+          btns: []
+        });
+      }
+    };
+
+    $scope.clickOrderStatus = function (status) {
+      $scope.curSubmitOrder.has_Y02 = status;
+      //$scope.updateSubmitOrderStatus();
+    };
+
+
     $scope.orders = [];
     $scope.getHqOtherOrders = function () {
       HqOrderService.getHqOtherOrders().then(function (data) {

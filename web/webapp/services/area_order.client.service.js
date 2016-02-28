@@ -38,6 +38,12 @@ angular.module('agilesales-web').factory('AreaOrderService', ['HttpService', fun
     },
     approveAreaOrders: function (orders) {
       return HttpService.post('/webapp/area/sales/approve/multi', {orders: orders});
+    },
+    updateSubmitOhterOrderStatus: function (orders) {
+      return HttpService.post('/webapp/area/sales/submit_order/update', {orders: orders});
+    },
+    getCurrentAreaSubmitOrder: function (orders) {
+      return HttpService.get('/webapp/area/sales/submit', {orders: orders});
     }
   };
 }]);

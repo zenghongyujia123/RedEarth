@@ -26,6 +26,27 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD03Ctrl', ['$scope'
         }
       ]
     });
+
+    $scope.clickOrderStatus = function (status) {
+      $scope.curSubmitOrder.has_D03 = status;
+      $scope.updateSubmitOrderStatus();
+    };
+
+    $scope.updateSubmitOrderStatus = function () {
+      AreaOrderService.updateSubmitOhterOrderStatus({
+        _id: $scope.curSubmitOrder._id,
+        has_D02: $scope.curSubmitOrder.has_D02,
+        has_D03: $scope.curSubmitOrder.has_D03,
+        has_D04: $scope.curSubmitOrder.has_D04
+      }).then(function (data) {
+        console.log(data);
+        if (data && !data.err) {
+          $scope.curSubmitOrder = data;
+        }
+      }, function (data) {
+        console.log(data);
+      });
+    };
     $scope.orders = [];
     $scope.getOrdersByArea = function () {
       Loading.show();

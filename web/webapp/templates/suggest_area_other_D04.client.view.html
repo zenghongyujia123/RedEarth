@@ -4,10 +4,10 @@
     <div class="col col-lg-3 col-md-3 col-sm-3 col-xs-3">
     </div>
     <div class="col col-lg-3 col-md-3 col-sm-3 col-xs-3">
-      <div class="select-item" ng-class="{select:curSubmitOrder.has_D04==='没有'}">没有陈列订单</div>
+      <div class="select-item" ng-class="{select:curSubmitOrder.has_D04==='没有'}" ng-click="clickOrderStatus('没有')">没有陈列订单</div>
     </div>
     <div class="col col-lg-3 col-md-3 col-sm-3 col-xs-3">
-      <div class="select-item" ng-class="{select:curSubmitOrder.has_D04==='有'}">有陈列订单</div>
+      <div class="select-item" ng-class="{select:curSubmitOrder.has_D04==='有'}" ng-click="clickOrderStatus('有')">有陈列订单</div>
     </div>
   </div>
 </div>

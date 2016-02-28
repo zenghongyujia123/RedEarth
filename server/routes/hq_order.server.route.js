@@ -12,6 +12,10 @@ module.exports = function (app) {
   app.route('/webapp/hq/orders/import').post(filter.requireUser, all.hq_order.hqOtherOrderImport);
   app.route('/webapp/hq/orders/suggest').get(filter.requireUser, all.hq_order.getHqSuggestOrders);
   app.route('/webapp/hq/sales/submit').post(filter.requireUser, all.hq_order.hqSuggestOrderSubmit);
+
+  app.route('/webapp/hq/sales/submit').get(filter.requireUser, all.hq_order.getCurrentHqSubmitOrder);
+  app.route('/webapp/hq/sales/submit_order/update').post(filter.requireUser, all.hq_order.updateSubmitOtherOrderStatus);
+
   app.route('/webapp/hq/sales/query').get(filter.requireUser, all.hq_order.getHqOrderList);
   app.route('/webapp/hq/sales/approve').post(filter.requireUser, all.hq_order.approveHqOrder);
   app.route('/webapp/hq/sales/approve/multi').post(filter.requireUser, all.hq_order.approveHqOrders);

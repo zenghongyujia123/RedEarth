@@ -4008,6 +4008,39 @@ angular.module('agilesales-web').controller('SuggestHqOtherOrderCtrl', ['$scope'
  */
 angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$scope', '$state', '$rootScope', 'HqOrderService',
   function ($scope, $state, $rootScope, HqOrderService) {
+    $scope.curSubmitOrder = {};
+    $scope.getCurrentHqSubmitOrder = function () {
+      HqOrderService.getCurrentHqSubmitOrder().then(function (data) {
+        console.log(data);
+        if (data && !data.err) {
+          $scope.curSubmitOrder = data;
+          if ($scope.curSubmitOrder.has_Y02 === '未选择') {
+            return alert('请选择是否上传批发订单');
+          }
+          if ($scope.curSubmitOrder.has_Y03 === '未选择') {
+            return alert('请选择是否上传试用装订单');
+          }
+          if ($scope.curSubmitOrder.has_Y04 === '未选择') {
+            return alert('请选择是否上传陈列订单');
+          }
+          if ($scope.curSubmitOrder.has_Y05 === '未选择') {
+            return alert('请选择是否上传经销商订单');
+          }
+          if ($scope.curSubmitOrder.has_Y06 === '未选择') {
+            return alert('请选择是否上传电商订单');
+          }
+          if ($scope.curSubmitOrder.has_Y07 === '未选择') {
+            return alert('请选择是否上传茂姿订单');
+          }
+          $scope.getHqSuggestOrders();
+        }
+      }, function (data) {
+        console.log(data);
+      });
+    };
+    $scope.getCurrentHqSubmitOrder();
+
+
     $scope.$emit('suggest.import.changed', {
       title: '建议订单 总部建议订单（SKU）=(地区已审批订单+其他订单)-(总部库存+在途-安全库存) +判断条件（是否TOP SKU? 是否MOQ之%必采购？）',
       btns: [
@@ -4028,7 +4061,6 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
         console.log(data);
       });
     };
-    $scope.getHqSuggestOrders();
 
     $scope.getSystemAreaSuggest = function (sale) {
       sale.system_suggest_count = (sale.D01_approve + sale.Y01 + sale.Y02 + sale.Y03 + sale.Y04 + sale.Y05 + sale.Y06 + sale.Y07);

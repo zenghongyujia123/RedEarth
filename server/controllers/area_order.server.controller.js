@@ -5,6 +5,24 @@
 var areaOrderService = require('./../services/all').area_order;
 var logService = require('./../services/all').re_log;
 
+exports.getCurrentAreaSubmitOrder = function (req, res, next) {
+  areaOrderService.getCurrentAreaSubmitOrder(req.user, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};
+
+exports.updateSubmitOhterOrderStatus = function (req, res, next) {
+  areaOrderService.updateSubmitOhterOrderStatus(req.user,req.body.submit_order, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};
+
 exports.areaSalesStockOnwayImport = function (req, res, next) {
   logService.insertLog(req.user.username, '导入地区销量,库存,在途');
   areaOrderService.areaSalesStockOnwayImport(req.user, req.body.sales, function (err, result) {

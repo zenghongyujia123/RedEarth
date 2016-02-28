@@ -17,6 +17,8 @@ module.exports = function (app) {
   app.route('/webapp/area/order/detail').get(filter.requireUser, all.area_order.getAreaOrderDetail);
 
   app.route('/webapp/area/sales/submit').post(filter.requireUser, all.area_order.suggestOrderSubmit);
+  app.route('/webapp/area/sales/submit_order/update').post(filter.requireUser, all.area_order.updateSubmitOhterOrderStatus);
+  app.route('/webapp/area/sales/submit').get(filter.requireUser, all.area_order.getCurrentAreaSubmitOrder);
 
   app.route('/webapp/area/sales/approve').post(filter.requireUser, all.area_order.approveAreaOrder);
   app.route('/webapp/area/sales/approve/multi').post(filter.requireUser, all.area_order.approveAreaOrders);

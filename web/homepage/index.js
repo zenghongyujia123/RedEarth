@@ -12,8 +12,10 @@ $(function () {
       },
       success: function (data) {
         if(!data.err){
-          window.location = '/webapp/index'
+          return window.location = '/webapp/index'
         }
+
+        alert(data.err.zh_message);
         console.log(data);
       },
       error: function (err) {

@@ -212,10 +212,8 @@ module.exports = function (appDb) {
       this.next_month_sales_forecast_4 = parseInt((this.next_month_sales_forecast_1 + this.next_month_sales_forecast_2 + this.next_month_sales_forecast_3) / 3);
       this.next_month_sales_forecast_5 = parseInt((this.next_month_sales_forecast_2 + this.next_month_sales_forecast_3 + this.next_month_sales_forecast_4 ) / 3);
       this.next_month_sales_forecast_6 = parseInt((this.next_month_sales_forecast_3 + this.next_month_sales_forecast_4 + this.next_month_sales_forecast_5 ) / 3);
-    }
 
-    if (this.last_month_stock_count_1 !== 0 || this.last_month_stock_count_2 !== 0 || this.last_month_stock_count_3 !== 0) {
-      this.safe_stock = parseInt(( this.last_month_stock_count_1 + this.last_month_stock_count_2 + this.last_month_stock_count_3) / 3) * 2
+      this.safe_stock = parseInt(( this.last_month_sales_count_3 + this.last_month_sales_count_2 + this.last_month_sales_count_1) / 3) * 2
     }
 
     if (this.system_suggest_count !== 0 && this.system_suggest_count_modify === 0) {

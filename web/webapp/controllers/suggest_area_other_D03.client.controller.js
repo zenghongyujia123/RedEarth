@@ -63,7 +63,7 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD03Ctrl', ['$scope'
     $scope.orders = [];
     $scope.getOrdersByArea = function () {
       Loading.show();
-      AreaOrderService.getOrdersByArea().then(function (data) {
+      AreaOrderService.getOrdersByArea('D03').then(function (data) {
         if (!data.err) {
           $scope.orders = data;
         }

@@ -15,7 +15,7 @@ exports.getCurrentAreaSubmitOrder = function (req, res, next) {
 };
 
 exports.updateSubmitOhterOrderStatus = function (req, res, next) {
-  areaOrderService.updateSubmitOhterOrderStatus(req.user,req.body.submit_order, function (err, result) {
+  areaOrderService.updateSubmitOhterOrderStatus(req.user, req.body.submit_order, function (err, result) {
     if (err) {
       return res.send(err);
     }
@@ -34,7 +34,7 @@ exports.areaSalesStockOnwayImport = function (req, res, next) {
 };
 
 exports.otherOrderImport = function (req, res, next) {
-  logService.insertLog(req.user.username,'导入地区其他订单');
+  logService.insertLog(req.user.username, '导入地区其他订单');
   areaOrderService.otherOrderImport (req.user, req.body.orders, function (err, result) {
     if (err) {
       return res.send(err);
@@ -44,7 +44,7 @@ exports.otherOrderImport = function (req, res, next) {
 };
 
 exports.getOrdersByArea = function (req, res, next) {
-  areaOrderService.getOrdersByArea (req.user, function (err, result) {
+  areaOrderService.getOrdersByArea (req.user, req.query.order_type, function (err, result) {
     if (err) {
       return res.send(err);
     }
@@ -62,7 +62,7 @@ exports.getSalesByArea = function (req, res, next) {
 };
 
 exports.historyAreaSalesStockOnwayImport = function (req, res, next) {
-  logService.insertLog(req.user.username,'导入地区历史销量');
+  logService.insertLog(req.user.username, '导入地区历史销量');
   areaOrderService.historyAreaSalesStockOnwayImport  (req.user, req.body.sales, function (err, result) {
     if (err) {
       return res.send(err);
@@ -90,7 +90,7 @@ exports.getAreaSuggestOrder = function (req, res, next) {
 };
 
 exports.suggestOrderSubmit = function (req, res, next) {
-  logService.insertLog(req.user.username,'提交地区订单');
+  logService.insertLog(req.user.username, '提交地区订单');
   areaOrderService.suggestOrderSubmit (req.user, req.body.sales, function (err, result) {
     if (err) {
       return res.send(err);
@@ -118,7 +118,7 @@ exports.getAreaOrderDetail = function (req, res, next) {
 };
 
 exports.approveAreaOrder = function (req, res, next) {
-  logService.insertLog(req.user.username,'审批地区订单');
+  logService.insertLog(req.user.username, '审批地区订单');
   areaOrderService.approveAreaOrder(req.user, req.body.order, function (err, result) {
     if (err) {
       return res.send(err);
@@ -128,7 +128,7 @@ exports.approveAreaOrder = function (req, res, next) {
 };
 
 exports.approveAreaOrders = function (req, res, next) {
-  logService.insertLog(req.user.username,'审批地区订单');
+  logService.insertLog(req.user.username, '审批地区订单');
   areaOrderService.approveAreaOrders(req.user, req.body.orders, function (err, result) {
     if (err) {
       return res.send(err);

@@ -178,9 +178,13 @@ exports.otherOrderImport = function (user, orders, callback) {
   });
 };
 
-exports.getOrdersByArea = function (user, callback) {
+exports.getOrdersByArea = function (user, order_type, callback) {
   var month = getLastMonth(1);
-  AreaOrder.find({department: user.department, month: month}, function (err, orders) {
+  var condition = {department: user.department, month: month};
+  if (order_type) {
+    condition.order_type = order_type;
+  }
+  AreaOrder.find(condition, function (err, orders) {
     if (err || !orders) {
       return callback({err: error.system.db_error});
     }

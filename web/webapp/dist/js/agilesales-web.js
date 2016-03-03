@@ -563,8 +563,8 @@ angular.module('agilesales-web').factory('AreaOrderService', ['HttpService', fun
     areaSalesStockOnwayImport: function (sales) {
       return HttpService.post('/webapp/area/sales/import', {sales: sales});
     },
-    getOrdersByArea: function () {
-      return HttpService.get('/webapp/area/order', {});
+    getOrdersByArea: function (order_type) {
+      return HttpService.get('/webapp/area/order', {order_type: order_type});
     },
     getSalesByArea: function () {
       return HttpService.get('/webapp/area/sales', {});
@@ -2100,7 +2100,7 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD02Ctrl', ['$scope'
     $scope.orders = [];
     $scope.getOrdersByArea = function () {
       Loading.show();
-      AreaOrderService.getOrdersByArea().then(function (data) {
+      AreaOrderService.getOrdersByArea('D02').then(function (data) {
         if (!data.err) {
           $scope.orders = data;
         }
@@ -2262,7 +2262,7 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD03Ctrl', ['$scope'
     $scope.orders = [];
     $scope.getOrdersByArea = function () {
       Loading.show();
-      AreaOrderService.getOrdersByArea().then(function (data) {
+      AreaOrderService.getOrdersByArea('D03').then(function (data) {
         if (!data.err) {
           $scope.orders = data;
         }
@@ -2425,7 +2425,7 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD04Ctrl', ['$scope'
     $scope.orders = [];
     $scope.getOrdersByArea = function () {
       Loading.show();
-      AreaOrderService.getOrdersByArea().then(function (data) {
+      AreaOrderService.getOrdersByArea('D04').then(function (data) {
         if (!data.err) {
           $scope.orders = data;
         }

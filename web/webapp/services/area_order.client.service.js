@@ -9,8 +9,8 @@ angular.module('agilesales-web').factory('AreaOrderService', ['HttpService', fun
     areaSalesStockOnwayImport: function (sales) {
       return HttpService.post('/webapp/area/sales/import', {sales: sales});
     },
-    getOrdersByArea: function () {
-      return HttpService.get('/webapp/area/order', {});
+    getOrdersByArea: function (order_type) {
+      return HttpService.get('/webapp/area/order', {order_type: order_type});
     },
     getSalesByArea: function () {
       return HttpService.get('/webapp/area/sales', {});

@@ -27,6 +27,9 @@ module.exports = function (appDb) {
     product_number: {
       type: String
     },
+    mid_classify:{
+      type: String
+    },
     product: {
       type: Schema.Types.ObjectId,
       ref: 'Product'

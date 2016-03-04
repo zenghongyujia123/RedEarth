@@ -87,6 +87,7 @@ exports.areaSalesStockOnwayImport = function (user, sales, callback) {
         areaSales.last_month_sales_count_1 = isNaN(parseInt(sale.last_month_sales_count)) ? 0 : parseInt(sale.last_month_sales_count);
         areaSales.last_month_stock_count_1 = isNaN(parseInt(sale.last_month_stock_count)) ? 0 : parseInt(sale.last_month_stock_count);
         areaSales.product = product;
+        areaSales.mid_classify = product.mid_classify;
         areaSales.month = month;
         areaSales.department = user.department;
 
@@ -184,7 +185,7 @@ exports.getOrdersByArea = function (user, order_type, callback) {
   if (order_type) {
     condition.order_type = order_type;
   }
-  AreaOrder.find(condition, function (err, orders) {
+  AreaOrder.find(condition).sort({mid_classify: 1, product_number: 1}).exec(function (err, orders) {
     if (err || !orders) {
       return callback({err: error.system.db_error});
     }
@@ -194,7 +195,9 @@ exports.getOrdersByArea = function (user, order_type, callback) {
 
 exports.getSalesByArea = function (user, callback) {
   var month = getLastMonth(1);
-  AreaSales.find({department: user.department, month: month}, function (err, areaSalse) {
+  AreaSales.find({department: user.department, month: month}).sort({
+    product_number: 1
+  }).exec(function (err, areaSalse) {
     if (err || !areaSalse) {
       return callback({err: error.system.db_error});
     }
@@ -266,14 +269,12 @@ exports.getHistoryAreaSalesStockOnway = function (user, callback) {
 exports.getAreaSuggestOrder = function (user, callback) {
   var month = getLastMonth(1);
   var suggests = [];
-  AreaSales.find({department: user.department, month: month}).populate('product').exec(function (err, areaSales) {
+  AreaSales.find({department: user.department, month: month}).sort({mid_classify: 1, product_number: 1}).populate('product').exec(function (err, areaSales) {
     if (err || !areaSales) {
       return callback({err: error.system.db_error});
     }
     async.each(areaSales, function (areaSale, eachCallback) {
       var suggest = {};
-      if (areaSale.toObject)
-        areaSale = areaSale.toObject();
       AreaOrder.aggregate([
         {
           $match: {
@@ -292,6 +293,7 @@ exports.getAreaSuggestOrder = function (user, callback) {
         suggest = areaSale;
         if (result) {
           result.forEach(function (item) {
+            areaSale[item._id] = item.count;
             suggest[item._id] = item.count;
           })
         }
@@ -299,7 +301,7 @@ exports.getAreaSuggestOrder = function (user, callback) {
         return eachCallback();
       });
     }, function (err) {
-      return callback(null, suggests);
+      return callback(null, areaSales);
     });
   });
 };

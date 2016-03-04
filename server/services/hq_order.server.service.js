@@ -85,6 +85,7 @@ exports.hqStockImport = function (user, stocks, callback) {
         hqSales.ungenuine_goods = stock.ungenuine_goods;
         hqSales.validity = stock.validity;
         hqSales.onway_goods = stock.onway_goods;
+        hqSales.mid_classify = product.mid_classify;
         hqSales.product = product;
         hqSales.month = month;
 
@@ -168,7 +169,7 @@ exports.hqStockImport = function (user, stocks, callback) {
 };
 
 exports.getHqCurrentStocks = function (user, callback) {
-  HqSales.find({month: getLastMonth(1)}, function (err, hqSales) {
+  HqSales.find({month: getLastMonth(1)}).sort({product_number: 1}).exec(function (err, hqSales) {
     if (err || !hqSales) {
       return callback({err: error.system.db_error});
     }
@@ -187,7 +188,7 @@ exports.getHqOtherOrders = function (user, info, callback) {
   else {
     condition.order_type = {$in: ['Y02', 'Y03', 'Y04']};
   }
-  HqOrder.find(condition, function (err, hqOrders) {
+  HqOrder.find(condition).sort({mid_classify: 1, product_number: 1}).exec(function (err, hqOrders) {
     if (err || !hqOrders) {
       return callback({err: error.system.db_error});
     }
@@ -241,7 +242,10 @@ exports.hqOtherOrderImport = function (user, orders, callback) {
 };
 
 exports.getHqSuggestOrders = function (user, callback) {
-  HqSales.find({month: getLastMonth(1)}).populate('product').exec(function (err, hqSales) {
+  HqSales.find({month: getLastMonth(1)}).sort({
+    mid_classify: 1,
+    product_number: 1
+  }).sort({mid_classify: 1, product_number: 1}).populate('product').exec(function (err, hqSales) {
     if (err || !hqSales) {
       return callback({err: error.system.db_error});
     }

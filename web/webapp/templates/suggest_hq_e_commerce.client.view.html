@@ -16,6 +16,9 @@
 
 <div class="re-table has-top">
   <div class="re-table-header" style="width:2000px;">
+    <div class="re-table-left-header" zz-float-left>
+      <div class="left-header-col">SKU编码</div>
+    </div>
     <div class="re-table-row">
       <div class="header-col">SKU编码</div>
       <div class="header-col">产品名称</div>
@@ -30,6 +33,9 @@
     </div>
   </div>
   <div class="re-table-body" style="width:2040px;">
+    <div class="re-table-left-header" zz-float-left>
+      <div class="left-col" ng-repeat="o in orders">{{o.product_number}}</div>
+    </div>
     <div class="re-table-row" ng-repeat="o in orders">
       <div class="body-col">{{o.product_number}}</div>
       <div class="body-col">{{o.product_name}}</div>

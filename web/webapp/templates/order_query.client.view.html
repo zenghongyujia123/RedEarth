@@ -19,7 +19,7 @@
         <div class="re-table-row" style="width:1200px;min-width: 100%;" ng-repeat="o in orders" ng-click="goDetail(o)">
           <div class="body-col">{{$index}}</div>
           <div class="body-col">{{o.order_number}}</div>
-          <div class="body-col">{{o.created | date : 'yyyy-MM-dd hh:mm'}}</div>
+          <div class="body-col">{{o.created | date : 'yyyy-MM-dd HH:MM'}}</div>
           <div class="body-col">{{o.status}}</div>
         </div>
       </div>

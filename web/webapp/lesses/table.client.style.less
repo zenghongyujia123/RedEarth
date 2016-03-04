@@ -1,5 +1,6 @@
 .re-table {
   padding: 20px;
+  padding-left: 0px;
   width: 100%;
   overflow-y: auto;
   top: 0px;
@@ -7,6 +8,8 @@
   position: absolute;
   .re-table-header {
     overflow: hidden;
+    z-index: 10;
+    position: relative;
     .header-col {
       line-height: 60px;
       float: left;
@@ -15,6 +18,33 @@
       white-space: nowrap;
       text-overflow: ellipsis;
     }
+  }
+  .re-table-left-header {
+    position: absolute;
+    left: 0px;
+    width:200px;
+    overflow: hidden;
+    top:0px;
+    .left-header-col{
+      padding-left: 20px;
+      line-height: 60px;
+      float: left;
+      overflow: hidden;
+      width: 200px;
+      white-space: nowrap;
+      background-color: white;
+      text-overflow: ellipsis;
+    }
+    .left-col {
+      border-bottom: 1px solid #cdcdcd;
+      line-height: 41px;
+      float: left;
+      padding-left: 20px;
+      height: 41px;
+      width: 200px;
+      background-color: white;
+    }
+
   }
   .re-table-body {
     position: absolute;

@@ -431,6 +431,7 @@ body {
 }
 .re-table {
   padding: 20px;
+  padding-left: 0px;
   width: 100%;
   overflow-y: auto;
   top: 0px;
@@ -439,6 +440,8 @@ body {
 }
 .re-table .re-table-header {
   overflow: hidden;
+  z-index: 10;
+  position: relative;
 }
 .re-table .re-table-header .header-col {
   line-height: 60px;
@@ -447,6 +450,32 @@ body {
   width: 200px;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+.re-table .re-table-left-header {
+  position: absolute;
+  left: 0px;
+  width: 200px;
+  overflow: hidden;
+  top: 0px;
+}
+.re-table .re-table-left-header .left-header-col {
+  padding-left: 20px;
+  line-height: 60px;
+  float: left;
+  overflow: hidden;
+  width: 200px;
+  white-space: nowrap;
+  background-color: white;
+  text-overflow: ellipsis;
+}
+.re-table .re-table-left-header .left-col {
+  border-bottom: 1px solid #cdcdcd;
+  line-height: 41px;
+  float: left;
+  padding-left: 20px;
+  height: 41px;
+  width: 200px;
+  background-color: white;
 }
 .re-table .re-table-body {
   position: absolute;

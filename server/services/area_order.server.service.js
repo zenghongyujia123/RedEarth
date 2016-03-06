@@ -29,7 +29,7 @@ exports.getCurrentAreaSubmitOrder = function (user, callback) {
         month: month,
         user_number: user.number,
         order_number: month + user.username + user.number,
-        status: '未审核'
+        status: '未提交'
       });
       areaSubmitOrder.save(function (err, saveAreaSubmitOrder) {
         return callback(null, saveAreaSubmitOrder);
@@ -373,6 +373,11 @@ exports.getAreaOrderList = function (user, callback) {
   if (user.account_type === '地区分公司') {
     condition.user_number = user.number;
   }
+
+  if (user.account_type === '地区总部') {
+    condition.status = {$in: ['未审核', '已审核']}
+  }
+
   AreaSubmitOrder.find(condition).sort('month').exec(function (err, aresSales) {
     if (err || !aresSales) {
       return callback({err: error.system.db_error});

@@ -65,9 +65,11 @@
       <div class="body-col">{{o.next_month_sales_forecast_6}}</div>
       <div class="body-col">{{o.D02}}</div>
       <div class="body-col">{{getSystemAreaSuggest(o)}}</div>
-      <input type="number" class="body-col" ng-model="o.system_suggest_count_modify" ng-keyup="modifySystemAreaSuggestPercent(o)">
+      <input type="number" class="body-col" ng-model="o.system_suggest_count_modify"
+             ng-keyup="modifySystemAreaSuggestPercent(o)">
 
-      <div class="body-col" ng-class="{yellow:o.system_suggest_count_modify_percent>=30}">
+      <div class="body-col"
+           ng-class="{green:o.system_suggest_count_modify_percent<0,red:o.system_suggest_count_modify_percent>0}">
         {{o.system_suggest_count_modify_percent}}%
       </div>
       <input class="body-col" ng-model="o.remark" placeholder="超额订购请点击备注">

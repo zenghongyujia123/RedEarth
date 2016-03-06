@@ -76,11 +76,15 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
       if (sale.system_suggest_count_modify > min_factory_moq && sale.system_suggest_count_modify < factory_moq) {
         sale.final_system_suggest_count = factory_moq;
       }
+
+      sale.final_purchased_count = sale.final_system_suggest_count;
+
       return sale.system_suggest_count;
     };
 
     $scope.modifySystemAreaSuggestPercent = function (sale) {
-      sale.system_suggest_count_modify_percent = parseInt((sale.system_suggest_count_modify - sale.system_suggest_count) * 100 / sale.system_suggest_count)
+      sale.system_suggest_count_modify_percent = parseInt((sale.system_suggest_count_modify - sale.system_suggest_count) * 100 / ((sale.system_suggest_count > 0) ? sale.system_suggest_count : (-sale.system_suggest_count)));
+      sale.final_purchased_count = sale.final_system_suggest_count;
     };
 
     function suggestOrderSubmit() {
@@ -91,6 +95,7 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
           sales.push({
             _id: sale._id,
             remark: sale.remark,
+            final_purchased_count: sale.final_purchased_count,
             system_suggest_count: sale.system_suggest_count,
             final_system_suggest_count: sale.final_system_suggest_count,
             system_suggest_count_modify: sale.system_suggest_count_modify,

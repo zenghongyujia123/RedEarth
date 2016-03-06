@@ -86,7 +86,7 @@ exports.hqStockImport = function (user, stocks, callback) {
         hqSales.validity = stock.validity;
         hqSales.onway_goods = stock.onway_goods;
         hqSales.mid_classify = product.mid_classify;
-        hqSales.hq_safe_stock= product.hq_safe_stock;
+        hqSales.hq_safe_stock = product.hq_safe_stock;
         hqSales.product = product;
         hqSales.month = month;
 
@@ -290,6 +290,7 @@ exports.hqSuggestOrderSubmit = function (user, sales, callback) {
           hqSales.final_system_suggest_count = sale.final_system_suggest_count;
           hqSales.system_suggest_count_modify = sale.system_suggest_count_modify;
           hqSales.system_suggest_count_modify_percent = sale.system_suggest_count_modify_percent;
+          hqSales.final_purchased_count = sale.final_purchased_count;
           hqSales.status = '未审核';
           hqSales.order_number = hqSubmitOrder.order_number;
           hqSales.D01 = sale.D01;

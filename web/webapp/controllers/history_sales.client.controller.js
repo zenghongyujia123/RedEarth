@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$rootScope', 'AreaOrderService', 'Loading',
-  function ($scope, $rootScope, AreaOrderService, Loading) {
+angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$state', '$rootScope', 'AreaOrderService', 'Loading',
+  function ($scope, $state, $rootScope, AreaOrderService, Loading) {
     $scope.$emit('suggest.import.changed', {
       title: '历史数据',
       btns: [

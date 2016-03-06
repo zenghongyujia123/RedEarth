@@ -41,13 +41,14 @@
       <div class="header-col">已取得上级核准</div>
       <div class="header-col">澳妆最终审批采购量</div>
       <div class="header-col">澳妆最终审批采购金额</div>
+      <div class="header-col">澳妆最终审批零售金额</div>
     </div>
   </div>
   <div class="re-table-body" style="width: 8240px;min-width: 100%;">
     <div class="re-table-left-header" zz-float-left>
-      <div class="left-col" ng-repeat="o in suggests">{{o.product_number}}</div>
+      <div class="left-col" ng-repeat="o in suggests" ng-if="o.product">{{o.product_number}}</div>
     </div>
-    <div class="re-table-row" ng-repeat="s in suggests">
+    <div class="re-table-row" ng-repeat="s in suggests" ng-if="s.product">
       <div class="body-col">{{s.product_number}}</div>
       <div class="body-col">{{s.product.product_name}}</div>
       <div class="body-col">{{s.product.product_barcode}}</div>
@@ -90,7 +91,8 @@
 
       <div class="body-col">{{''}}</div>
       <div class="body-col">{{s.final_purchased_count}}</div>
-      <div class="body-col">{{s.final_purchased_price}}</div>
+      <div class="body-col">{{s.final_purchased_count*s.product.jinyi_cost}}</div>
+      <div class="body-col">{{s.final_purchased_count*s.product.sales_price}}</div>
       <div class="body-col red" ng-class="{green:s.status==='已审核'}">{{s.status}}</div>
     </div>
   </div>

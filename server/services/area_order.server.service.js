@@ -81,6 +81,7 @@ exports.areaSalesStockOnwayImport = function (user, sales, callback) {
         }
 
         areaSales.product_number = sale.product_number;
+        areaSales.product_name = sale.product_name;
         areaSales.last_month_sales_count = isNaN(parseInt(sale.last_month_sales_count)) ? 0 : parseInt(sale.last_month_sales_count);
         areaSales.last_month_stock_count = isNaN(parseInt(sale.last_month_stock_count)) ? 0 : parseInt(sale.last_month_stock_count);
         areaSales.last_month_onway_count = isNaN(parseInt(sale.last_month_onway_count)) ? 0 : parseInt(sale.last_month_onway_count);
@@ -212,41 +213,48 @@ exports.historyAreaSalesStockOnwayImport = function (user, sales, callback) {
       return eachCallback();
     }
 
-    AreaSales.findOne({
-      product_number: sale.product_number,
-      month: sale.month,
-      department: sale.department
-    }, function (err, areaSale) {
-      if (err) {
+    Product.findOne({product_number: product_number}, function (err, product) {
+      if (err || !product)
         return eachCallback();
-      }
 
-      if (!areaSale) {
-        areaSale = new AreaSales({
-          username: user.username
+      AreaSales.findOne({
+        product_number: sale.product_number,
+        month: sale.month,
+        department: sale.department
+      }, function (err, areaSale) {
+        if (err) {
+          return eachCallback();
+        }
+
+        if (!areaSale) {
+          areaSale = new AreaSales({
+            username: user.username
+          });
+        }
+
+        areaSale.department = sale.department;
+        areaSale.month = sale.month;
+        areaSale.product_number = sale.product_number;
+        areaSale.product = product;
+        if (sale.last_month_sales_count) {
+          areaSale.last_month_sales_count = isNaN(parseInt(sale.last_month_sales_count)) ? 0 : parseInt(sale.last_month_sales_count);
+        }
+
+        if (sale.last_month_onway_count) {
+          areaSale.last_month_onway_count = isNaN(parseInt(sale.last_month_onway_count)) ? 0 : parseInt(sale.last_month_onway_count);
+        }
+
+        if (sale.last_month_stock_count) {
+          areaSale.last_month_stock_count = isNaN(parseInt(sale.last_month_stock_count)) ? 0 : parseInt(sale.last_month_stock_count);
+        }
+
+        areaSale.save(function (err) {
+          return eachCallback();
         });
-      }
-
-      areaSale.department = sale.department;
-      areaSale.month = sale.month;
-      areaSale.product_number = sale.product_number;
-      if (sale.last_month_sales_count) {
-        areaSale.last_month_sales_count = isNaN(parseInt(sale.last_month_sales_count)) ? 0 : parseInt(sale.last_month_sales_count);
-      }
-
-      if (sale.last_month_onway_count) {
-        areaSale.last_month_onway_count = isNaN(parseInt(sale.last_month_onway_count)) ? 0 : parseInt(sale.last_month_onway_count);
-      }
-
-      if (sale.last_month_stock_count) {
-        areaSale.last_month_stock_count = isNaN(parseInt(sale.last_month_stock_count)) ? 0 : parseInt(sale.last_month_stock_count);
-      }
-
-      areaSale.save(function (err) {
-        return eachCallback();
       });
-
     });
+
+
   }, function (err, result) {
     return callback(err, {})
   });
@@ -258,7 +266,7 @@ exports.getHistoryAreaSalesStockOnway = function (user, callback) {
     condition.department = user.department;
   }
 
-  AreaSales.find(condition).limit(400).exec(function (err, areaSales) {
+  AreaSales.find(condition).limit(400).populate('product').exec(function (err, areaSales) {
     if (err || !areaSales) {
       return callback({err: error.system.db_error});
     }

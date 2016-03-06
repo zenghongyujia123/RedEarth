@@ -52,11 +52,13 @@ module.exports = function (appDb) {
     },
     //销售价格
     sales_price: {
-      type: String
+      type: Number,
+      default:0
     },
     //晋yi成本
     jinyi_cost: {
-      type: String
+      type: Number,
+      default:0
     },
     //开始销售日期
     start_sales_date: {

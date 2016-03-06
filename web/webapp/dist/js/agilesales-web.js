@@ -335,46 +335,6 @@ angular.module('agilesales-web').directive('zzLoading', ['$rootScope', function 
 /**
  * Created by zenghong on 16/1/18.
  */
-angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',function ($rootScope) {
-  return {
-    restrict: 'AE',
-    templateUrl: 'directives/dialog_confirm/dialog_confirm.client.view.html',
-    replace: true,
-    scope: {},
-    link: function ($scope, $element, $attrs) {
-      $scope.info = {
-        title: '',
-        content:'',
-        color: 'blue'
-      };
-
-      $scope.show = function () {
-        $element.addClass('show');
-      };
-      $scope.hide = function () {
-        $element.removeClass('show');
-      };
-      $scope.submit = function () {
-        $element.removeClass('show');
-        if ($scope.info.callback) {
-          $scope.info.callback($scope.info);
-        }
-      };
-      $rootScope.$on('show.dialogConfirm', function (event, data) {
-        setTheme(data);
-        $scope.show();
-      });
-
-      function setTheme(info) {
-        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
-        $scope.info = info;
-      }
-    }
-  }
-}]);
-/**
- * Created by zenghong on 16/1/18.
- */
 angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
   return {
     restrict: 'AE',
@@ -405,6 +365,46 @@ angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', funct
         }
       };
       $rootScope.$on('show.dialogInput', function (event, data) {
+        setTheme(data);
+        $scope.show();
+      });
+
+      function setTheme(info) {
+        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
+        $scope.info = info;
+      }
+    }
+  }
+}]);
+/**
+ * Created by zenghong on 16/1/18.
+ */
+angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',function ($rootScope) {
+  return {
+    restrict: 'AE',
+    templateUrl: 'directives/dialog_confirm/dialog_confirm.client.view.html',
+    replace: true,
+    scope: {},
+    link: function ($scope, $element, $attrs) {
+      $scope.info = {
+        title: '',
+        content:'',
+        color: 'blue'
+      };
+
+      $scope.show = function () {
+        $element.addClass('show');
+      };
+      $scope.hide = function () {
+        $element.removeClass('show');
+      };
+      $scope.submit = function () {
+        $element.removeClass('show');
+        if ($scope.info.callback) {
+          $scope.info.callback($scope.info);
+        }
+      };
+      $rootScope.$on('show.dialogConfirm', function (event, data) {
         setTheme(data);
         $scope.show();
       });
@@ -1246,8 +1246,8 @@ angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$r
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$rootScope', 'AreaOrderService', 'Loading',
-  function ($scope, $rootScope, AreaOrderService, Loading) {
+angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$state', '$rootScope', 'AreaOrderService', 'Loading',
+  function ($scope, $state, $rootScope, AreaOrderService, Loading) {
     $scope.$emit('suggest.import.changed', {
       title: '历史数据',
       btns: [
@@ -2682,6 +2682,19 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
           if ($scope.curSubmitOrder.has_D04 === '未选择') {
             return alert('请选择是否上传陈列订单');
           }
+
+          if(data.status !=='已审核'){
+            $scope.$emit('suggest.import.changed', {
+              title: '建议订单 地区建议订单（SKU）=当月预测-[地区库存(包括店柜库存) +在途-未来6月销售预测-其他订单(批发)-安全库存）] * 产品分类（ABC）?%',
+              btns: [
+                {
+                  text: '提交',
+                  clickCallback: suggestOrderSubmit
+                }
+              ]
+            });
+          }
+
           $scope.getAreaSuggestOrder();
         }
       }, function (data) {
@@ -2690,16 +2703,6 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
     };
     $scope.getCurrentAreaSubmitOrder();
 
-
-    $scope.$emit('suggest.import.changed', {
-      title: '建议订单 地区建议订单（SKU）=当月预测-[地区库存(包括店柜库存) +在途-未来6月销售预测-其他订单(批发)-安全库存）] * 产品分类（ABC）?%',
-      btns: [
-        {
-          text: '提交',
-          clickCallback: suggestOrderSubmit
-        }
-      ]
-    });
     $scope.orders = [];
     $scope.getAreaSuggestOrder = function () {
       Loading.show();
@@ -4044,6 +4047,19 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
           if ($scope.curSubmitOrder.has_Y07 === '未选择') {
             return alert('请选择是否上传茂姿订单');
           }
+
+          if(data.status!=='已审核'){
+            $scope.$emit('suggest.import.changed', {
+              title: '建议订单 总部建议订单（SKU）=(地区已审批订单+其他订单)-(总部库存+在途-安全库存) +判断条件（是否TOP SKU? 是否MOQ之%必采购？）',
+              btns: [
+                {
+                  text: '提交',
+                  clickCallback: suggestOrderSubmit
+                }
+              ]
+            });
+          }
+
           $scope.getHqSuggestOrders();
         }
       }, function (data) {
@@ -4053,15 +4069,6 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
     $scope.getCurrentHqSubmitOrder();
 
 
-    $scope.$emit('suggest.import.changed', {
-      title: '建议订单 总部建议订单（SKU）=(地区已审批订单+其他订单)-(总部库存+在途-安全库存) +判断条件（是否TOP SKU? 是否MOQ之%必采购？）',
-      btns: [
-        {
-          text: '提交',
-          clickCallback: suggestOrderSubmit
-        }
-      ]
-    });
     $scope.suggests = [];
     $scope.getHqSuggestOrders = function () {
       HqOrderService.getHqSuggestOrders().then(function (data) {

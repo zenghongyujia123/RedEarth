@@ -143,6 +143,7 @@ function getLastMonth(index) {
 exports.otherOrderImport = function (user, orders, callback) {
   var order_number = getOrderNumber(user.username);
   var month = getLastMonth(1);
+  var invalid_product = '';
   async.each(orders, function (order, eachCallback) {
     AreaOrder.findOne({
       order_number: order_number + order.order_type,
@@ -177,7 +178,7 @@ exports.otherOrderImport = function (user, orders, callback) {
       });
     });
   }, function (err, result) {
-    return callback(err, {});
+    return callback(err, {invalid_product: invalid_product});
   });
 };
 
@@ -213,7 +214,7 @@ exports.historyAreaSalesStockOnwayImport = function (user, sales, callback) {
       return eachCallback();
     }
 
-    Product.findOne({product_number: product_number}, function (err, product) {
+    Product.findOne({product_number: sale.product_number}, function (err, product) {
       if (err || !product)
         return eachCallback();
 
@@ -337,6 +338,8 @@ exports.suggestOrderSubmit = function (user, sales, callback) {
     if (areaSubmitOrder.status === '已审核') {
       return callback(null, {});
     }
+
+    areaSubmitOrder.status = '未审核';
 
     areaSubmitOrder.order_number = month + user.username + user.number;
     areaSubmitOrder.save(function (err, saveAreaSubmitOrder) {

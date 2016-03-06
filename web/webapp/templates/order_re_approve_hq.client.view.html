@@ -55,6 +55,7 @@
           <div class="header-col">订单达MOQ%必采购</div>
           <div class="header-col">澳妆最终审批采购量</div>
           <div class="header-col">澳妆最终审批采购金额</div>
+          <div class="header-col">澳妆最终审批采购零售金额</div>
           <div class="header-col">状态</div>
         </div>
       </div>
@@ -105,7 +106,8 @@
           <div class="body-col">{{s.product.order_count_exceed_moq}}</div>
           <input class="body-col" type="number" ng-model="s.final_purchased_count" ng-keyup="inputPurchaseCount(s)">
 
-          <div class="body-col" type="number">{{s.final_purchased_price}}</div>
+          <div class="body-col" type="number">{{s.final_purchased_count*s.product.jinyi_cost}}</div>
+          <div class="body-col" type="number">{{s.final_purchased_count*s.product.sales_price}}</div>
           <div class="body-col red" ng-class="{green:s.status==='已审核'}">{{s.status}}</div>
         </div>
       </div>

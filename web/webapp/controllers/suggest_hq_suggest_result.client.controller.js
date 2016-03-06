@@ -27,6 +27,19 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
           if ($scope.curSubmitOrder.has_Y07 === '未选择') {
             return alert('请选择是否上传茂姿订单');
           }
+
+          if(data.status!=='已审核'){
+            $scope.$emit('suggest.import.changed', {
+              title: '建议订单 总部建议订单（SKU）=(地区已审批订单+其他订单)-(总部库存+在途-安全库存) +判断条件（是否TOP SKU? 是否MOQ之%必采购？）',
+              btns: [
+                {
+                  text: '提交',
+                  clickCallback: suggestOrderSubmit
+                }
+              ]
+            });
+          }
+
           $scope.getHqSuggestOrders();
         }
       }, function (data) {
@@ -36,15 +49,6 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
     $scope.getCurrentHqSubmitOrder();
 
 
-    $scope.$emit('suggest.import.changed', {
-      title: '建议订单 总部建议订单（SKU）=(地区已审批订单+其他订单)-(总部库存+在途-安全库存) +判断条件（是否TOP SKU? 是否MOQ之%必采购？）',
-      btns: [
-        {
-          text: '提交',
-          clickCallback: suggestOrderSubmit
-        }
-      ]
-    });
     $scope.suggests = [];
     $scope.getHqSuggestOrders = function () {
       HqOrderService.getHqSuggestOrders().then(function (data) {

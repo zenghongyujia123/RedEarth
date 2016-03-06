@@ -16,8 +16,8 @@ module.exports = function (appDb) {
     product_number: {
       type: String
     },
-    mid_classify:{
-      type:String
+    mid_classify: {
+      type: String
     },
     //正品
     genuine_goods: {
@@ -27,6 +27,9 @@ module.exports = function (appDb) {
     onway_goods: {
       type: Number,
       default: 0
+    },
+    hq_safe_stock: {
+      type: String,
     },
     month: {
       type: String
@@ -216,7 +219,7 @@ module.exports = function (appDb) {
       this.next_month_sales_forecast_5 = parseInt((this.next_month_sales_forecast_2 + this.next_month_sales_forecast_3 + this.next_month_sales_forecast_4 ) / 3);
       this.next_month_sales_forecast_6 = parseInt((this.next_month_sales_forecast_3 + this.next_month_sales_forecast_4 + this.next_month_sales_forecast_5 ) / 3);
 
-      this.safe_stock = parseInt(( this.last_month_sales_count_3 + this.last_month_sales_count_2 + this.last_month_sales_count_1) / 3) * 2
+      this.safe_stock = parseInt(( this.last_month_sales_count_3 + this.last_month_sales_count_2 + this.last_month_sales_count_1) / 3) * isNaN(parseInt(this.hq_safe_stock)) ? 0 : parseInt(this.hq_safe_stock)
     }
 
     if (this.system_suggest_count !== 0 && this.system_suggest_count_modify === 0) {

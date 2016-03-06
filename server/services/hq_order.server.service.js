@@ -86,6 +86,7 @@ exports.hqStockImport = function (user, stocks, callback) {
         hqSales.validity = stock.validity;
         hqSales.onway_goods = stock.onway_goods;
         hqSales.mid_classify = product.mid_classify;
+        hqSales.hq_safe_stock= product.hq_safe_stock;
         hqSales.product = product;
         hqSales.month = month;
 

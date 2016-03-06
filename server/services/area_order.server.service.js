@@ -87,6 +87,7 @@ exports.areaSalesStockOnwayImport = function (user, sales, callback) {
         areaSales.last_month_sales_count_1 = isNaN(parseInt(sale.last_month_sales_count)) ? 0 : parseInt(sale.last_month_sales_count);
         areaSales.last_month_stock_count_1 = isNaN(parseInt(sale.last_month_stock_count)) ? 0 : parseInt(sale.last_month_stock_count);
         areaSales.product = product;
+        areaSales.area_safe_stock = product.area_safe_stock;
         areaSales.mid_classify = product.mid_classify;
         areaSales.month = month;
         areaSales.department = user.department;
@@ -269,7 +270,10 @@ exports.getHistoryAreaSalesStockOnway = function (user, callback) {
 exports.getAreaSuggestOrder = function (user, callback) {
   var month = getLastMonth(1);
   var suggests = [];
-  AreaSales.find({department: user.department, month: month}).sort({mid_classify: 1, product_number: 1}).populate('product').exec(function (err, areaSales) {
+  AreaSales.find({department: user.department, month: month}).sort({
+    mid_classify: 1,
+    product_number: 1
+  }).populate('product').exec(function (err, areaSales) {
     if (err || !areaSales) {
       return callback({err: error.system.db_error});
     }

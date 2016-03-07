@@ -5,7 +5,8 @@
       订单详情 : {{order_number}}
     </span>
 
-    <div class="re-header-right" ng-if="orders&&orders.length>0" ng-click="approveAreaOrders()">{{orders[0].status==='已审核'?'已审核':'审核'}}
+    <div class="re-header-right" ng-if="orders&&orders.length>0" ng-click="approveAreaOrders()">
+      {{orders[0].status==='已审核'?'已审核':'审核'}}
     </div>
   </div>
   <div class="re-child-body">
@@ -67,8 +68,8 @@
           <div class="body-col">{{o.product.abc_category}}</div>
           <div class="body-col">{{o.last_month_stock_count}}</div>
           <div class="body-col">{{o.last_month_onway_count}}</div>
-          <div class="body-col">{{o.ungenuine_goods}}</div>
-          <div class="body-col">{{o.validity}}</div>
+          <div class="body-col">{{o.product.jinyi_ungenuine_goods}}</div>
+          <div class="body-col">{{o.product.jinyi_validity}}</div>
           <div class="body-col">{{o.safe_stock}}</div>
           <div class="body-col">{{o.next_month_sales_forecast_0}}</div>
           <div class="body-col">{{o.next_month_sales_forecast_1}}</div>

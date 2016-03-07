@@ -60,6 +60,14 @@ module.exports = function (appDb) {
       type: Number,
       default:0
     },
+    jinyi_validity:{
+      type: Number,
+      default:0
+    },
+    jinyi_ungenuine_goods:{
+      type: Number,
+      default:0
+    },
     //开始销售日期
     start_sales_date: {
       type: String

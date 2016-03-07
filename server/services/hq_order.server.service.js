@@ -80,85 +80,93 @@ exports.hqStockImport = function (user, stocks, callback) {
           hqSales = new HqSales({});
         }
 
-        hqSales.product_number = stock.product_number;
-        hqSales.genuine_goods = stock.genuine_goods;
-        hqSales.ungenuine_goods = stock.ungenuine_goods;
-        hqSales.validity = stock.validity;
-        hqSales.onway_goods = stock.onway_goods;
-        hqSales.mid_classify = product.mid_classify;
-        hqSales.hq_safe_stock = product.hq_safe_stock;
-        hqSales.product = product;
-        hqSales.month = month;
-
-        AreaSales.aggregate([
-          {
-            $match: {
-              product_number: stock.product_number,
-              month: {$in: [getLastMonth(1), getLastMonth(2), getLastMonth(3)]}
-            }
-          },
-          {
-            $group: {
-              _id: '$month',
-              sales_count: {$sum: '$last_month_sales_count'},
-              D_01: {$sum: '$D01'},
-              D_01_approve: {$sum: '$D01_approve'},
-              D_02: {$sum: '$D02'},
-              D_02_approve: {$sum: '$D02_approve'},
-              D_03: {$sum: '$D03'},
-              D_03_approve: {$sum: '$D03_approve'},
-              D_04: {$sum: '$D04'},
-              D_04_approve: {$sum: '$D04_approve'}
-            }
+        product.jinyi_ungenuine_goods = stock.genuine_goods;
+        product.jinyi_validity = stock.validity;
+        product.save(function (err, saveProduct) {
+          if (err || !saveProduct) {
+            return eachCallback();
           }
-        ]).exec(function (err, result) {
-          result.forEach(function (item) {
-            if (item._id === getLastMonth(1)) {
-              hqSales.D01 = item.D_01;
-              hqSales.D02 = item.D_02;
-              hqSales.D03 = item.D_03;
-              hqSales.D04 = item.D_04;
-              hqSales.D01_approve = item.D_01_approve;
-              hqSales.D02_approve = item.D_02_approve;
-              hqSales.D03_approve = item.D_03_approve;
-              hqSales.D04_approve = item.D_04_approve;
 
-              hqSales.last_month_sales_count_1 = item.sales_count;
-            }
-            if (item._id === getLastMonth(2)) {
-              hqSales.last_month_sales_count_2 = item.sales_count;
-            }
-            if (item._id === getLastMonth(3)) {
-              hqSales.last_month_sales_count_3 = item.sales_count;
-            }
-          });
+          hqSales.product_number = stock.product_number;
+          hqSales.genuine_goods = stock.genuine_goods;
+          hqSales.ungenuine_goods = stock.ungenuine_goods;
+          hqSales.validity = stock.validity;
+          hqSales.onway_goods = stock.onway_goods;
+          hqSales.mid_classify = product.mid_classify;
+          hqSales.hq_safe_stock = product.hq_safe_stock;
+          hqSales.product = product;
+          hqSales.month = month;
 
-          HqSales.aggregate([
+          AreaSales.aggregate([
             {
               $match: {
                 product_number: stock.product_number,
-                month: {$in: [getLastMonth(2), getLastMonth(3)]}
+                month: {$in: [getLastMonth(1), getLastMonth(2), getLastMonth(3)]}
               }
             },
             {
               $group: {
                 _id: '$month',
-                stock: {$sum: '$genuine_goods'}
+                sales_count: {$sum: '$last_month_sales_count'},
+                D_01: {$sum: '$D01'},
+                D_01_approve: {$sum: '$D01_approve'},
+                D_02: {$sum: '$D02'},
+                D_02_approve: {$sum: '$D02_approve'},
+                D_03: {$sum: '$D03'},
+                D_03_approve: {$sum: '$D03_approve'},
+                D_04: {$sum: '$D04'},
+                D_04_approve: {$sum: '$D04_approve'}
               }
             }
           ]).exec(function (err, result) {
             result.forEach(function (item) {
-              if (item._id === getLastMonth(2)) {
-                hqSales.last_month_stock_count_2 = item.genuine_goods;
+              if (item._id === getLastMonth(1)) {
+                hqSales.D01 = item.D_01;
+                hqSales.D02 = item.D_02;
+                hqSales.D03 = item.D_03;
+                hqSales.D04 = item.D_04;
+                hqSales.D01_approve = item.D_01_approve;
+                hqSales.D02_approve = item.D_02_approve;
+                hqSales.D03_approve = item.D_03_approve;
+                hqSales.D04_approve = item.D_04_approve;
 
+                hqSales.last_month_sales_count_1 = item.sales_count;
+              }
+              if (item._id === getLastMonth(2)) {
+                hqSales.last_month_sales_count_2 = item.sales_count;
               }
               if (item._id === getLastMonth(3)) {
-                hqSales.last_month_stock_count_3 = item.genuine_goods;
+                hqSales.last_month_sales_count_3 = item.sales_count;
               }
             });
-            hqSales.last_month_stock_count_1 = hqSales.genuine_goods;
-            hqSales.save(function (err) {
-              return eachCallback();
+
+            HqSales.aggregate([
+              {
+                $match: {
+                  product_number: stock.product_number,
+                  month: {$in: [getLastMonth(2), getLastMonth(3)]}
+                }
+              },
+              {
+                $group: {
+                  _id: '$month',
+                  stock: {$sum: '$genuine_goods'}
+                }
+              }
+            ]).exec(function (err, result) {
+              result.forEach(function (item) {
+                if (item._id === getLastMonth(2)) {
+                  hqSales.last_month_stock_count_2 = item.genuine_goods;
+
+                }
+                if (item._id === getLastMonth(3)) {
+                  hqSales.last_month_stock_count_3 = item.genuine_goods;
+                }
+              });
+              hqSales.last_month_stock_count_1 = hqSales.genuine_goods;
+              hqSales.save(function (err) {
+                return eachCallback();
+              });
             });
           });
         });

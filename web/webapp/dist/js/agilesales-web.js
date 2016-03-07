@@ -335,6 +335,46 @@ angular.module('agilesales-web').directive('zzLoading', ['$rootScope', function 
 /**
  * Created by zenghong on 16/1/18.
  */
+angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',function ($rootScope) {
+  return {
+    restrict: 'AE',
+    templateUrl: 'directives/dialog_confirm/dialog_confirm.client.view.html',
+    replace: true,
+    scope: {},
+    link: function ($scope, $element, $attrs) {
+      $scope.info = {
+        title: '',
+        content:'',
+        color: 'blue'
+      };
+
+      $scope.show = function () {
+        $element.addClass('show');
+      };
+      $scope.hide = function () {
+        $element.removeClass('show');
+      };
+      $scope.submit = function () {
+        $element.removeClass('show');
+        if ($scope.info.callback) {
+          $scope.info.callback($scope.info);
+        }
+      };
+      $rootScope.$on('show.dialogConfirm', function (event, data) {
+        setTheme(data);
+        $scope.show();
+      });
+
+      function setTheme(info) {
+        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
+        $scope.info = info;
+      }
+    }
+  }
+}]);
+/**
+ * Created by zenghong on 16/1/18.
+ */
 angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
   return {
     restrict: 'AE',
@@ -365,46 +405,6 @@ angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', funct
         }
       };
       $rootScope.$on('show.dialogInput', function (event, data) {
-        setTheme(data);
-        $scope.show();
-      });
-
-      function setTheme(info) {
-        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
-        $scope.info = info;
-      }
-    }
-  }
-}]);
-/**
- * Created by zenghong on 16/1/18.
- */
-angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',function ($rootScope) {
-  return {
-    restrict: 'AE',
-    templateUrl: 'directives/dialog_confirm/dialog_confirm.client.view.html',
-    replace: true,
-    scope: {},
-    link: function ($scope, $element, $attrs) {
-      $scope.info = {
-        title: '',
-        content:'',
-        color: 'blue'
-      };
-
-      $scope.show = function () {
-        $element.addClass('show');
-      };
-      $scope.hide = function () {
-        $element.removeClass('show');
-      };
-      $scope.submit = function () {
-        $element.removeClass('show');
-        if ($scope.info.callback) {
-          $scope.info.callback($scope.info);
-        }
-      };
-      $rootScope.$on('show.dialogConfirm', function (event, data) {
         setTheme(data);
         $scope.show();
       });
@@ -2683,7 +2683,7 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
             return alert('请选择是否上传陈列订单');
           }
 
-          if(data.status !=='已审核'){
+          if (data.status !== '已审核') {
             $scope.$emit('suggest.import.changed', {
               title: '建议订单 地区建议订单（SKU）=当月预测-[地区库存(包括店柜库存) +在途-未来6月销售预测-其他订单(批发)-安全库存）] * 产品分类（ABC）?%',
               btns: [
@@ -2726,6 +2726,9 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
         sale.next_month_sales_forecast_3 +
         sale.next_month_sales_forecast_4 +
         sale.next_month_sales_forecast_5;
+      if(sale.product_number==='ACC13561'){
+        var a = parseInt(sale.next_month_sales_forecast_0 - (sale.last_month_stock_count + sale.last_month_onway_count - next_6_month_forecast - parseInt(sale['D02'])) * sale.product.abc_category / 100);
+      }
       sale.system_suggest_count = parseInt(sale.next_month_sales_forecast_0 - (sale.last_month_stock_count + sale.last_month_onway_count - next_6_month_forecast - parseInt(sale['D02'])) * sale.product.abc_category / 100);
 
       if (sale.system_suggest_count_modify === 0) {
@@ -3896,8 +3899,8 @@ angular.module('agilesales-web').controller('SuggestHqOtherY04Ctrl', ['$scope','
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqOtherOrderCtrl', ['$scope','$state', '$rootScope', 'HqOrderService',
-  function ($scope, $state,$rootScope, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqOtherOrderCtrl', ['$scope', '$state', '$rootScope', 'HqOrderService',
+  function ($scope, $state, $rootScope, HqOrderService) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单',
       btns: [

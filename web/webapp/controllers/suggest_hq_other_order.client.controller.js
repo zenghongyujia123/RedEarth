@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqOtherOrderCtrl', ['$scope','$state', '$rootScope', 'HqOrderService',
-  function ($scope, $state,$rootScope, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqOtherOrderCtrl', ['$scope', '$state', '$rootScope', 'HqOrderService',
+  function ($scope, $state, $rootScope, HqOrderService) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单',
       btns: [

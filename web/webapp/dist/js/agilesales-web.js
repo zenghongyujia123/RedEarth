@@ -2728,9 +2728,9 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
         sale.next_month_sales_forecast_5;
       var other_order_count = parseInt(sale.D02) + parseInt(sale.D03) + parseInt(sale.D04);
       if (sale.product_number === 'ACC13561') {
-        var a = parseInt(sale.next_month_sales_forecast_0 - (sale.last_month_stock_count + sale.last_month_onway_count - next_6_month_forecast - other_order_count) * parseInt( sale.product.abc_category )/ 100);
+        var a = parseInt(sale.next_month_sales_forecast_0 - (sale.last_month_stock_count + sale.last_month_onway_count - next_6_month_forecast - other_order_count - sale.safe_stock) * parseInt(sale.product.abc_category) / 100);
       }
-      sale.system_suggest_count = parseInt(sale.next_month_sales_forecast_0 - (sale.last_month_stock_count + sale.last_month_onway_count - next_6_month_forecast - other_order_count) * parseInt(sale.product.abc_category ) / 100);
+      sale.system_suggest_count = parseInt(sale.next_month_sales_forecast_0 - (sale.last_month_stock_count + sale.last_month_onway_count - next_6_month_forecast - other_order_count - sale.safe_stock) * parseInt(sale.product.abc_category) / 100);
 
       if (sale.system_suggest_count_modify === 0) {
         sale.system_suggest_count_modify = sale.system_suggest_count;

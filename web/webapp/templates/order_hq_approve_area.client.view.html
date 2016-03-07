@@ -82,7 +82,7 @@
           <div class="body-col">{{o.system_suggest_count}}</div>
           <input class="body-col" ng-model="o.system_suggest_count_modify">
 
-          <div class="body-col" ng-class="{yellow:o.system_suggest_count_modify_percent>100}">
+          <div class="body-col" ng-class="{green:o.system_suggest_count_modify_percent<0,red:o.system_suggest_count_modify_percent>0}">
             {{o.system_suggest_count_modify_percent}}%
           </div>
           <div class="body-col">{{o.remark}}</div>

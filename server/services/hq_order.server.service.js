@@ -367,6 +367,7 @@ exports.approveHqOrders = function (user, orders, callback) {
           return eachCallback();
         }
         hqSales.status = '已审核';
+        hqSales.D01_approve= order.D01_approve;
         hqSales.final_purchased_count = order.final_purchased_count;
         hqSales.final_purchased_price = order.final_purchased_price;
         hqSales.save(function (err) {

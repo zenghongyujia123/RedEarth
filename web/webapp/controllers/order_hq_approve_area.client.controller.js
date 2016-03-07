@@ -53,6 +53,7 @@ angular.module('agilesales-web').controller('OrderHqApproveAreaCtrl', ['$scope',
         sales.push({
           _id: sale._id,
           order_number: sale.order_number,
+          D01_approve: sale.D01_approve,
           D02_approve: sale.D02_approve,
           D03_approve: sale.D03_approve,
           D04_approve: sale.D04_approve

@@ -425,6 +425,7 @@ exports.approveAreaOrder = function (user, order, callback) {
       return callback({err: error.business.area_sale_not_found});
     }
 
+    areaSales.D01_approve = order.D01_approve;
     areaSales.D02_approve = order.D02_approve;
     areaSales.D03_approve = order.D03_approve;
     areaSales.D04_approve = order.D04_approve;

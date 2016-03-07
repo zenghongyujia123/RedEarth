@@ -28,7 +28,7 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
             return alert('请选择是否上传茂姿订单');
           }
 
-          if(data.status!=='已审核'){
+          if (data.status !== '已审核') {
             $scope.$emit('suggest.import.changed', {
               title: '建议订单 总部建议订单（SKU）=(地区已审批订单+其他订单)-(总部库存+在途-安全库存) +判断条件（是否TOP SKU? 是否MOQ之%必采购？）',
               btns: [
@@ -81,7 +81,9 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
         sale.final_system_suggest_count = factory_moq;
       }
 
-      sale.final_purchased_count = sale.final_system_suggest_count;
+      if (sale.final_purchased_count === 0) {
+        sale.final_purchased_count = sale.final_system_suggest_count;
+      }
 
       return sale.system_suggest_count;
     };

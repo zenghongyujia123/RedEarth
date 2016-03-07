@@ -97,7 +97,7 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD02Ctrl', ['$scope'
             }
             else {
               Loading.hide();
-              $state.go('order_suggest.suggest_area_other_order', {}, {reload: true});
+              $state.go('order_suggest.suggest_area_other_D02', {}, {reload: true});
             }
           }, function (err) {
             Loading.hide();

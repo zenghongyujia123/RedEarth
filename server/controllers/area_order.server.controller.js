@@ -61,6 +61,15 @@ exports.getSalesByArea = function (req, res, next) {
   });
 };
 
+exports.sureOrder = function (req, res, next) {
+  areaOrderService.sureOrder (req.user, req.body.order, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};
+
 exports.historyAreaSalesStockOnwayImport = function (req, res, next) {
   logService.insertLog(req.user.username, '导入地区历史销量');
   areaOrderService.historyAreaSalesStockOnwayImport  (req.user, req.body.sales, function (err, result) {

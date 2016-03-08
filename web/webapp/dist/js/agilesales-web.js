@@ -610,6 +610,9 @@ angular.module('agilesales-web').factory('AreaOrderService', ['HttpService', fun
     },
     getCurrentAreaSubmitOrder: function () {
       return HttpService.get('/webapp/area/sales/submit', {});
+    },
+    sureOrder: function (order) {
+      return HttpService.post('/webapp/area/order/sure', {order: order});
     }
   };
 }]);
@@ -918,8 +921,10 @@ angular.module('agilesales-web').factory('HqOrderService', ['HttpService', funct
     },
     updateSubmitOtherOrderStatus: function (submit_order) {
       return HttpService.post('/webapp/hq/sales/submit_order/update', {submit_order: submit_order});
+    },
+    sureOrder:function(order){
+      return HttpService.post('/webapp/hq/order/sure', {order: order});
     }
-
   };
 }]);
 /**
@@ -2695,6 +2700,13 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
               ]
             });
           }
+          else{
+            $scope.$emit('suggest.import.changed', {
+              title: '建议订单 地区建议订单（SKU）=当月预测-[地区库存(包括店柜库存) +在途-未来6月销售预测-其他订单(批发)-安全库存）]',
+              btns: [
+              ]
+            });
+          }
 
           $scope.getAreaSuggestOrder();
         }
@@ -2767,6 +2779,9 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
           if (!sale.remark) {
             return alert('产品编码:' + sale.product.product_number + '超额订购需填写备注');
           }
+          if(sale.is_sure!=='是'){
+            return alert('产品编码:' + sale.product.product_number + '超额订购需上级确认');
+          }
         }
 
         sales.push({
@@ -2810,6 +2825,17 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
           console.log(err);
         });
     }
+
+    $scope.sureOrder = function (order) {
+      AreaOrderService.sureOrder(order).then(function (data) {
+        if (data && !data.err) {
+          order.is_sure = data.is_sure;
+        }
+        console.log(data);
+      }, function (data) {
+        console.log(data);
+      });
+    };
   }]);
 /**
  * Created by zenghong on 16/1/15.
@@ -4118,13 +4144,15 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
     function suggestOrderSubmit() {
       var sales = [];
 
-      for(var i = 0 ;i<$scope.suggests.length;i++){
+      for (var i = 0; i < $scope.suggests.length; i++) {
         var sale = $scope.suggests[i];
         if (sale.system_suggest_count_modify_percent >= 50 || sale.system_suggest_count_modify_percent < -50) {
           if (!sale.remark) {
             return alert('产品编码:' + sale.product.product_number + '超额订购需填写备注');
           }
-
+          if(sale.is_sure!=='是'){
+            return alert('产品编码:' + sale.product.product_number + '超额订购需上级确认');
+          }
         }
 
         if (sale.status !== '已审核') {
@@ -4173,6 +4201,16 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
         });
     }
 
+    $scope.sureOrder = function (order) {
+      HqOrderService.sureOrder(order).then(function (data) {
+        if (data && !data.err) {
+          order.is_sure = data.is_sure;
+        }
+        console.log(data);
+      }, function (data) {
+        console.log(data);
+      });
+    };
   }]);
 /**
  * Created by zenghong on 16/1/15.

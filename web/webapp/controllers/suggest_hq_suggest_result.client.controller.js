@@ -96,13 +96,15 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
     function suggestOrderSubmit() {
       var sales = [];
 
-      for(var i = 0 ;i<$scope.suggests.length;i++){
+      for (var i = 0; i < $scope.suggests.length; i++) {
         var sale = $scope.suggests[i];
         if (sale.system_suggest_count_modify_percent >= 50 || sale.system_suggest_count_modify_percent < -50) {
           if (!sale.remark) {
             return alert('产品编码:' + sale.product.product_number + '超额订购需填写备注');
           }
-
+          if(sale.is_sure!=='是'){
+            return alert('产品编码:' + sale.product.product_number + '超额订购需上级确认');
+          }
         }
 
         if (sale.status !== '已审核') {
@@ -151,4 +153,14 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
         });
     }
 
+    $scope.sureOrder = function (order) {
+      HqOrderService.sureOrder(order).then(function (data) {
+        if (data && !data.err) {
+          order.is_sure = data.is_sure;
+        }
+        console.log(data);
+      }, function (data) {
+        console.log(data);
+      });
+    };
   }]);

@@ -74,7 +74,11 @@
       </div>
       <input class="body-col" ng-model="o.remark" placeholder="超额订购请点击备注">
 
-      <div class="body-col"></div>
+      <div class="body-col">
+        <button ng-show="o.system_suggest_count_modify_percent>=50||o.system_suggest_count_modify_percent<=-50" ng-click="sureOrder(o)">
+          {{o.is_sure==='是'?'已确认':'确认'}}
+        </button>
+      </div>
       <div class="body-col">{{o.D03}}</div>
       <div class="body-col">{{o.D04}}</div>
 

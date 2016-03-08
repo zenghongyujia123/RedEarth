@@ -44,6 +44,9 @@ angular.module('agilesales-web').factory('AreaOrderService', ['HttpService', fun
     },
     getCurrentAreaSubmitOrder: function () {
       return HttpService.get('/webapp/area/sales/submit', {});
+    },
+    sureOrder: function (order) {
+      return HttpService.post('/webapp/area/order/sure', {order: order});
     }
   };
 }]);

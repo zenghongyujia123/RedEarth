@@ -20,5 +20,7 @@ module.exports = function (app) {
   app.route('/webapp/hq/sales/approve').post(filter.requireUser, all.hq_order.approveHqOrder);
   app.route('/webapp/hq/sales/approve/multi').post(filter.requireUser, all.hq_order.approveHqOrders);
 
+  app.route('/webapp/hq/order/sure').post(filter.requireUser, all.hq_order.sureOrder);
+
 
 };

@@ -30,6 +30,13 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
               ]
             });
           }
+          else{
+            $scope.$emit('suggest.import.changed', {
+              title: '建议订单 地区建议订单（SKU）=当月预测-[地区库存(包括店柜库存) +在途-未来6月销售预测-其他订单(批发)-安全库存）]',
+              btns: [
+              ]
+            });
+          }
 
           $scope.getAreaSuggestOrder();
         }
@@ -102,6 +109,9 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
           if (!sale.remark) {
             return alert('产品编码:' + sale.product.product_number + '超额订购需填写备注');
           }
+          if(sale.is_sure!=='是'){
+            return alert('产品编码:' + sale.product.product_number + '超额订购需上级确认');
+          }
         }
 
         sales.push({
@@ -145,4 +155,15 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
           console.log(err);
         });
     }
+
+    $scope.sureOrder = function (order) {
+      AreaOrderService.sureOrder(order).then(function (data) {
+        if (data && !data.err) {
+          order.is_sure = data.is_sure;
+        }
+        console.log(data);
+      }, function (data) {
+        console.log(data);
+      });
+    };
   }]);

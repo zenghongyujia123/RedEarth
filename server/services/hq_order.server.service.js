@@ -57,7 +57,24 @@ exports.updateSubmitOtherOrderStatus = function (user, submitOrder, callback) {
       return callback(null, saveOrder);
     });
   })
+};
 
+exports.sureOrder = function (user, order, callback) {
+  HqSales.findOne({_id: order._id}, function (err, hqOrder) {
+    if (err) {
+      return callback({err: error.system.db_error});
+    }
+    if (!hqOrder) {
+      return callback(null, order);
+    }
+    hqOrder.is_sure = '是';
+    hqOrder.save(function (err, saveAreaOrder) {
+      if (err || !saveAreaOrder) {
+        return callback({err: error.system.db_error});
+      }
+      return callback(null, saveAreaOrder);
+    });
+  });
 };
 
 exports.hqStockImport = function (user, stocks, callback) {

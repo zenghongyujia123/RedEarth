@@ -397,6 +397,24 @@ exports.getAreaOrderList = function (user, callback) {
   });
 };
 
+exports.sureOrder = function (user, sales, callback) {
+  AreaSales.findOne({_id: sales._id}, function (err, areaSales) {
+    if (err) {
+      return callback({err: error.system.db_error});
+    }
+    if (!areaSales) {
+      return callback(null, sales);
+    }
+    areaSales.is_sure = '是';
+    areaSales.save(function (err, saveAreaSales) {
+      if (err || !saveAreaSales) {
+        return callback({err: error.system.db_error});
+      }
+      return callback(null, saveAreaSales);
+    });
+  });
+};
+
 exports.getAreaOrderDetail = function (user, order_number, callback) {
   if (user.account_type === '地区分公司' || user.account_type === '地区总部') {
     AreaSales.find({order_number: order_number}).populate('product').exec(function (err, areaSales) {

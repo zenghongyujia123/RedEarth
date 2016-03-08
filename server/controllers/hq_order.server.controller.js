@@ -32,6 +32,14 @@ exports.hqStockImport = function (req, res, next) {
     return res.send(result);
   });
 };
+exports.sureOrder = function (req, res, next) {
+  hqOrderService.sureOrder (req.user, req.body.order, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};
 
 exports.getHqCurrentStocks = function (req, res, next) {
   hqOrderService.getHqCurrentStocks(req.user, function (err, result) {

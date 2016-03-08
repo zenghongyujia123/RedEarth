@@ -36,7 +36,9 @@ angular.module('agilesales-web').factory('HqOrderService', ['HttpService', funct
     },
     updateSubmitOtherOrderStatus: function (submit_order) {
       return HttpService.post('/webapp/hq/sales/submit_order/update', {submit_order: submit_order});
+    },
+    sureOrder:function(order){
+      return HttpService.post('/webapp/hq/order/sure', {order: order});
     }
-
   };
 }]);

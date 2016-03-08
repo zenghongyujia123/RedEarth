@@ -19,6 +19,9 @@ module.exports = function (appDb) {
     department: {
       type: String
     },
+    is_sure:{
+      type:String
+    },
     //上月月份
     month: {
       type: String

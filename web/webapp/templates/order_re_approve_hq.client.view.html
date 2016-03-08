@@ -105,7 +105,7 @@
           <div class="body-col">{{s.system_suggest_count_modify}}</div>
           <div class="body-col" ng-class="{green:s.system_suggest_count_modify_percent<0,red:s.system_suggest_count_modify_percent>0}">{{s.system_suggest_count_modify_percent}}%</div>
           <div class="body-col">{{s.remark}}</div>
-          <div class="body-col">已取得上级核准</div>
+          <div class="body-col">{{s.is_sure==='是'?'是':''}}</div>
           <div class="body-col">{{s.product.factory_moq}}</div>
           <div class="body-col">{{s.product.moq_remark}}</div>
           <div class="body-col">{{s.product.order_count_exceed_moq}}</div>

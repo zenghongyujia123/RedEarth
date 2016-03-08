@@ -31,6 +31,9 @@ module.exports = function (appDb) {
     hq_safe_stock: {
       type: String,
     },
+    is_sure:{
+      type:String
+    },
     month: {
       type: String
     },

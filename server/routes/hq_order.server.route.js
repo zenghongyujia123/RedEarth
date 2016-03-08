@@ -22,5 +22,7 @@ module.exports = function (app) {
 
   app.route('/webapp/hq/order/sure').post(filter.requireUser, all.hq_order.sureOrder);
 
+  app.route('/webapp/hq/order/detail').get(filter.requireUser, all.hq_order.getHqOrderDetail);
+
 
 };

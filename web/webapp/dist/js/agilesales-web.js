@@ -165,6 +165,11 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'templates/suggest_hq_other_Y04.client.view.html',
         controller: "SuggestHqOtherY04Ctrl"
       })
+      .state('order_hq_detail', {
+        url: '/order_hq_detail/:order_number',
+        templateUrl: 'templates/order_hq_detail.client.view.html',
+        controller: "OrderHqDetailCtrl"
+      })
       .state('order_hq_approve_area', {
         url: '/order_hq_approve_area/:order_number',
         templateUrl: 'templates/order_hq_approve_area.client.view.html',
@@ -918,6 +923,9 @@ angular.module('agilesales-web').factory('HqOrderService', ['HttpService', funct
     },
     getCurrentHqSubmitOrder: function (orders) {
       return HttpService.get('/webapp/hq/sales/submit', {});
+    },
+    getHqOrderDetail:function(order_number){
+      return HttpService.get('/webapp/hq/order/detail', {order_number:order_number});
     },
     updateSubmitOtherOrderStatus: function (submit_order) {
       return HttpService.post('/webapp/hq/sales/submit_order/update', {submit_order: submit_order});
@@ -1717,11 +1725,46 @@ angular.module('agilesales-web').controller('OrderHqApproveAreaCtrl', ['$scope',
 /**
  * Created by zenghong on 16/1/15.
  */
+angular.module('agilesales-web').controller('OrderHqDetailCtrl', ['$scope', '$state', '$stateParams', 'AuthService', 'AreaOrderService', 'HqOrderService','Loading',
+  function ($scope, $state, $stateParams, AuthService, AreaOrderService, HqOrderService,Loading) {
+    $scope.importBtns = [];
+    $scope.order_number = $stateParams.order_number;
+    $scope.location = window.location;
+
+    $scope.orders = [];
+    $scope.getHqOrderDetail = function () {
+      Loading.show();
+      HqOrderService.getHqOrderDetail($scope.order_number).then(function (data) {
+        if (data && !data.err) {
+          $scope.orders = data;
+        }
+        Loading.hide();
+        console.log(data);
+      }, function (data) {
+        Loading.hide();
+        console.log(data);
+      });
+    };
+
+    $scope.user = AuthService.getUser() || {};
+    AuthService.onUserUpdated('AuthService', function (user) {
+      $scope.user = user;
+    });
+    $scope.getHqOrderDetail();
+  }]);
+/**
+ * Created by zenghong on 16/1/15.
+ */
 angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state', 'AreaOrderService', 'HqOrderService', 'AuthService', 'Loading',
   function ($scope, $state, AreaOrderService, HqOrderService, AuthService, Loading) {
     $scope.goDetail = function (o) {
       if ($scope.user.account_type === '地区总部') {
-        $state.go('order_hq_approve_area', {order_number: o.order_number});
+        if(o.object==='areaSubmitOrder'){
+          $state.go('order_hq_approve_area', {order_number: o.order_number});
+        }
+        if(o.object==='hqSubmitOrder'){
+          $state.go('order_hq_detail', {order_number: o.order_number});
+        }
       }
 
       if ($scope.user.account_type === '地区分公司') {
@@ -1773,6 +1816,7 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state
 
     if ($scope.user.account_type === '地区总部') {
       $scope.getAreaOrderList();
+      $scope.getHqOrderList();
     }
 
     if ($scope.user.account_type === '地区分公司') {

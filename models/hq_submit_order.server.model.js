@@ -14,7 +14,7 @@ module.exports = function (appDb) {
   var HqSubmitOrderSchema = new Schema({
     object: {
       type: String,
-      default: 'areaSubmitOrder'
+      default: 'hqSubmitOrder'
     },
     month: {
       type: String

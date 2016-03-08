@@ -5,7 +5,12 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state
   function ($scope, $state, AreaOrderService, HqOrderService, AuthService, Loading) {
     $scope.goDetail = function (o) {
       if ($scope.user.account_type === '地区总部') {
-        $state.go('order_hq_approve_area', {order_number: o.order_number});
+        if(o.object==='areaSubmitOrder'){
+          $state.go('order_hq_approve_area', {order_number: o.order_number});
+        }
+        if(o.object==='hqSubmitOrder'){
+          $state.go('order_hq_detail', {order_number: o.order_number});
+        }
       }
 
       if ($scope.user.account_type === '地区分公司') {
@@ -57,6 +62,7 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state
 
     if ($scope.user.account_type === '地区总部') {
       $scope.getAreaOrderList();
+      $scope.getHqOrderList();
     }
 
     if ($scope.user.account_type === '地区分公司') {

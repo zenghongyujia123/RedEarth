@@ -384,7 +384,7 @@ exports.approveHqOrders = function (user, orders, callback) {
           return eachCallback();
         }
         hqSales.status = '已审核';
-        hqSales.D01_approve= order.D01_approve;
+        hqSales.D01_approve = order.D01_approve;
         hqSales.final_purchased_count = order.final_purchased_count;
         hqSales.final_purchased_price = order.final_purchased_price;
         hqSales.save(function (err) {
@@ -398,6 +398,16 @@ exports.approveHqOrders = function (user, orders, callback) {
     });
   });
 };
+
+exports.getHqOrderDetail = function (user, order_number, callback) {
+  HqSales.find({order_number: order_number}).populate('product').exec(function (err, areaSales) {
+    if (err || !areaSales) {
+      return callback({err: error.system.db_error});
+    }
+    return callback(null, areaSales);
+  });
+};
+
 
 function getOrderNumber(username) {
   return getLastMonth(1) + username;

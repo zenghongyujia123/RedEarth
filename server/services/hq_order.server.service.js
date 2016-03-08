@@ -80,7 +80,7 @@ exports.hqStockImport = function (user, stocks, callback) {
           hqSales = new HqSales({});
         }
 
-        product.jinyi_ungenuine_goods = stock.genuine_goods;
+        product.jinyi_ungenuine_goods = stock.ungenuine_goods;
         product.jinyi_validity = stock.validity;
         product.save(function (err, saveProduct) {
           if (err || !saveProduct) {

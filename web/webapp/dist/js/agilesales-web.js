@@ -340,6 +340,46 @@ angular.module('agilesales-web').directive('zzLoading', ['$rootScope', function 
 /**
  * Created by zenghong on 16/1/18.
  */
+angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',function ($rootScope) {
+  return {
+    restrict: 'AE',
+    templateUrl: 'directives/dialog_confirm/dialog_confirm.client.view.html',
+    replace: true,
+    scope: {},
+    link: function ($scope, $element, $attrs) {
+      $scope.info = {
+        title: '',
+        content:'',
+        color: 'blue'
+      };
+
+      $scope.show = function () {
+        $element.addClass('show');
+      };
+      $scope.hide = function () {
+        $element.removeClass('show');
+      };
+      $scope.submit = function () {
+        $element.removeClass('show');
+        if ($scope.info.callback) {
+          $scope.info.callback($scope.info);
+        }
+      };
+      $rootScope.$on('show.dialogConfirm', function (event, data) {
+        setTheme(data);
+        $scope.show();
+      });
+
+      function setTheme(info) {
+        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
+        $scope.info = info;
+      }
+    }
+  }
+}]);
+/**
+ * Created by zenghong on 16/1/18.
+ */
 angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
   return {
     restrict: 'AE',
@@ -370,46 +410,6 @@ angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', funct
         }
       };
       $rootScope.$on('show.dialogInput', function (event, data) {
-        setTheme(data);
-        $scope.show();
-      });
-
-      function setTheme(info) {
-        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
-        $scope.info = info;
-      }
-    }
-  }
-}]);
-/**
- * Created by zenghong on 16/1/18.
- */
-angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',function ($rootScope) {
-  return {
-    restrict: 'AE',
-    templateUrl: 'directives/dialog_confirm/dialog_confirm.client.view.html',
-    replace: true,
-    scope: {},
-    link: function ($scope, $element, $attrs) {
-      $scope.info = {
-        title: '',
-        content:'',
-        color: 'blue'
-      };
-
-      $scope.show = function () {
-        $element.addClass('show');
-      };
-      $scope.hide = function () {
-        $element.removeClass('show');
-      };
-      $scope.submit = function () {
-        $element.removeClass('show');
-        if ($scope.info.callback) {
-          $scope.info.callback($scope.info);
-        }
-      };
-      $rootScope.$on('show.dialogConfirm', function (event, data) {
         setTheme(data);
         $scope.show();
       });
@@ -4283,7 +4283,7 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
 
       for (var i = 0; i < $scope.suggests.length; i++) {
         var sale = $scope.suggests[i];
-        if (sale.system_suggest_count_modify_percent >= 50 || sale.system_suggest_count_modify_percent < -50) {
+        if (sale.system_suggest_count_modify_percent >= 50 || sale.system_suggest_count_modify_percent < -50||isNaN(sale.system_suggest_count_modify_percent)) {
           if (!sale.remark) {
             return alert('产品编码:' + sale.product.product_number + '超额订购需填写备注');
           }

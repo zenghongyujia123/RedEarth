@@ -98,7 +98,7 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
 
       for (var i = 0; i < $scope.suggests.length; i++) {
         var sale = $scope.suggests[i];
-        if (sale.system_suggest_count_modify_percent >= 50 || sale.system_suggest_count_modify_percent < -50) {
+        if (sale.system_suggest_count_modify_percent >= 50 || sale.system_suggest_count_modify_percent < -50||isNaN(sale.system_suggest_count_modify_percent)) {
           if (!sale.remark) {
             return alert('产品编码:' + sale.product.product_number + '超额订购需填写备注');
           }

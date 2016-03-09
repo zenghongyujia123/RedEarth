@@ -2819,10 +2819,6 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
       if (sale.system_suggest_count_modify === 0) {
         sale.system_suggest_count_modify = sale.system_suggest_count;
       }
-      if (sale.D01_approve === 0) {
-        sale.D01_approve = sale.system_suggest_count_modify + sale.D03_approve + sale.D04_approve;
-      }
-
       if (sale.D02_approve === 0) {
         sale.D02_approve = sale.D02;
       }
@@ -2835,6 +2831,9 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
         sale.D04_approve = sale.D04;
       }
 
+      if (sale.D01_approve === 0) {
+        sale.D01_approve = sale.system_suggest_count_modify + sale.D03_approve + sale.D04_approve;
+      }
 
       return sale.system_suggest_count;
     };

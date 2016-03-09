@@ -214,6 +214,10 @@ exports.historyAreaSalesStockOnwayImport = function (user, sales, callback) {
       return eachCallback();
     }
 
+    if (sale.month === getLastMonth(1)) {
+      return eachCallback();
+    }
+
     Product.findOne({product_number: sale.product_number}, function (err, product) {
       if (err || !product)
         return eachCallback();

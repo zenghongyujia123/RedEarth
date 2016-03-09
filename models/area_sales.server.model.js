@@ -34,7 +34,7 @@ module.exports = function (appDb) {
       type: String
     },
     area_safe_stock: {
-      type: String
+      type: Number
     },
     product: {
       type: Schema.Types.ObjectId,

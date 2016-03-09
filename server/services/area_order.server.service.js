@@ -503,10 +503,10 @@ exports.approveAreaOrders = function (user, orders, callback) {
         if (err || !areaSales) {
           return eachCallback();
         }
-        areaSales.D02_approve = order.D02_approve;
-        areaSales.D03_approve = order.D03_approve;
-        areaSales.D04_approve = order.D04_approve;
-        areaSales.D01_approve = order.D01_approve;
+        areaSales.D02_approve =parseInt( order.D02_approve)=== 0 ? 0 : parseInt(order.D02_approve);
+        areaSales.D03_approve = parseInt( order.D03_approve)=== 0 ? 0 : parseInt(order.D03_approve);
+        areaSales.D04_approve = parseInt( order.D04_approve)=== 0 ? 0 : parseInt(order.D04_approve);
+        areaSales.D01_approve = parseInt(order.D01_approve) === 0 ? 0 : parseInt(order.D01_approve);
         areaSales.status = '已审核';
         areaSales.save(function (err) {
           return eachCallback();

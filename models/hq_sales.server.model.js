@@ -222,7 +222,7 @@ module.exports = function (appDb) {
       this.next_month_sales_forecast_5 = parseInt((this.next_month_sales_forecast_2 + this.next_month_sales_forecast_3 + this.next_month_sales_forecast_4 ) / 3);
       this.next_month_sales_forecast_6 = parseInt((this.next_month_sales_forecast_3 + this.next_month_sales_forecast_4 + this.next_month_sales_forecast_5 ) / 3);
       var hq_safe_stock = isNaN(parseFloat(this.hq_safe_stock)) ? 0 : parseFloat(this.hq_safe_stock);
-      this.safe_stock = parseInt(( this.last_month_sales_count_3 + this.last_month_sales_count_2 + this.last_month_sales_count_1) / 3) * hq_safe_stock;
+      this.safe_stock = parseInt(( this.last_month_sales_count_3 + this.last_month_sales_count_2 + this.last_month_sales_count_1) / 3 * hq_safe_stock);
     }
 
     if (this.system_suggest_count !== 0 && this.system_suggest_count_modify === 0) {

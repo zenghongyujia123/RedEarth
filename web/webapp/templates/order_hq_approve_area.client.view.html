@@ -82,7 +82,8 @@
           <div class="body-col">{{o.system_suggest_count}}</div>
           <div class="body-col">{{o.system_suggest_count_modify}}</div>
 
-          <div class="body-col" ng-class="{green:o.system_suggest_count_modify_percent<0,red:o.system_suggest_count_modify_percent>0}">
+          <div class="body-col"
+               ng-class="{green:o.system_suggest_count_modify_percent<0,red:o.system_suggest_count_modify_percent>0}">
             {{o.system_suggest_count_modify_percent}}%
           </div>
           <div class="body-col">{{o.remark}}</div>
@@ -92,9 +93,10 @@
 
           <div class="body-col">{{o.D04}}</div>
           <input type="number" class="body-col" ng-model="o.D04_approve" ng-keyup="updateApprove(o)">
+
           <div type="number" class="body-col">{{o.D01_approve}}</div>
 
-          <div class="body-col">{{''}}</div>
+          <div class="body-col">{{o.D01_approve*o.product.sales_price}}</div>
           <div class="body-col red" ng-class="{green:o.status==='已审核'}">{{o.status}}</div>
         </div>
       </div>

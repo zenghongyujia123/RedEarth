@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$rootScope', 'ProductService', 'Loading',
-  function ($scope, $rootScope, ProductService, Loading) {
+angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$state', '$rootScope', 'ProductService', 'Loading',
+  function ($scope, $state, $rootScope, ProductService, Loading) {
     $scope.$emit('suggest.import.changed', {
       title: '历史数据',
       btns: [
@@ -89,7 +89,7 @@ angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$r
             }
             else {
               Loading.hide();
-              $state.go('history_product', {}, {reload: true});
+              $state.go('order_history.history_product', {}, {reload: true});
             }
           }, function (err) {
             Loading.hide();
@@ -117,7 +117,7 @@ angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$r
           var result = [];
           data.forEach(function (item) {
             var p = {};
-            p.product_number = item['SKU编码'];
+            p.product_number = item['SKU编码'].trim();
             p.product_barcode = item['产品条码'];
             p.sap_code = item['SAP CODE'];
             p.product_name = item['产品名称'];
@@ -164,6 +164,10 @@ angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$r
             p.field_3 = item['字段3'];
             p.field_4 = item['字段4'];
             p.field_5 = item['字段5'];
+            var a = /MBPB4CGB0/;
+            if (a.test(p.product_number)) {
+              var a = p;
+            }
             result.push(p);
           });
           var products = [];

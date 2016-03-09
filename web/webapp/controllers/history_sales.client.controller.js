@@ -49,7 +49,7 @@ angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$sta
             }
             else {
               Loading.hide();
-              $state.go('history_sales', {}, {reload: true});
+              $state.go('order_history.history_sales', {}, {reload: true});
             }
           }, function (err) {
             Loading.hide();

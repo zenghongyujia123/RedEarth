@@ -91,6 +91,11 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD03Ctrl', ['$scope'
       function upload(orders, i) {
         AreaOrderService.otherOrderImport(orders[i++])
           .then(function (data) {
+            if (data && data.err && data.err.type === 'product_not_exist') {
+              alert(data.err.message);
+              return $state.go('order_suggest.suggest_area_other_D03', {}, {reload: true});
+            }
+
             console.log(data);
             if (orders[i]) {
               upload(orders, i);

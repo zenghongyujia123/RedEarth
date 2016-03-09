@@ -1076,8 +1076,8 @@ angular.module('agilesales-web').controller('HistoryHomeCtrl', function () {
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$rootScope', 'ProductService', 'Loading',
-  function ($scope, $rootScope, ProductService, Loading) {
+angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$state', '$rootScope', 'ProductService', 'Loading',
+  function ($scope, $state, $rootScope, ProductService, Loading) {
     $scope.$emit('suggest.import.changed', {
       title: '历史数据',
       btns: [
@@ -1164,7 +1164,7 @@ angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$r
             }
             else {
               Loading.hide();
-              $state.go('history_product', {}, {reload: true});
+              $state.go('order_history.history_product', {}, {reload: true});
             }
           }, function (err) {
             Loading.hide();
@@ -1192,7 +1192,7 @@ angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$r
           var result = [];
           data.forEach(function (item) {
             var p = {};
-            p.product_number = item['SKU编码'];
+            p.product_number = item['SKU编码'].trim();
             p.product_barcode = item['产品条码'];
             p.sap_code = item['SAP CODE'];
             p.product_name = item['产品名称'];
@@ -1239,6 +1239,10 @@ angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$r
             p.field_3 = item['字段3'];
             p.field_4 = item['字段4'];
             p.field_5 = item['字段5'];
+            var a = /MBPB4CGB0/;
+            if (a.test(p.product_number)) {
+              var a = p;
+            }
             result.push(p);
           });
           var products = [];
@@ -1307,7 +1311,7 @@ angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$sta
             }
             else {
               Loading.hide();
-              $state.go('history_sales', {}, {reload: true});
+              $state.go('order_history.history_sales', {}, {reload: true});
             }
           }, function (err) {
             Loading.hide();
@@ -2005,8 +2009,8 @@ angular.module('agilesales-web').controller('SettingPasswordCtrl', ['$scope', 'U
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService','Loading',
-  function ($scope, $rootScope, $state, AreaOrderService,Loading) {
+angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService', 'Loading',
+  function ($scope, $rootScope, $state, AreaOrderService, Loading) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单',
       btns: [
@@ -2044,6 +2048,11 @@ angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope
       function upload(saleses, i) {
         AreaOrderService.areaSalesStockOnwayImport(saleses[i++])
           .then(function (data) {
+            if (data && data.err && data.err.type === 'product_not_exist') {
+              alert(data.err.message);
+              return $state.go('order_suggest.suggest_area_last_month', {}, {reload: true});
+            }
+
             console.log(data);
             if (saleses[i]) {
               upload(saleses, i);
@@ -2191,6 +2200,12 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD02Ctrl', ['$scope'
         AreaOrderService.otherOrderImport(orders[i++])
           .then(function (data) {
             console.log(data);
+
+            if (data && data.err && data.err.type === 'product_not_exist') {
+              alert(data.err.message);
+              return $state.go('order_suggest.suggest_area_other_D02', {}, {reload: true});
+            }
+
             if (orders[i]) {
               upload(orders, i);
             }
@@ -2352,6 +2367,11 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD03Ctrl', ['$scope'
       function upload(orders, i) {
         AreaOrderService.otherOrderImport(orders[i++])
           .then(function (data) {
+            if (data && data.err && data.err.type === 'product_not_exist') {
+              alert(data.err.message);
+              return $state.go('order_suggest.suggest_area_other_D03', {}, {reload: true});
+            }
+
             console.log(data);
             if (orders[i]) {
               upload(orders, i);
@@ -2515,6 +2535,11 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD04Ctrl', ['$scope'
       function upload(orders, i) {
         AreaOrderService.otherOrderImport(orders[i++])
           .then(function (data) {
+            if (data && data.err && data.err.type === 'product_not_exist') {
+              alert(data.err.message);
+              return $state.go('order_suggest.suggest_area_other_D04', {}, {reload: true});
+            }
+
             console.log(data);
             if (orders[i]) {
               upload(orders, i);

@@ -21,6 +21,9 @@ exports.getProducts = function (user, callback) {
 
 exports.importProducts = function (user, products, callback) {
   async.each(products, function (product, eachCallback) {
+    if (product.product_number === 'MBPB4CGB02') {
+      var a = product.product_number;
+    }
     Product.findOne({product_number: product.product_number}, function (err, findProduct) {
       if (err) {
         return eachCallback();
@@ -78,6 +81,10 @@ exports.importProducts = function (user, products, callback) {
       findProduct.field_4 = product.field_4;
       findProduct.field_5 = product.field_5;
       findProduct.save(function (err) {
+        if (err) {
+          var a = err;
+          console.log(err);
+        }
         return eachCallback();
       });
     });

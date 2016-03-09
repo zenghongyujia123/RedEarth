@@ -62,8 +62,12 @@ exports.areaSalesStockOnwayImport = function (user, sales, callback) {
 
   async.each(sales, function (sale, eachCallback) {
     Product.findOne({product_number: sale.product_number}, function (err, product) {
-      if (err || !product)
+      if (err)
         return eachCallback();
+
+      if (!product) {
+        return eachCallback({err: {type: 'product_not_exist', message: '产品编号为 : ' + sale.product_number + ' 的产品不存在'}});
+      }
 
       AreaSales.findOne({
         month: month,
@@ -145,40 +149,49 @@ exports.otherOrderImport = function (user, orders, callback) {
   var month = getLastMonth(1);
   var invalid_product = '';
   async.each(orders, function (order, eachCallback) {
-    AreaOrder.findOne({
-      order_number: order_number + order.order_type,
-      product_number: order.product_number,
-      month: month,
-    }, function (err, areaOrder) {
+    Product.findOne({product_number: order.product_number}, function (err, product) {
       if (err) {
-        return eachCallback();
+        return eachCallback({err: error.system.db_error});
       }
 
-      if (!areaOrder) {
-        areaOrder = new AreaOrder({});
+      if (!product) {
+        return eachCallback({err: {type: 'product_not_exist', message: '产品编号为 : ' + order.product_number + ' 的产品不存在'}});
       }
+      AreaOrder.findOne({
+        order_number: order_number + order.order_type,
+        product_number: order.product_number,
+        month: month,
+      }, function (err, areaOrder) {
+        if (err) {
+          return eachCallback();
+        }
 
-      if (areaOrder.is_approval === true) {
-        return eachCallback();
-      }
-      areaOrder.product_number = order.product_number;
-      areaOrder.product_name = order.product_name;
-      areaOrder.product_barcode = order.product_name;
-      areaOrder.category = order.category;
-      areaOrder.mid_classify = order.mid_classify;
-      areaOrder.sales_price = parseFloat(order.sales_price);
-      areaOrder.order_number = order_number + order.order_type;
-      areaOrder.order_count = parseInt(order.order_count);
-      areaOrder.order_type = order.order_type;
-      areaOrder.total_price = parseFloat(order.total_price);
-      areaOrder.department = user.department;
-      areaOrder.month = month;
-      areaOrder.save(function (err) {
-        return eachCallback();
+        if (!areaOrder) {
+          areaOrder = new AreaOrder({});
+        }
+
+        if (areaOrder.is_approval === true) {
+          return eachCallback();
+        }
+        areaOrder.product_number = order.product_number;
+        areaOrder.product_name = order.product_name;
+        areaOrder.product_barcode = order.product_name;
+        areaOrder.category = order.category;
+        areaOrder.mid_classify = order.mid_classify;
+        areaOrder.sales_price = parseFloat(order.sales_price);
+        areaOrder.order_number = order_number + order.order_type;
+        areaOrder.order_count = parseInt(order.order_count);
+        areaOrder.order_type = order.order_type;
+        areaOrder.total_price = parseFloat(order.total_price);
+        areaOrder.department = user.department;
+        areaOrder.month = month;
+        areaOrder.save(function (err) {
+          return eachCallback();
+        });
       });
     });
   }, function (err, result) {
-    return callback(err, {invalid_product: invalid_product});
+    return callback(err, {});
   });
 };
 
@@ -261,7 +274,7 @@ exports.historyAreaSalesStockOnwayImport = function (user, sales, callback) {
 
 
   }, function (err, result) {
-    return callback(err, {})
+    return callback(err, {});
   });
 };
 

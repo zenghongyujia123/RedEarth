@@ -13,7 +13,7 @@
 </div>
 
 <div class="re-table has-top">
-  <div class="re-table-header" style="width:2000px;">
+  <div class="re-table-header" style="width:2200px;">
     <div class="re-table-left-header" zz-float-left>
       <div class="left-header-col">SKU编码</div>
     </div>
@@ -28,9 +28,10 @@
       <div class="header-col">订单号码</div>
       <div class="header-col">订单数量</div>
       <div class="header-col">晋颖总价格</div>
+      <div class="header-col">序列</div>
     </div>
   </div>
-  <div class="re-table-body" style="width:2040px;">
+  <div class="re-table-body" style="width:2240px;">
     <div class="re-table-left-header" zz-float-left>
       <div class="left-col" ng-repeat="o in orders">{{o.product_number}}</div>
     </div>
@@ -45,6 +46,7 @@
       <div class="body-col">{{o.order_number}}</div>
       <div class="body-col">{{o.order_count}}</div>
       <div class="body-col">{{o.jinyi_total_price}}</div>
+      <div class="body-col">{{$index+1}}</div>
     </div>
   </div>
 </div>

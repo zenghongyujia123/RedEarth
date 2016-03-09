@@ -1,5 +1,5 @@
 <div class="re-table">
-  <div class="re-table-header" style="width: 8240px;min-width: 100%;">
+  <div class="re-table-header" style="width: 8440px;min-width: 100%;">
     <div class="re-table-left-header" zz-float-left>
       <div class="left-header-col">SKU编码</div>
     </div>
@@ -42,9 +42,10 @@
       <div class="header-col">澳妆最终审批采购量</div>
       <div class="header-col">澳妆最终审批采购金额</div>
       <div class="header-col">澳妆最终审批零售金额</div>
+      <div class="header-col">序列</div>
     </div>
   </div>
-  <div class="re-table-body" style="width: 8240px;min-width: 100%;">
+  <div class="re-table-body" style="width: 8440px;min-width: 100%;">
     <div class="re-table-left-header" zz-float-left>
       <div class="left-col" ng-repeat="o in suggests" ng-if="o.product">{{o.product_number}}</div>
     </div>
@@ -98,6 +99,7 @@
       <div class="body-col">{{s.final_purchased_count*s.product.jinyi_cost}}</div>
       <div class="body-col">{{s.final_purchased_count*s.product.sales_price}}</div>
       <div class="body-col red" ng-class="{green:s.status==='已审核'}">{{s.status}}</div>
+      <div class="body-col">{{$index+1}}</div>
     </div>
   </div>
 </div>

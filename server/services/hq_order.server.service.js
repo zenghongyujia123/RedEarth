@@ -82,10 +82,10 @@ exports.hqStockImport = function (user, stocks, callback) {
 
   async.each(stocks, function (stock, eachCallback) {
     Product.findOne({product_number: stock.product_number}, function (err, product) {
-      if (err )
+      if (err)
         return eachCallback();
 
-      if(!product){
+      if (!product) {
         return eachCallback({err: {type: 'product_not_exist', message: '产品编号为 : ' + stock.product_number + ' 的产品不存在'}});
       }
 
@@ -329,8 +329,8 @@ exports.hqSuggestOrderSubmit = function (user, sales, callback) {
           hqSales.remark = sale.remark;
           hqSales.system_suggest_count = sale.system_suggest_count;
           hqSales.final_system_suggest_count = sale.final_system_suggest_count;
-          hqSales.system_suggest_count_modify = sale.system_suggest_count_modify;
-          hqSales.system_suggest_count_modify_percent = sale.system_suggest_count_modify_percent;
+          hqSales.system_suggest_count_modify = isNaN(parseInt(sale.system_suggest_count_modify)) ? 0 : parseInt(sale.system_suggest_count_modify);
+          hqSales.system_suggest_count_modify_percent = isNaN(parseInt(sale.system_suggest_count_modify_percent)) ? 0 : parseInt(sale.system_suggest_count_modify_percent);
           hqSales.final_purchased_count = sale.final_purchased_count;
           hqSales.status = '未审核';
           hqSales.order_number = hqSubmitOrder.order_number;

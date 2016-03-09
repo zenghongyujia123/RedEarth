@@ -22,6 +22,9 @@ module.exports = function (appDb) {
     product_name: {
       type: String
     },
+    mid_classify: {
+      type: String
+    },
     product_barcode: {
       type: String
     },

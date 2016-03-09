@@ -257,6 +257,7 @@ exports.hqOtherOrderImport = function (user, orders, callback) {
         hqOrder.product_name = order.product_name;
         hqOrder.product_barcode = order.product_barcode;
         hqOrder.category = order.category;
+        hqOrder.mid_classify = order.mid_classify;
         hqOrder.sales_price = isNaN(parseFloat(order.sales_price)) ? 0 : parseFloat(order.sales_price);
         hqOrder.jinyi_cost = isNaN(parseFloat(order.jinyi_cost)) ? 0 : parseFloat(order.jinyi_cost);
         hqOrder.order_number = month + user.username + order.order_type;

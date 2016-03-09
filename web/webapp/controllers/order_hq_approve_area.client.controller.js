@@ -68,8 +68,7 @@ angular.module('agilesales-web').controller('OrderHqApproveAreaCtrl', ['$scope',
     };
 
     $scope.updateApprove = function (order) {
-      order.D01_approve = order.D03_approve + order.D04_approve;
-
+      order.D01_approve = order.system_suggest_count_modify+ order.D03_approve + order.D04_approve;
     };
 
 

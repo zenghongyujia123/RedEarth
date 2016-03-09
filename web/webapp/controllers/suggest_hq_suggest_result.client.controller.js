@@ -77,7 +77,7 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
       if (sale.system_suggest_count_modify < min_factory_moq) {
         sale.final_system_suggest_count = 0;
       }
-      if (sale.system_suggest_count_modify > min_factory_moq && sale.system_suggest_count_modify < factory_moq) {
+      if (sale.system_suggest_count_modify >= min_factory_moq && sale.system_suggest_count_modify < factory_moq) {
         sale.final_system_suggest_count = factory_moq;
       }
 

@@ -67,6 +67,11 @@ angular.module('agilesales-web').controller('OrderHqApproveAreaCtrl', ['$scope',
       upload(final_sales, 0);
     };
 
+    $scope.updateApprove = function (order) {
+      order.D01_approve = order.D03_approve + order.D04_approve;
+
+    };
+
 
     function upload(orders, i) {
       AreaOrderService.approveAreaOrders(orders[i++])

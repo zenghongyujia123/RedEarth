@@ -27,8 +27,6 @@
           <div class="header-col">ABC类别%</div>
           <div class="header-col">上月月结库存包括店柜库存</div>
           <div class="header-col">在途已订购未交货</div>
-          <div class="header-col">次品</div>
-          <div class="header-col">近效期库存</div>
           <div class="header-col">安全库存2个月</div>
           <div class="header-col">当月销售预测</div>
           <div class="header-col">后1月销售预测</div>
@@ -43,8 +41,10 @@
           <div class="header-col">修改%</div>
           <div class="header-col">备注</div>
           <div class="header-col">确认超额订购?</div>
-          <div class="header-col">上传订单适用装</div>
-          <div class="header-col">最终审批适用装</div>
+          <div class="header-col">次品</div>
+          <div class="header-col">近效期库存</div>
+          <div class="header-col">上传订单试用装</div>
+          <div class="header-col">最终审批试用装</div>
           <div class="header-col">上传订单陈列</div>
           <div class="header-col">最终审批陈列</div>
           <div class="header-col">最终审批订货数</div>
@@ -68,8 +68,6 @@
           <div class="body-col">{{o.product.abc_category}}</div>
           <div class="body-col">{{o.last_month_stock_count}}</div>
           <div class="body-col">{{o.last_month_onway_count}}</div>
-          <div class="body-col">{{o.product.jinyi_ungenuine_goods}}</div>
-          <div class="body-col">{{o.product.jinyi_validity}}</div>
           <div class="body-col">{{o.safe_stock}}</div>
           <div class="body-col">{{o.next_month_sales_forecast_0}}</div>
           <div class="body-col">{{o.next_month_sales_forecast_1}}</div>
@@ -88,6 +86,8 @@
           </div>
           <div class="body-col">{{o.remark}}</div>
           <div class="body-col">{{o.is_sure==='是'?'是':''}}</div>
+          <div class="body-col">{{o.product.jinyi_ungenuine_goods}}</div>
+          <div class="body-col">{{o.product.jinyi_validity}}</div>
           <div class="body-col">{{o.D03}}</div>
           <input type="number" class="body-col" ng-model="o.D03_approve" ng-keyup="updateApprove(o)">
 

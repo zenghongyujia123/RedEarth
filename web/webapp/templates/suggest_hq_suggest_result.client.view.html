@@ -91,7 +91,9 @@
       <input class="body-col" ng-model="s.remark" placeholder="超额采购需填写备注">
 
       <div class="body-col">
-        <button ng-show="s.system_suggest_count_modify_percent>=50||s.system_suggest_count_modify_percent<=-50" ng-click="sureOrder(s)">
+        <button
+            ng-show="s.system_suggest_count_modify_percent>=50||s.system_suggest_count_modify_percent<=-50||(s.system_suggest_count===0&&s.system_suggest_count_modify>0)"
+            ng-click="sureOrder(s)">
           {{s.is_sure==='是'?'已确认':'确认'}}
         </button>
       </div>

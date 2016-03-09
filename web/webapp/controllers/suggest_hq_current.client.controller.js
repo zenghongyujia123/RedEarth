@@ -37,6 +37,12 @@ angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope','$
       function upload(stocks, i) {
         HqOrderService.hqStockImport(stocks[i++])
           .then(function (data) {
+            if (data && data.err && data.err.type === 'product_not_exist') {
+              alert(data.err.message);
+              Loading.hide();
+              return $state.go('order_suggest.suggest_hq_current', {}, {reload: true});
+            }
+
             console.log(data);
             if (stocks[i]) {
               upload(stocks, i);

@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope', '$state','$rootScope', 'AuthService','HqOrderService',
-  function ($scope, $state,$rootScope, AuthService,HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope', '$state','$rootScope', 'AuthService','HqOrderService','Loading',
+  function ($scope, $state,$rootScope, AuthService,HqOrderService,Loading) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentHqSubmitOrder = function () {
       HqOrderService.getCurrentHqSubmitOrder().then(function (data) {
@@ -97,6 +97,12 @@ angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope',
       function upload(orders, i) {
         HqOrderService.hqOtherOrderImport(orders[i++])
           .then(function (data) {
+            if (data && data.err && data.err.type === 'product_not_exist') {
+              alert(data.err.message);
+              Loading.hide();
+              return $state.go('order_suggest.suggest_hq_e_commerce', {}, {reload: true});
+            }
+
             console.log(data);
             if (orders[i]) {
               upload(orders, i);

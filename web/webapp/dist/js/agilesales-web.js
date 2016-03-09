@@ -3131,6 +3131,12 @@ angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope','$
       function upload(stocks, i) {
         HqOrderService.hqStockImport(stocks[i++])
           .then(function (data) {
+            if (data && data.err && data.err.type === 'product_not_exist') {
+              alert(data.err.message);
+              Loading.hide();
+              return $state.go('order_suggest.suggest_hq_current', {}, {reload: true});
+            }
+
             console.log(data);
             if (stocks[i]) {
               upload(stocks, i);
@@ -3187,8 +3193,8 @@ angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope','$
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope', '$state','$rootScope', 'AuthService','HqOrderService',
-  function ($scope, $state,$rootScope, AuthService,HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope', '$state','$rootScope', 'AuthService','HqOrderService','Loading',
+  function ($scope, $state,$rootScope, AuthService,HqOrderService,Loading) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentHqSubmitOrder = function () {
       HqOrderService.getCurrentHqSubmitOrder().then(function (data) {
@@ -3283,6 +3289,12 @@ angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope',
       function upload(orders, i) {
         HqOrderService.hqOtherOrderImport(orders[i++])
           .then(function (data) {
+            if (data && data.err && data.err.type === 'product_not_exist') {
+              alert(data.err.message);
+              Loading.hide();
+              return $state.go('order_suggest.suggest_hq_e_commerce', {}, {reload: true});
+            }
+
             console.log(data);
             if (orders[i]) {
               upload(orders, i);
@@ -3350,8 +3362,8 @@ angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope',
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqMaoziCtrl', ['$scope','$state', '$rootScope', 'AuthService', 'HqOrderService',
-  function ($scope, $state,$rootScope, AuthService, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqMaoziCtrl', ['$scope','$state', '$rootScope', 'AuthService', 'HqOrderService','Loading',
+  function ($scope, $state,$rootScope, AuthService, HqOrderService,Loading) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentHqSubmitOrder = function () {
       HqOrderService.getCurrentHqSubmitOrder().then(function (data) {
@@ -3445,6 +3457,12 @@ angular.module('agilesales-web').controller('SuggestHqMaoziCtrl', ['$scope','$st
       function upload(orders, i) {
         HqOrderService.hqOtherOrderImport(orders[i++])
           .then(function (data) {
+            if (data && data.err && data.err.type === 'product_not_exist') {
+              alert(data.err.message);
+              Loading.hide();
+              return $state.go('order_suggest.suggest_hq_maozi', {}, {reload: true});
+            }
+
             console.log(data);
             if (orders[i]) {
               upload(orders, i);
@@ -3512,8 +3530,8 @@ angular.module('agilesales-web').controller('SuggestHqMaoziCtrl', ['$scope','$st
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqOtherY02Ctrl', ['$scope', '$state', '$rootScope', 'HqOrderService',
-  function ($scope, $state, $rootScope, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqOtherY02Ctrl', ['$scope', '$state', '$rootScope', 'HqOrderService','Loading',
+  function ($scope, $state, $rootScope, HqOrderService,Loading) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentHqSubmitOrder = function () {
       HqOrderService.getCurrentHqSubmitOrder().then(function (data) {
@@ -3603,6 +3621,11 @@ angular.module('agilesales-web').controller('SuggestHqOtherY02Ctrl', ['$scope', 
       function upload(orders, i) {
         HqOrderService.hqOtherOrderImport(orders[i++])
           .then(function (data) {
+            if (data && data.err && data.err.type === 'product_not_exist') {
+              alert(data.err.message);
+              Loading.hide();
+              return $state.go('order_suggest.suggest_hq_other_Y02', {}, {reload: true});
+            }
             console.log(data);
             if (orders[i]) {
               upload(orders, i);
@@ -3674,8 +3697,8 @@ angular.module('agilesales-web').controller('SuggestHqOtherY02Ctrl', ['$scope', 
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqOtherY03Ctrl', ['$scope','$state', '$rootScope', 'HqOrderService',
-  function ($scope, $state,$rootScope, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqOtherY03Ctrl', ['$scope','$state', '$rootScope', 'HqOrderService','Loading',
+  function ($scope, $state,$rootScope, HqOrderService,Loading) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentHqSubmitOrder = function () {
       HqOrderService.getCurrentHqSubmitOrder().then(function (data) {
@@ -3765,6 +3788,11 @@ angular.module('agilesales-web').controller('SuggestHqOtherY03Ctrl', ['$scope','
       function upload(orders, i) {
         HqOrderService.hqOtherOrderImport(orders[i++])
           .then(function (data) {
+            if (data && data.err && data.err.type === 'product_not_exist') {
+              alert(data.err.message);
+              Loading.hide();
+              return $state.go('order_suggest.suggest_hq_other_Y03', {}, {reload: true});
+            }
             console.log(data);
             if (orders[i]) {
               upload(orders, i);
@@ -3836,8 +3864,8 @@ angular.module('agilesales-web').controller('SuggestHqOtherY03Ctrl', ['$scope','
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqOtherY04Ctrl', ['$scope','$state', '$rootScope', 'HqOrderService',
-  function ($scope, $state,$rootScope, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqOtherY04Ctrl', ['$scope', '$state', '$rootScope', 'HqOrderService', 'Loading',
+  function ($scope, $state, $rootScope, HqOrderService, Loading) {
 
     $scope.curSubmitOrder = {};
     $scope.getCurrentHqSubmitOrder = function () {
@@ -3928,6 +3956,11 @@ angular.module('agilesales-web').controller('SuggestHqOtherY04Ctrl', ['$scope','
       function upload(orders, i) {
         HqOrderService.hqOtherOrderImport(orders[i++])
           .then(function (data) {
+            if (data && data.err && data.err.type === 'product_not_exist') {
+              alert(data.err.message);
+              Loading.hide();
+              return $state.go('order_suggest.suggest_hq_other_Y04', {}, {reload: true});
+            }
             console.log(data);
             if (orders[i]) {
               upload(orders, i);
@@ -3999,8 +4032,8 @@ angular.module('agilesales-web').controller('SuggestHqOtherY04Ctrl', ['$scope','
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqOtherOrderCtrl', ['$scope', '$state', '$rootScope', 'HqOrderService',
-  function ($scope, $state, $rootScope, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqOtherOrderCtrl', ['$scope', '$state', '$rootScope', 'HqOrderService','Loading',
+  function ($scope, $state, $rootScope, HqOrderService,Loading) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单',
       btns: [
@@ -4053,6 +4086,11 @@ angular.module('agilesales-web').controller('SuggestHqOtherOrderCtrl', ['$scope'
       function upload(orders, i) {
         HqOrderService.hqOtherOrderImport(orders[i++])
           .then(function (data) {
+            if (data && data.err && data.err.type === 'product_not_exist') {
+              alert(data.err.message);
+              Loading.hide();
+              return $state.go('order_suggest.suggest_hq_other_order', {}, {reload: true});
+            }
             console.log(data);
             if (orders[i]) {
               upload(orders, i);

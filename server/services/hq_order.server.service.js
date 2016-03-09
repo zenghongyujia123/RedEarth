@@ -82,8 +82,12 @@ exports.hqStockImport = function (user, stocks, callback) {
 
   async.each(stocks, function (stock, eachCallback) {
     Product.findOne({product_number: stock.product_number}, function (err, product) {
-      if (err || !product)
+      if (err )
         return eachCallback();
+
+      if(!product){
+        return eachCallback({err: {type: 'product_not_exist', message: '产品编号为 : ' + stock.product_number + ' 的产品不存在'}});
+      }
 
       HqSales.findOne({
         month: month,
@@ -225,43 +229,54 @@ exports.getHqOtherOrders = function (user, info, callback) {
 exports.hqOtherOrderImport = function (user, orders, callback) {
   var month = getLastMonth(1);
   async.each(orders, function (order, eachCallback) {
-    HqOrder.findOne({
-      month: month,
-      product_number: order.product_number,
-      order_type: order.order_type
-    }, function (err, hqOrder) {
+    Product.findOne({product_number: order.product_number}, function (err, product) {
       if (err) {
-        return callback({err: error.system.db_error});
+        return eachCallback({err: error.system.db_error});
       }
 
-      if (!hqOrder) {
-        hqOrder = new HqOrder({
-          month: month,
-          product_number: order.product_number
-        });
+      if (!product) {
+        return eachCallback({err: {type: 'product_not_exist', message: '产品编号为 : ' + order.product_number + ' 的产品不存在'}});
       }
 
-      hqOrder.product_name = order.product_name;
-      hqOrder.product_barcode = order.product_barcode;
-      hqOrder.category = order.category;
-      hqOrder.sales_price = isNaN(parseFloat(order.sales_price)) ? 0 : parseFloat(order.sales_price);
-      hqOrder.jinyi_cost = isNaN(parseFloat(order.jinyi_cost)) ? 0 : parseFloat(order.jinyi_cost);
-      hqOrder.order_number = month + user.username + order.order_type;
-      hqOrder.order_count = isNaN(parseInt(order.order_count)) ? 0 : parseInt(order.order_count);
-      hqOrder.order_type = order.order_type;
-      hqOrder.jinyi_total_price = isNaN(parseFloat(order.jinyi_total_price)) ? 0 : parseFloat(order.jinyi_total_price);
-      hqOrder.save(function (err) {
-        HqSales.findOne({product_number: hqOrder.product_number, month: getLastMonth(1)}, function (err, hqSales) {
-          if (err || !hqSales) {
-            return eachCallback();
-          }
-          hqSales[hqOrder.order_type] = hqOrder.order_count;
-          hqSales.save(function (err) {
-            return eachCallback();
-          })
+      HqOrder.findOne({
+        month: month,
+        product_number: order.product_number,
+        order_type: order.order_type
+      }, function (err, hqOrder) {
+        if (err) {
+          return callback({err: error.system.db_error});
+        }
+
+        if (!hqOrder) {
+          hqOrder = new HqOrder({
+            month: month,
+            product_number: order.product_number
+          });
+        }
+
+        hqOrder.product_name = order.product_name;
+        hqOrder.product_barcode = order.product_barcode;
+        hqOrder.category = order.category;
+        hqOrder.sales_price = isNaN(parseFloat(order.sales_price)) ? 0 : parseFloat(order.sales_price);
+        hqOrder.jinyi_cost = isNaN(parseFloat(order.jinyi_cost)) ? 0 : parseFloat(order.jinyi_cost);
+        hqOrder.order_number = month + user.username + order.order_type;
+        hqOrder.order_count = isNaN(parseInt(order.order_count)) ? 0 : parseInt(order.order_count);
+        hqOrder.order_type = order.order_type;
+        hqOrder.jinyi_total_price = isNaN(parseFloat(order.jinyi_total_price)) ? 0 : parseFloat(order.jinyi_total_price);
+        hqOrder.save(function (err) {
+          HqSales.findOne({product_number: hqOrder.product_number, month: getLastMonth(1)}, function (err, hqSales) {
+            if (err || !hqSales) {
+              return eachCallback();
+            }
+            hqSales[hqOrder.order_type] = hqOrder.order_count;
+            hqSales.save(function (err) {
+              return eachCallback();
+            })
+          });
         });
       });
     });
+
   }, function (err) {
     return callback(err, {});
   });

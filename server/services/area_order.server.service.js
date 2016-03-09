@@ -223,7 +223,7 @@ exports.getSalesByArea = function (user, callback) {
     return callback(null, areaSalse);
   })
 };
-
+var new_count = 1;
 exports.historyAreaSalesStockOnwayImport = function (user, sales, callback) {
   async.each(sales, function (sale, eachCallback) {
     if (!sale.department || !sale.product_number || !sale.month) {
@@ -235,8 +235,12 @@ exports.historyAreaSalesStockOnwayImport = function (user, sales, callback) {
     }
 
     Product.findOne({product_number: sale.product_number}, function (err, product) {
-      if (err || !product)
+      if (err)
         return eachCallback();
+
+      if (!product) {
+        return eachCallback({err: {type: 'product_not_exist', message: '产品编号为 : ' + sale.product_number + ' 的产品不存在'}});
+      }
 
       AreaSales.findOne({
         product_number: sale.product_number,
@@ -251,6 +255,10 @@ exports.historyAreaSalesStockOnwayImport = function (user, sales, callback) {
           areaSale = new AreaSales({
             username: user.username
           });
+        }
+        else {
+          console.log('sdfadfads-------' + areaSale.product_number);
+          console.log('old sales ----------------' + new_count++);
         }
 
         areaSale.department = sale.department;
@@ -270,6 +278,9 @@ exports.historyAreaSalesStockOnwayImport = function (user, sales, callback) {
         }
 
         areaSale.save(function (err) {
+          if (err) {
+            console.log(err);
+          }
           return eachCallback();
         });
       });

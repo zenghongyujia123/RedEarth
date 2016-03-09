@@ -1303,8 +1303,14 @@ angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$sta
       ];
 
       function upload(sales, i) {
+        console.log(i);
         AreaOrderService.importsHistorySales(sales[i++])
           .then(function (data) {
+            if (data && data.err && data.err.type === 'product_not_exist') {
+              alert(data.err.message);
+              return $state.go('order_history.history_sales', {}, {reload: true});
+            }
+
             console.log(data);
             if (sales[i]) {
               upload(sales, i);

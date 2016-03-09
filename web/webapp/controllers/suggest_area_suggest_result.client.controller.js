@@ -30,11 +30,10 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
               ]
             });
           }
-          else{
+          else {
             $scope.$emit('suggest.import.changed', {
               title: '建议订单 地区建议订单（SKU）=当月预测-[地区库存(包括店柜库存) +在途-未来6月销售预测-其他订单(批发)-安全库存）]',
-              btns: [
-              ]
+              btns: []
             });
           }
 
@@ -63,12 +62,12 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
 
     $scope.getSystemAreaSuggest = function (sale) {
       var next_6_month_forecast =
-        sale.next_month_sales_forecast_0 +
         sale.next_month_sales_forecast_1 +
         sale.next_month_sales_forecast_2 +
         sale.next_month_sales_forecast_3 +
         sale.next_month_sales_forecast_4 +
-        sale.next_month_sales_forecast_5;
+        sale.next_month_sales_forecast_5 +
+        sale.next_month_sales_forecast_6;
       var other_order_count = parseInt(sale.D02) + parseInt(sale.D03) + parseInt(sale.D04);
       sale.system_suggest_count = parseInt(sale.next_month_sales_forecast_0 - (sale.last_month_stock_count + sale.last_month_onway_count - next_6_month_forecast - other_order_count - sale.safe_stock));
 
@@ -109,7 +108,7 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
           if (!sale.remark) {
             return alert('产品编码:' + sale.product.product_number + '超额订购需填写备注');
           }
-          if(sale.is_sure!=='是'){
+          if (sale.is_sure !== '是') {
             return alert('产品编码:' + sale.product.product_number + '超额订购需上级确认');
           }
         }

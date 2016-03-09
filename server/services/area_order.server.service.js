@@ -178,14 +178,17 @@ exports.otherOrderImport = function (user, orders, callback) {
         areaOrder.product_barcode = order.product_name;
         areaOrder.category = order.category;
         areaOrder.mid_classify = order.mid_classify;
-        areaOrder.sales_price = parseFloat(order.sales_price);
+        areaOrder.sales_price = isNaN(parseFloat(order.sales_price)) ? 0 : parseFloat(order.sales_price);
         areaOrder.order_number = order_number + order.order_type;
-        areaOrder.order_count = parseInt(order.order_count);
+        areaOrder.order_count = isNaN(parseInt(order.order_count)) ? 0 : parseInt(order.order_count);
         areaOrder.order_type = order.order_type;
-        areaOrder.total_price = parseFloat(order.total_price);
+        areaOrder.total_price = isNaN(parseFloat(order.total_price)) ? 0 : parseFloat(order.total_price);
         areaOrder.department = user.department;
         areaOrder.month = month;
         areaOrder.save(function (err) {
+          if (err) {
+            console.log(err);
+          }
           return eachCallback();
         });
       });

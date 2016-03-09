@@ -34,3 +34,12 @@ exports.getDesks = function (req, res, next) {
   });
 };
 
+exports.clearData  = function (req, res, next) {
+  productService.clearData(req.user, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};
+

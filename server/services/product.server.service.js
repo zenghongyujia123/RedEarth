@@ -7,7 +7,14 @@ var appDb = require('./../../libraries/mongoose').appDb,
   error = require('./../../errors/all'),
   async = require('async'),
   Desk = appDb.model('Desk'),
-  Product = appDb.model('Product');
+  AreaOrder = appDb.model('AreaOrder'),
+  AreaSales = appDb.model('AreaSales'),
+  AreaSubmitOrder = appDb.model('AreaSubmitOrder'),
+  Product = appDb.model('Product'),
+  HqOrder = appDb.model('HqOrder'),
+  ReLog = appDb.model('ReLog'),
+  HqSubmitOrder = appDb.model('HqSubmitOrder'),
+  HqSales = appDb.model('HqSales');
 
 exports.getProducts = function (user, callback) {
   Product.find({}, function (err, products) {
@@ -104,6 +111,34 @@ exports.getDesks = function (user, callback) {
 
 exports.importDesks = function (user, callback) {
 
+};
+
+exports.clearData = function (user, callback) {
+  AreaOrder.remove({}, function () {
+    console.log('remove AreaOrder');
+    AreaSales.remove({}, function () {
+      console.log('remove AreaSales');
+      AreaSubmitOrder.remove({}, function () {
+        console.log('remove AreaSubmitOrder');
+        Product.remove({}, function () {
+          console.log('remove Product');
+          HqOrder.remove({}, function () {
+            console.log('remove HqOrder');
+            ReLog.remove({}, function () {
+              console.log('remove ReLog');
+              HqSubmitOrder.remove({}, function () {
+                console.log('remove HqSubmitOrder');
+                HqSales.remove({}, function () {
+                  console.log('remove HqSales');
+                  return callback(null, {});
+                });
+              });
+            });
+          });
+        });
+      });
+    })
+  });
 };
 
 

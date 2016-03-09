@@ -9,9 +9,23 @@ angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$s
         {
           text: '导入产品资料',
           clickCallback: importClickCallback
+        },
+        {
+          text: '清除数据',
+          clickCallback: clearClickCallback
         }
       ]
     });
+
+    function clearClickCallback(){
+      ProductService.clearData().then(function(data){
+        console.log(data);
+        alert('ok');
+        $state.go('order_history.history_product', {}, {reload: true});
+      },function(data){
+        console.log(data);
+      });
+    }
 
     $scope.products = [];
     $scope.getProducts = function () {

@@ -11,6 +11,9 @@ angular.module('agilesales-web').factory('ProductService', ['HttpService', funct
     },
     getDesks: function () {
       return HttpService.get('/webapp/desk', {});
+    },
+    clearData: function () {
+      return HttpService.post('/webapp/data/clear', {});
     }
   };
 }]);

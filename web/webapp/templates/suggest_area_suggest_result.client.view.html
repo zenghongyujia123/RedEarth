@@ -76,7 +76,7 @@
       <input class="body-col" ng-model="o.remark" placeholder="超额订购请点击备注">
 
       <div class="body-col">
-        <button ng-show="o.system_suggest_count_modify_percent>=50||o.system_suggest_count_modify_percent<=-50||(s.system_suggest_count===0&&s.system_suggest_count_modify>0)" ng-click="sureOrder(o)">
+        <button ng-show="o.system_suggest_count_modify_percent>=50||o.system_suggest_count_modify_percent<=-50||(o.system_suggest_count===0&&o.system_suggest_count_modify>0)" ng-click="sureOrder(o)">
           {{o.is_sure==='是'?'已确认':'确认'}}
         </button>
       </div>

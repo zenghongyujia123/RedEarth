@@ -33,6 +33,7 @@
     "mongoose": "~3.8.8",
     "mongoose-timestamp": "^0.4.0",
     "morgan": "~1.2.2",
+    "node-xlsx": "^0.6.0",
     "protobufjs": "^3.8.2",
     "q": "^1.0.1",
     "qiniu": "^6.1.9",

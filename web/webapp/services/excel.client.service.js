@@ -7,9 +7,13 @@
 
 'use strict';
 angular.module('agilesales-web').factory('ExcelReaderService', function () {
+  function isIE() {
+    var myNav = navigator.userAgent.toLowerCase();
+    return (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) : false;
+  }
 
   var activeXReader = {
-    getWorkSheet: function (element,sheetName, callback) {
+    getWorkSheet: function (element, sheetName, callback) {
       var fileObject = document.getElementById('filename');
       fileObject.select();
       fileObject.blur();
@@ -51,6 +55,35 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
       }
       return true;
     },
+    exportExcel: function (rows) {
+      var workSheetName = "Sheet1";
+      console.log('data:');
+      var data = rows;
+      console.log(data);
+      if (isIE()) {
+        var excel = new ActiveXObject('Excel.Application');
+        var excel_book = excel.Workbooks.Add;
+        var excel_sheet = excel_book.Worksheets(1);
+        for (var i = 0; i < data.length; i++) {
+          for (var j = 0; j < data[i].length; j++) {
+            excel_sheet.Cells(i + 1, j + 1).Value = data[i][j];
+          }
+        }
+        excel.Visible = true;
+        excel.UserControl = true;
+      }
+      else {
+        var wookBook = new Workbook();
+        var wookSheet = sheet_from_array_of_arrays(data);
+
+        /* add worksheet to workbook */
+        wookBook.SheetNames.push(workSheetName);
+        wookBook.Sheets[workSheetName] = wookSheet;
+
+        var wbout = XLSX.write(wookBook, {bookType: 'xlsx', bookSST: false, type: 'binary'});
+        saveAs(new Blob([s2ab(wbout)], {type: "application/octet-stream"}), "Sheet1.xlsx");
+      }
+    },
     getSheetData: function (excelSheet, headers, callback) {
       var dataArray = [];
       var columnCount = excelSheet.UsedRange.Columns.Count;
@@ -78,7 +111,7 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
   };
 
   var otherReader = {
-    getWorkSheet: function (element,sheetName, callback) {
+    getWorkSheet: function (element, sheetName, callback) {
       var file = element.files[0];
       var suffix = file.name.substring(file.name.lastIndexOf('.') + 1).toLowerCase();
       if (suffix !== 'xls' && suffix !== 'xlsx') {
@@ -125,7 +158,7 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
         reader.readAsArrayBuffer(file);
       }
     },
-    checkHeader: function (workbook, headers,sheetName, callback) {
+    checkHeader: function (workbook, headers, sheetName, callback) {
       var excelSheet = workbook.Sheets[sheetName];
       if (!excelSheet) {
         return callback(false);
@@ -145,7 +178,7 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
       }
       return callback(true);
     },
-    isHeaderNameExist: function (workbook, headerColumn,sheetName) {
+    isHeaderNameExist: function (workbook, headerColumn, sheetName) {
       var excelSheet = workbook.Sheets[0];
       if (!excelSheet) {
         return false;
@@ -159,7 +192,7 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
       }
       return false;
     },
-    getSheetData: function (workbook, headers, sheetName,callback) {
+    getSheetData: function (workbook, headers, sheetName, callback) {
       //目前只取第一个sheet的内容
       var xlsSheetArray = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
       //var jsonResultString = JSON.stringify(xlsSheetArray);
@@ -168,6 +201,35 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
         return callback({type: 'file_content_empty', message: '表格中没有数据'});
       }
       return callback(null, xlsSheetArray);
+    },
+    exportExcel: function (rows) {
+      var workSheetName = "Sheet1";
+      console.log('data:');
+      var data = rows;
+      console.log(data);
+      if (isIE()) {
+        var excel = new ActiveXObject('Excel.Application');
+        var excel_book = excel.Workbooks.Add;
+        var excel_sheet = excel_book.Worksheets(1);
+        for (var i = 0; i < data.length; i++) {
+          for (var j = 0; j < data[i].length; j++) {
+            excel_sheet.Cells(i + 1, j + 1).Value = data[i][j];
+          }
+        }
+        excel.Visible = true;
+        excel.UserControl = true;
+      }
+      else {
+        var wookBook = new Workbook();
+        var wookSheet = sheet_from_array_of_arrays(data);
+
+        /* add worksheet to workbook */
+        wookBook.SheetNames.push(workSheetName);
+        wookBook.Sheets[workSheetName] = wookSheet;
+
+        var wbout = XLSX.write(wookBook, {bookType: 'xlsx', bookSST: false, type: 'binary'});
+        saveAs(new Blob([s2ab(wbout)], {type: "application/octet-stream"}), "Sheet1.xlsx");
+      }
     }
   };
 

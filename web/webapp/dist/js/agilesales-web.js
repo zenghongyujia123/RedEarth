@@ -703,9 +703,13 @@ angular.module('agilesales-web').factory('AuthService', ['localStorageService', 
 
 'use strict';
 angular.module('agilesales-web').factory('ExcelReaderService', function () {
+  function isIE() {
+    var myNav = navigator.userAgent.toLowerCase();
+    return (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) : false;
+  }
 
   var activeXReader = {
-    getWorkSheet: function (element,sheetName, callback) {
+    getWorkSheet: function (element, sheetName, callback) {
       var fileObject = document.getElementById('filename');
       fileObject.select();
       fileObject.blur();
@@ -747,6 +751,35 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
       }
       return true;
     },
+    exportExcel: function (rows) {
+      var workSheetName = "Sheet1";
+      console.log('data:');
+      var data = rows;
+      console.log(data);
+      if (isIE()) {
+        var excel = new ActiveXObject('Excel.Application');
+        var excel_book = excel.Workbooks.Add;
+        var excel_sheet = excel_book.Worksheets(1);
+        for (var i = 0; i < data.length; i++) {
+          for (var j = 0; j < data[i].length; j++) {
+            excel_sheet.Cells(i + 1, j + 1).Value = data[i][j];
+          }
+        }
+        excel.Visible = true;
+        excel.UserControl = true;
+      }
+      else {
+        var wookBook = new Workbook();
+        var wookSheet = sheet_from_array_of_arrays(data);
+
+        /* add worksheet to workbook */
+        wookBook.SheetNames.push(workSheetName);
+        wookBook.Sheets[workSheetName] = wookSheet;
+
+        var wbout = XLSX.write(wookBook, {bookType: 'xlsx', bookSST: false, type: 'binary'});
+        saveAs(new Blob([s2ab(wbout)], {type: "application/octet-stream"}), "Sheet1.xlsx");
+      }
+    },
     getSheetData: function (excelSheet, headers, callback) {
       var dataArray = [];
       var columnCount = excelSheet.UsedRange.Columns.Count;
@@ -774,7 +807,7 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
   };
 
   var otherReader = {
-    getWorkSheet: function (element,sheetName, callback) {
+    getWorkSheet: function (element, sheetName, callback) {
       var file = element.files[0];
       var suffix = file.name.substring(file.name.lastIndexOf('.') + 1).toLowerCase();
       if (suffix !== 'xls' && suffix !== 'xlsx') {
@@ -821,7 +854,7 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
         reader.readAsArrayBuffer(file);
       }
     },
-    checkHeader: function (workbook, headers,sheetName, callback) {
+    checkHeader: function (workbook, headers, sheetName, callback) {
       var excelSheet = workbook.Sheets[sheetName];
       if (!excelSheet) {
         return callback(false);
@@ -841,7 +874,7 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
       }
       return callback(true);
     },
-    isHeaderNameExist: function (workbook, headerColumn,sheetName) {
+    isHeaderNameExist: function (workbook, headerColumn, sheetName) {
       var excelSheet = workbook.Sheets[0];
       if (!excelSheet) {
         return false;
@@ -855,7 +888,7 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
       }
       return false;
     },
-    getSheetData: function (workbook, headers, sheetName,callback) {
+    getSheetData: function (workbook, headers, sheetName, callback) {
       //目前只取第一个sheet的内容
       var xlsSheetArray = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
       //var jsonResultString = JSON.stringify(xlsSheetArray);
@@ -864,6 +897,35 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
         return callback({type: 'file_content_empty', message: '表格中没有数据'});
       }
       return callback(null, xlsSheetArray);
+    },
+    exportExcel: function (rows) {
+      var workSheetName = "Sheet1";
+      console.log('data:');
+      var data = rows;
+      console.log(data);
+      if (isIE()) {
+        var excel = new ActiveXObject('Excel.Application');
+        var excel_book = excel.Workbooks.Add;
+        var excel_sheet = excel_book.Worksheets(1);
+        for (var i = 0; i < data.length; i++) {
+          for (var j = 0; j < data[i].length; j++) {
+            excel_sheet.Cells(i + 1, j + 1).Value = data[i][j];
+          }
+        }
+        excel.Visible = true;
+        excel.UserControl = true;
+      }
+      else {
+        var wookBook = new Workbook();
+        var wookSheet = sheet_from_array_of_arrays(data);
+
+        /* add worksheet to workbook */
+        wookBook.SheetNames.push(workSheetName);
+        wookBook.Sheets[workSheetName] = wookSheet;
+
+        var wbout = XLSX.write(wookBook, {bookType: 'xlsx', bookSST: false, type: 'binary'});
+        saveAs(new Blob([s2ab(wbout)], {type: "application/octet-stream"}), "Sheet1.xlsx");
+      }
     }
   };
 
@@ -2772,8 +2834,8 @@ angular.module('agilesales-web').controller('SuggestAreaOtherOrderCtrl', ['$scop
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService', 'Loading',
-  function ($scope, $rootScope, $state, AreaOrderService, Loading) {
+angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService', 'Loading', 'ExcelReaderService',
+  function ($scope, $rootScope, $state, AreaOrderService, Loading, ExcelReaderService) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentAreaSubmitOrder = function () {
       AreaOrderService.getCurrentAreaSubmitOrder().then(function (data) {
@@ -2797,6 +2859,10 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
                 {
                   text: '提交',
                   clickCallback: suggestOrderSubmit
+                },
+                {
+                  text: '导出',
+                  clickCallback: exportExecl
                 }
               ]
             });
@@ -2804,7 +2870,12 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
           else {
             $scope.$emit('suggest.import.changed', {
               title: '建议订单 地区建议订单（SKU）=当月预测-[地区库存(包括店柜库存) +在途-未来6月销售预测-其他订单(批发)-安全库存）]',
-              btns: []
+              btns: [
+                {
+                  text: '导出',
+                  clickCallback: exportExecl
+                }
+              ]
             });
           }
 
@@ -2935,6 +3006,86 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
         console.log(data);
       });
     };
+
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [['SKU编码',
+        '产品名称',
+        '产品条码',
+        '品类',
+        '中分类名称',
+        '销售价格',
+        'ABC分类',
+        'ABC类说明',
+        'ABC类别%',
+        '上月月结库存包括店柜库存',
+        '在途已订购未交货',
+        '安全库存2个月',
+        '当月销售预测',
+        '后1月销售预测',
+        '后2月销售预测',
+        '后3月销售预测',
+        '后4月销售预测',
+        '后5月销售预测',
+        '后6月销售预测',
+        '当月上传批发订单',
+        '当月订单系统建议',
+        '修改',
+        '修改%',
+        '备注',
+        '确认超额订购',
+        '上传订单试用装',
+        '上传订单陈列',
+        '最终审批试用装',
+        '最终审批陈列',
+        '最终审批订货数',
+        '总金额',
+        '审批状态'
+      ]];
+
+      $scope.orders.forEach(function (o) {
+        rows.push([
+          o.product.product_number,
+          o.product.product_name,
+          o.product.product_barcode,
+          o.product.category,
+          o.product.mid_classify,
+          o.product.sales_price,
+          o.product.abc_classify,
+          o.product.abc_classify_explain,
+          o.product.abc_category,
+          o.last_month_stock_count,
+          o.last_month_onway_count,
+          o.safe_stock,
+          o.next_month_sales_forecast_0,
+          o.next_month_sales_forecast_1,
+          o.next_month_sales_forecast_2,
+          o.next_month_sales_forecast_3,
+          o.next_month_sales_forecast_4,
+          o.next_month_sales_forecast_5,
+          o.next_month_sales_forecast_6,
+          o.D02,
+          o.system_suggest_count,
+          o.system_suggest_count_modify,
+          o.system_suggest_count_modify_percent + '%',
+          o.remark,
+          o.is_sure === '是' ? '已确认' : '',
+          o.D03,
+          o.D04,
+          o.D03_approve,
+          o.D04_approve,
+          o.D01_approve,
+          (o.D01_approve + o.D02_approve + o.D03_approve) * o.product.sales_price,
+          o.status
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
+    }
   }]);
 /**
  * Created by zenghong on 16/1/15.
@@ -4186,8 +4337,8 @@ angular.module('agilesales-web').controller('SuggestHqOtherOrderCtrl', ['$scope'
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$scope', '$state', '$rootScope', 'HqOrderService',
-  function ($scope, $state, $rootScope, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$scope', '$state', '$rootScope', 'HqOrderService','ExcelReaderService',
+  function ($scope, $state, $rootScope, HqOrderService,ExcelReaderService) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentHqSubmitOrder = function () {
       HqOrderService.getCurrentHqSubmitOrder().then(function (data) {
@@ -4220,6 +4371,10 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
                 {
                   text: '提交',
                   clickCallback: suggestOrderSubmit
+                },
+                {
+                  text: '导出',
+                  clickCallback: exportExecl
                 }
               ]
             });
@@ -4283,11 +4438,11 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
 
       for (var i = 0; i < $scope.suggests.length; i++) {
         var sale = $scope.suggests[i];
-        if (sale.system_suggest_count_modify_percent >= 50 || sale.system_suggest_count_modify_percent < -50||isNaN(sale.system_suggest_count_modify_percent)) {
+        if (sale.system_suggest_count_modify_percent >= 50 || sale.system_suggest_count_modify_percent < -50 || isNaN(sale.system_suggest_count_modify_percent)) {
           if (!sale.remark) {
             return alert('产品编码:' + sale.product.product_number + '超额订购需填写备注');
           }
-          if(sale.is_sure!=='是'){
+          if (sale.is_sure !== '是') {
             return alert('产品编码:' + sale.product.product_number + '超额订购需上级确认');
           }
         }
@@ -4348,6 +4503,101 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
         console.log(data);
       });
     };
+
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [[
+        'SKU编码',
+        '产品名称',
+        '产品条码',
+        '品类',
+        '中分类名称',
+        '销售价格',
+        '晋颖成本价',
+        'ABC分类',
+        'ABC类说明',
+        'ABC类别%',
+        '上月月结库存总部正品库存',
+        '上月月结总部在途',
+        '月均销售前3个月平均',
+        '安全库存2个月',
+        '后1月销售预测',
+        '后2月销售预测',
+        '后3月销售预测',
+        '后4月销售预测',
+        '后5月销售预测',
+        '后6月销售预测',
+        '当月汇总地区已审批订单',
+        '当月汇总地区已审批试用装',
+        '当月汇总地区已审批陈列',
+        '上传其他订单批发',
+        '上传其他订单试用装',
+        '上传其他订单陈列',
+        '上传其他订单经销商',
+        '上传其他订单电商',
+        '上传其他订单茂姿',
+        '当月总部订单系统建议',
+        '修改',
+        '修改%',
+        '当月总部订单moq系统建议',
+        '备注',
+        '已取得上级核准',
+        '澳妆最终审批采购量',
+        '澳妆最终审批采购金额',
+        '澳妆最终审批零售金额',
+        '审核状态'
+      ]];
+
+      $scope.suggests.forEach(function (o) {
+        rows.push([
+          o.product.product_number,
+          o.product.product_name,
+          o.product.product_barcode,
+          o.product.category,
+          o.product.mid_classify,
+          o.product.sales_price,
+          o.product.jinyi_cost,
+          o.product.abc_classify,
+          o.product.abc_classify_explain,
+          o.product.abc_category,
+          o.genuine_goods,
+          o.onway_goods,
+          o.next_month_sales_forecast_0,
+          o.safe_stock,
+          o.next_month_sales_forecast_1,
+          o.next_month_sales_forecast_2,
+          o.next_month_sales_forecast_3,
+          o.next_month_sales_forecast_4,
+          o.next_month_sales_forecast_5,
+          o.next_month_sales_forecast_6,
+          o.D01_approve,
+          o.D03_approve,
+          o.D04_approve,
+          o.Y02,
+          o.Y03,
+          o.Y04,
+          o.Y05,
+          o.Y06,
+          o.Y07,
+          o.system_suggest_count,
+          o.system_suggest_count_modify,
+          o.system_suggest_count_modify_percent+'%',
+          o.final_system_suggest_count,
+          o.remark,
+          o.is_sure==='是'?'已确认':'',
+          o.final_purchased_count,
+          o.final_purchased_count*o.product.jinyi_cost,
+          o.final_purchased_count*o.product.sales_price,
+          o.status
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
+    }
   }]);
 /**
  * Created by zenghong on 16/1/15.

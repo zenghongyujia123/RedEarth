@@ -1,10 +1,8 @@
 <div class="re-table">
-  <div class="re-table-header" style="width: 1700px;min-width: 100%">
+  <div class="re-table-header" style="width: 1900px;min-width: 100%">
     <div class="re-table-row">
-      <div class="re-table-left-header" zz-float-left>
-        <div class="left-header-col">SKU编码</div>
-      </div>
       <div class="header-col">SKU编码</div>
+      <div class="header-col">产品名称</div>
       <div class="header-col">上月月结库存</div>
       <div class="header-col">上月月结在途</div>
       <div class="header-col">上1个月销售量</div>
@@ -13,12 +11,10 @@
       <div class="header-col">序号</div>
     </div>
   </div>
-  <div class="re-table-body" style="width: 1700px;min-width: 100%">
-    <div class="re-table-left-header" zz-float-left>
-      <div class="left-col" ng-repeat="s in sales">{{s.product_number}}</div>
-    </div>
+  <div class="re-table-body" style="width: 1900px;min-width: 100%">
     <div class="re-table-row" ng-repeat="s in sales">
       <div class="body-col">{{($index+1)+'.'+s.product_number}}</div>
+      <div class="body-col">{{s.product.product_name}}</div>
       <div class="body-col">{{s.last_month_stock_count}}</div>
       <div class="body-col">{{s.last_month_onway_count}}</div>
       <div class="body-col">{{s.last_month_sales_count}}</div>

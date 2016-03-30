@@ -9,10 +9,6 @@ angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$s
         {
           text: '导入产品资料',
           clickCallback: importClickCallback
-        },
-        {
-          text: '清除数据',
-          clickCallback: clearClickCallback
         }
       ]
     });

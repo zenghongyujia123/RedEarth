@@ -216,7 +216,7 @@ exports.getOrdersByArea = function (user, order_type, callback) {
 
 exports.getSalesByArea = function (user, callback) {
   var month = getLastMonth(1);
-  AreaSales.find({department: user.department, month: month}).sort({
+  AreaSales.find({department: user.department, month: month}).populate('product').sort({
     product_number: 1
   }).exec(function (err, areaSalse) {
     if (err || !areaSalse) {

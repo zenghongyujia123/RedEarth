@@ -8,13 +8,14 @@
     <div class="re-header-right" ng-if="orders&&orders.length>0" ng-click="approveHqOrders()">
       {{orders[0].status==='已审核'?'继续审核':'审核'}}
     </div>
-    <div class="re-header-right" ng-if="orders&&orders.length>0" ng-click="importDeliveryTime()">
+    <div class="re-header-right" ng-if="orders&&orders.length>0" ng-click="importHqDeliveryTime()"
+         ng-show="orders[0].status==='已审核'">
       导入交期
     </div>
   </div>
   <div ng-if="user.account_type==='澳妆供应链'" class="re-child-body">
     <div class="re-table">
-      <div class="re-table-header" style="width: 9440px;min-width: 100%;">
+      <div class="re-table-header" style="width: 10640px;min-width: 100%;">
         <div class="re-table-left-header" zz-float-left>
           <div class="left-header-col">SKU编码</div>
         </div>
@@ -31,7 +32,6 @@
           <div class="header-col">ABC类别%</div>
           <div class="header-col">上月月结库存总部正品库存</div>
           <div class="header-col">上月月结总部在途</div>
-
           <div class="header-col">次品</div>
           <div class="header-col">近效期库存</div>
           <div class="header-col">月均销售前3个月平均</div>
@@ -63,11 +63,19 @@
           <div class="header-col">澳妆最终审批采购量</div>
           <div class="header-col">澳妆最终审批采购金额</div>
           <div class="header-col">澳妆最终审批采购零售金额</div>
+
+          <div class="header-col" ng-show="orders[0].status==='已审核'">计划交货数</div>
+          <div class="header-col" ng-show="orders[0].status==='已审核'">计划交期</div>
+          <div class="header-col" ng-show="orders[0].status==='已审核'">实际收货数</div>
+          <div class="header-col" ng-show="orders[0].status==='已审核'">实际交期</div>
+          <div class="header-col" ng-show="orders[0].status==='已审核'">在途数</div>
+          <div class="header-col" ng-show="orders[0].status==='已审核'">剩余计划交期</div>
+
           <div class="header-col">状态</div>
           <div class="header-col">序号</div>
         </div>
       </div>
-      <div class="re-table-body" style="width: 9440px;min-width: 100%;">
+      <div class="re-table-body" style="width: 10640px;min-width: 100%;">
         <div class="re-table-left-header" zz-float-left>
           <div class="left-col" ng-repeat="o in orders">{{o.product_number}}</div>
         </div>
@@ -119,6 +127,14 @@
 
           <div class="body-col" type="number">{{s.final_purchased_count*s.product.jinyi_cost}}</div>
           <div class="body-col" type="number">{{s.final_purchased_count*s.product.sales_price}}</div>
+
+          <div class="body-col" type="number" ng-show="s.status==='已审核'">{{s.plan_delivery_count}}</div>
+          <div class="body-col" type="number" ng-show="s.status==='已审核'">{{s.plan_delivery_time| date: 'yyyy-MM-dd'}}</div>
+          <div class="body-col" type="number" ng-show="s.status==='已审核'">{{s.real_delivery_count}}</div>
+          <div class="body-col" type="number" ng-show="s.status==='已审核'">{{s.real_delivery_time| date: 'yyyy-MM-dd'}}</div>
+          <div class="body-col" type="number" ng-show="s.status==='已审核'">{{s.onway_count}}</div>
+          <div class="body-col" type="number" ng-show="s.status==='已审核'">{{s.final_plan_delivery_time| date: 'yyyy-MM-dd'}}</div>
+
           <div class="body-col red" ng-class="{green:s.status==='已审核'}">{{s.status}}</div>
           <div class="body-col">{{$index+1}}</div>
         </div>

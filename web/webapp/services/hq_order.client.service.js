@@ -34,14 +34,17 @@ angular.module('agilesales-web').factory('HqOrderService', ['HttpService', funct
     getCurrentHqSubmitOrder: function (orders) {
       return HttpService.get('/webapp/hq/sales/submit', {});
     },
-    getHqOrderDetail:function(order_number){
-      return HttpService.get('/webapp/hq/order/detail', {order_number:order_number});
+    getHqOrderDetail: function (order_number) {
+      return HttpService.get('/webapp/hq/order/detail', {order_number: order_number});
     },
     updateSubmitOtherOrderStatus: function (submit_order) {
       return HttpService.post('/webapp/hq/sales/submit_order/update', {submit_order: submit_order});
     },
-    sureOrder:function(order){
+    sureOrder: function (order) {
       return HttpService.post('/webapp/hq/order/sure', {order: order});
+    },
+    importHqDeliveryTime: function (order_number, time_infos) {
+      return HttpService.post('/webapp/hq/order/delivery_time', {time_infos: time_infos, order_number: order_number});
     }
   };
 }]);

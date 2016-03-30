@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="re-table-body">
-        <div class="re-table-row" style="width:1400px;min-width: 100%;" ng-repeat="o in orders | orderBy:created" ng-click="goDetail(o)">
+        <div class="re-table-row" style="width:1400px;min-width: 100%;" ng-repeat="o in orders | orderBy:'created':true " ng-click="goDetail(o)">
           <div class="body-col">{{$index}}</div>
           <div class="body-col">{{o.order_number}}</div>
           <div class="body-col">{{o.created | date : 'yyyy-MM-dd HH:mm'}}</div>

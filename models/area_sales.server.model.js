@@ -16,6 +16,12 @@ module.exports = function (appDb) {
     area: {
       type: String
     },
+    category: {
+      type: String
+    },
+    series_name: {
+      type: String
+    },
     department: {
       type: String
     },

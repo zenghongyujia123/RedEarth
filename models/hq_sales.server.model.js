@@ -19,6 +19,12 @@ module.exports = function (appDb) {
     mid_classify: {
       type: String
     },
+    category: {
+      type: String
+    },
+    series_name: {
+      type: String
+    },
     //正品
     genuine_goods: {
       type: Number,

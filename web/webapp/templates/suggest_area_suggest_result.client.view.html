@@ -1,14 +1,17 @@
 <div class="re-table">
-  <div class="re-table-header" style="min-width: 6800px;">
+  <div class="re-table-header" style="min-width: 7000px;">
     <div class="re-table-left-header" zz-float-left>
-      <div class="left-header-col">SKU编码</div>
+      <div class="left-header-col">序号</div>
+      <div class="left-header-col">产品名称</div>
     </div>
     <div class="re-table-row">
-      <div class="header-col">SKU编码</div>
+      <div class="header-col">序号</div>
       <div class="header-col">产品名称</div>
+      <div class="header-col">SKU编码</div>
       <div class="header-col">产品条码</div>
       <div class="header-col">品类</div>
       <div class="header-col">中分类名称</div>
+      <div class="header-col">系列名称</div>
       <div class="header-col">销售价格</div>
       <div class="header-col">ABC分类</div>
       <div class="header-col">ABC类说明</div>
@@ -36,20 +39,24 @@
       <div class="header-col">最终审批订货数</div>
       <div class="header-col">总金额</div>
       <div class="header-col">审批状态</div>
-      <div class="header-col">序号</div>
     </div>
   </div>
-  <div class="re-table-body" style="min-width: 6800px;">
+  <div class="re-table-body" style="min-width: 7000px;">
     <div class="re-table-left-header" zz-float-left>
-      <div class="left-col" ng-repeat="o in orders" ng-if="o.product">{{o.product_number}}</div>
+      <div ng-repeat="o in orders">
+        <div class="left-col">{{$index+1}}</div>
+        <div class="left-col" ng-if="o.product">{{o.product.product_name}}</div>
+      </div>
     </div>
 
     <div class="re-table-row" ng-repeat="o in orders" ng-if="o.product">
-      <div class="body-col">{{o.product.product_number}}</div>
+      <div class="body-col">{{$index+1}}</div>
       <div class="body-col">{{o.product.product_name}}</div>
+      <div class="body-col">{{o.product.product_number}}</div>
       <div class="body-col">{{o.product.product_barcode}}</div>
       <div class="body-col">{{o.product.category}}</div>
       <div class="body-col">{{o.product.mid_classify}}</div>
+      <div class="body-col">{{o.product.series_name}}</div>
       <div class="body-col">{{o.product.sales_price}}</div>
       <div class="body-col">{{o.product.abc_classify}}</div>
       <div class="body-col">{{o.product.abc_classify_explain}}</div>
@@ -88,7 +95,6 @@
       <div class="body-col">{{o.D01_approve}}</div>
       <div class="body-col">{{(o.D01_approve+o.D02_approve+o.D03_approve)*o.product.sales_price}}</div>
       <div class="body-col">{{o.status}}</div>
-      <div class="body-col">{{$index+1}}</div>
     </div>
   </div>
 </div>

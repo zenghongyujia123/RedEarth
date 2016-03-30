@@ -1,14 +1,17 @@
 <div class="re-table">
-  <div class="re-table-header" style="width: 8440px;min-width: 100%;">
+  <div class="re-table-header" style="width: 8640px;min-width: 100%;">
     <div class="re-table-left-header" zz-float-left>
-      <div class="left-header-col">SKU编码</div>
+      <div class="left-header-col">序号</div>
+      <div class="left-header-col">产品名称</div>
     </div>
     <div class="re-table-row">
-      <div class="header-col">SKU编码</div>
+      <div class="header-col">序号</div>
       <div class="header-col">产品名称</div>
+      <div class="header-col">SKU编码</div>
       <div class="header-col">产品条码</div>
       <div class="header-col">品类</div>
       <div class="header-col">中分类名称</div>
+      <div class="header-col">系列名称</div>
       <div class="header-col">销售价格</div>
       <div class="header-col">晋颖成本价</div>
       <div class="header-col">ABC分类</div>
@@ -42,19 +45,24 @@
       <div class="header-col">澳妆最终审批采购量</div>
       <div class="header-col">澳妆最终审批采购金额</div>
       <div class="header-col">澳妆最终审批零售金额</div>
-      <div class="header-col">序列</div>
     </div>
   </div>
-  <div class="re-table-body" style="width: 8440px;min-width: 100%;">
+  <div class="re-table-body" style="width: 8640px;min-width: 100%;">
     <div class="re-table-left-header" zz-float-left>
-      <div class="left-col" ng-repeat="o in suggests" ng-if="o.product">{{o.product_number}}</div>
+      <div ng-repeat="o in suggests">
+        <div class="left-col">{{$index+1}}</div>
+        <div class="left-col" ng-if="o.product">{{o.product.product_name}}</div>
+      </div>
     </div>
     <div class="re-table-row" ng-repeat="s in suggests" ng-if="s.product">
-      <div class="body-col">{{s.product_number}}</div>
+      <div class="body-col">{{$index+1}}</div>
       <div class="body-col">{{s.product.product_name}}</div>
+      <div class="body-col">{{s.product_number}}</div>
       <div class="body-col">{{s.product.product_barcode}}</div>
       <div class="body-col">{{s.product.category}}</div>
       <div class="body-col">{{s.product.mid_classify}}</div>
+
+      <div class="body-col">{{s.product.series_name}}</div>
       <div class="body-col">{{s.product.sales_price}}</div>
       <div class="body-col">{{s.product.jinyi_cost}}</div>
       <div class="body-col">{{s.product.abc_classify}}</div>
@@ -101,7 +109,6 @@
       <div class="body-col">{{s.final_purchased_count*s.product.jinyi_cost}}</div>
       <div class="body-col">{{s.final_purchased_count*s.product.sales_price}}</div>
       <div class="body-col red" ng-class="{green:s.status==='已审核'}">{{s.status}}</div>
-      <div class="body-col">{{$index+1}}</div>
     </div>
   </div>
 </div>

@@ -1857,10 +1857,10 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state
   function ($scope, $state, AreaOrderService, HqOrderService, AuthService, Loading) {
     $scope.goDetail = function (o) {
       if ($scope.user.account_type === '地区总部') {
-        if(o.object==='areaSubmitOrder'){
+        if (o.object === 'areaSubmitOrder') {
           $state.go('order_hq_approve_area', {order_number: o.order_number});
         }
-        if(o.object==='hqSubmitOrder'){
+        if (o.object === 'hqSubmitOrder') {
           $state.go('order_hq_detail', {order_number: o.order_number});
         }
       }
@@ -1924,13 +1924,12 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state
     if ($scope.user.account_type === '澳妆供应链') {
       $scope.getHqOrderList();
     }
-
   }]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('OrderReApproveHqCtrl', ['$scope', '$state', '$stateParams', 'AuthService', 'AreaOrderService', 'HqOrderService','Loading',
-  function ($scope, $state, $stateParams, AuthService, AreaOrderService, HqOrderService,Loading) {
+angular.module('agilesales-web').controller('OrderReApproveHqCtrl', ['$scope', '$state', '$stateParams', 'AuthService', 'AreaOrderService', 'HqOrderService', 'Loading',
+  function ($scope, $state, $stateParams, AuthService, AreaOrderService, HqOrderService, Loading) {
     $scope.importBtns = [];
     $scope.order_number = $stateParams.order_number;
     $scope.location = window.location;
@@ -2013,6 +2012,10 @@ angular.module('agilesales-web').controller('OrderReApproveHqCtrl', ['$scope', '
     $scope.inputPurchaseCount = function (order) {
       order.final_purchased_price = order.final_purchased_count * order.product.sales_price;
     };
+
+    $scope.importDeliveryTime = function () {
+
+    }
   }]);
 /**
  * Created by zenghong on 16/1/15.

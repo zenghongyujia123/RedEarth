@@ -8,6 +8,9 @@
     <div class="re-header-right" ng-if="orders&&orders.length>0" ng-click="approveHqOrders()">
       {{orders[0].status==='已审核'?'继续审核':'审核'}}
     </div>
+    <div class="re-header-right" ng-if="orders&&orders.length>0" ng-click="importDeliveryTime()">
+      导入交期
+    </div>
   </div>
   <div ng-if="user.account_type==='澳妆供应链'" class="re-child-body">
     <div class="re-table">

@@ -5,10 +5,10 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state
   function ($scope, $state, AreaOrderService, HqOrderService, AuthService, Loading) {
     $scope.goDetail = function (o) {
       if ($scope.user.account_type === '地区总部') {
-        if(o.object==='areaSubmitOrder'){
+        if (o.object === 'areaSubmitOrder') {
           $state.go('order_hq_approve_area', {order_number: o.order_number});
         }
-        if(o.object==='hqSubmitOrder'){
+        if (o.object === 'hqSubmitOrder') {
           $state.go('order_hq_detail', {order_number: o.order_number});
         }
       }
@@ -72,5 +72,4 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state
     if ($scope.user.account_type === '澳妆供应链') {
       $scope.getHqOrderList();
     }
-
   }]);

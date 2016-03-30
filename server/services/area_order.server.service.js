@@ -177,7 +177,7 @@ exports.otherOrderImport = function (user, orders, callback) {
         }
         areaOrder.product_number = order.product_number;
         areaOrder.product_name = order.product_name;
-        areaOrder.product_barcode = order.product_name;
+        areaOrder.product_barcode = order.product_barcode;
         areaOrder.category = order.category;
         areaOrder.mid_classify = order.mid_classify;
         areaOrder.sales_price = isNaN(parseFloat(order.sales_price)) ? 0 : parseFloat(order.sales_price);

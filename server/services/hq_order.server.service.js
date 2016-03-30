@@ -450,11 +450,11 @@ exports.importHqDeliveryTime = function (user, order_number, timeInfos, callback
         }
 
         hqSale.plan_delivery_count = hqSale.final_purchased_count;
-        hqSale.plan_delivery_time = addDay(hqSubmitOrder.re_submit_time, parseInt(hqSale.factory_delivery_cycle) * 30);
+        hqSale.plan_delivery_time = addDay(hqSubmitOrder.re_submit_time, parseInt(hqSale.product.factory_delivery_cycle) * 30);
         hqSale.onway_count = hqSale.final_purchased_count - parseInt(timeInfo.real_delivery_count);
         hqSale.real_delivery_time = new Date(timeInfo.real_delivery_time);
         hqSale.real_delivery_count = parseInt(timeInfo.real_delivery_count);
-        hqSale.final_play_delivery_time = new Date(timeInfo.final_play_delivery_time)
+        hqSale.final_plan_delivery_time = new Date(timeInfo.final_plan_delivery_time);
         hqSale.save(function (err) {
           return eachCalback();
         });
@@ -468,8 +468,6 @@ exports.importHqDeliveryTime = function (user, order_number, timeInfos, callback
       });
     });
   });
-
-  return callback(null, {});
 };
 
 function getOrderNumber(username) {

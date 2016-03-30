@@ -211,7 +211,7 @@ module.exports = function (appDb) {
     plan_delivery_count: {
       type: Number
     },
-    final_play_delivery_time: {
+    final_plan_delivery_time: {
       type: Date
     },
     real_delivery_time: {

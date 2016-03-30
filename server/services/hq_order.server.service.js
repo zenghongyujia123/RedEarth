@@ -435,6 +435,7 @@ exports.importHqDeliveryTime = function (user, order_number, timeInfos, callback
       return callback(null, {});
     }
 
+    hqSubmitOrder.has_delivery_time = true;
     async.each(timeInfos, function (timeInfo, eachCalback) {
       HqSales.findOne({
         order_number: order_number,

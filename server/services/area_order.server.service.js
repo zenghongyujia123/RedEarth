@@ -94,6 +94,8 @@ exports.areaSalesStockOnwayImport = function (user, sales, callback) {
         areaSales.product = product;
         areaSales.area_safe_stock = product.area_safe_stock;
         areaSales.mid_classify = product.mid_classify;
+        areaSales.category = product.category;
+        areaSales.series_name = product.series_name;
         areaSales.month = month;
         areaSales.department = user.department;
 
@@ -311,9 +313,10 @@ exports.getAreaSuggestOrder = function (user, callback) {
   var month = getLastMonth(1);
   var suggests = [];
   AreaSales.find({department: user.department, month: month}).sort({
+    category: 1,
     mid_classify: 1,
-    product_number: 1
-  }).populate('product').exec(function (err, areaSales) {
+    series_name: 1,
+    product_number: 1  }).populate('product').exec(function (err, areaSales) {
     if (err || !areaSales) {
       return callback({err: error.system.db_error});
     }

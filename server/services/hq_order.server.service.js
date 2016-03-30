@@ -115,6 +115,8 @@ exports.hqStockImport = function (user, stocks, callback) {
           hqSales.onway_goods = stock.onway_goods;
           hqSales.mid_classify = product.mid_classify;
           hqSales.hq_safe_stock = product.hq_safe_stock;
+          hqSales.series_name = product.series_name;
+          hqSales.category = product.category;
           hqSales.product = product;
           hqSales.month = month;
 
@@ -287,7 +289,12 @@ exports.getHqSuggestOrders = function (user, callback) {
   HqSales.find({month: getLastMonth(1)}).sort({
     mid_classify: 1,
     product_number: 1
-  }).sort({mid_classify: 1, product_number: 1}).populate('product').exec(function (err, hqSales) {
+  }).sort({
+    category: 1,
+    mid_classify: 1,
+    series_name: 1,
+    product_number: 1
+  }).populate('product').exec(function (err, hqSales) {
     if (err || !hqSales) {
       return callback({err: error.system.db_error});
     }

@@ -144,3 +144,12 @@ exports.approveHqOrders = function (req, res, next) {
     return res.send(result);
   });
 };
+
+exports.importHqDeliveryTime = function (req, res, next) {
+  hqOrderService.importHqDeliveryTime(req.body.user,req.body.order_number, req.body.timeInfos, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};

@@ -204,6 +204,24 @@ module.exports = function (appDb) {
     final_purchased_price: {
       type: Number,
       default: 0
+    },
+    plan_delivery_time: {
+      type: Date
+    },
+    plan_delivery_count: {
+      type: Number
+    },
+    final_play_delivery_time: {
+      type: Date
+    },
+    real_delivery_time: {
+      type: Date
+    },
+    real_delivery_count: {
+      type: Number
+    },
+    onway_count: {
+      type: Number
     }
   });
 

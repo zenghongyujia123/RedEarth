@@ -57,6 +57,13 @@ module.exports = function (appDb) {
     status: {
       type: String,
       default: '未审核'
+    },
+    re_submit_time: {
+      type: Date
+    },
+    has_delivery_time: {
+      type: Boolean,
+      default: false
     }
   });
 

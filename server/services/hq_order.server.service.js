@@ -394,6 +394,7 @@ exports.approveHqOrders = function (user, orders, callback) {
     }
 
     hqSubmitOrder.status = '已审核';
+    hqSubmitOrder.re_submit_time = new Date();
     async.each(orders, function (order, eachCallback) {
       HqSales.findOne({_id: order._id}, function (err, hqSales) {
         if (err || !hqSales) {
@@ -424,9 +425,58 @@ exports.getHqOrderDetail = function (user, order_number, callback) {
   });
 };
 
+exports.importHqDeliveryTime = function (user, order_number, timeInfos, callback) {
+  HqSubmitOrder.findOne({order_number: order_number}, function (err, hqSubmitOrder) {
+    if (err) {
+      return callback({err: error.system.db_error});
+    }
+
+    if (!hqSubmitOrder) {
+      return callback(null, {});
+    }
+
+    async.each(timeInfos, function (timeInfo, eachCalback) {
+      HqSales.findOne({
+        order_number: order_number,
+        product_number: timeInfo.product_number
+      }).populate('product').exec(function (err, hqSale) {
+        if (err) {
+          return eachCalback({err: error.system.db_error});
+        }
+
+        if (!hqSale) {
+          return eachCalback(null, {});
+        }
+
+        hqSale.plan_delivery_count = hqSale.final_purchased_count;
+        hqSale.plan_delivery_time = addDay(hqSubmitOrder.re_submit_time, parseInt(hqSale.factory_delivery_cycle) * 30);
+        hqSale.onway_count = hqSale.final_purchased_count - parseInt(timeInfo.real_delivery_count);
+        hqSale.real_delivery_time = new Date(timeInfo.real_delivery_time);
+        hqSale.real_delivery_count = parseInt(timeInfo.real_delivery_count);
+        hqSale.final_play_delivery_time = new Date(timeInfo.final_play_delivery_time)
+        hqSale.save(function (err) {
+          return eachCalback();
+        });
+      });
+    }, function (err) {
+      if (err) {
+        return callback(err);
+      }
+      hqSubmitOrder.save(function (err) {
+        return callback(null, {});
+      });
+    });
+  });
+
+  return callback(null, {});
+};
 
 function getOrderNumber(username) {
   return getLastMonth(1) + username;
+}
+
+function addDay(time, day) {
+  return new Date(time.getTime() + 24 * 60 * 60 * 1000 * day);
 }
 
 function getLastMonth(index) {

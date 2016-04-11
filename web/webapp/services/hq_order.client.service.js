@@ -45,6 +45,9 @@ angular.module('agilesales-web').factory('HqOrderService', ['HttpService', funct
     },
     importHqDeliveryTime: function (order_number, time_infos) {
       return HttpService.post('/webapp/hq/order/delivery_time', {time_infos: time_infos, order_number: order_number});
+    },
+    getHqReports: function () {
+      return HttpService.get('/webapp/hq/reports', {});
     }
   };
 }]);

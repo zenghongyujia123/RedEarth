@@ -1,1 +1,46 @@
-<div>this is dashboard_query</div>
+<div class="re-suggest-page">
+  <div class="re-suggest-header">
+    <span ui-sref="home">
+      <i class="fa fa-angle-left"></i>
+      {{info.title }}
+    </span>
+
+    <div class="import-btn" ng-repeat="b in importBtns" ng-click="b.clickCallback()">{{b.text}}</div>
+  </div>
+  <div class="re-suggest-body">
+    <div class="re-suggest-left">
+      <div class="suggest-left-item"
+           ng-click="clickBtn('总部')"
+           ng-class="{'select':curName==='总部'}">
+        总部
+      </div>
+      <div class="suggest-left-item"
+           ng-click="clickBtn('上海')"
+           ng-class="{'select':curName==='上海'}">
+        上海
+      </div>
+      <div class="suggest-left-item"
+           ng-click="clickBtn('杭州')"
+           ng-class="{'select':curName==='杭州'}">
+        杭州
+      </div>
+      <div class="suggest-left-item"
+           ng-click="clickBtn('南京')"
+           ng-class="{'select':curName==='南京'}">
+        南京
+      </div>
+      <div class="suggest-left-item"
+           ng-click="clickBtn('北京')"
+           ng-class="{'select':curName==='北京'}">
+        北京
+      </div>
+      <div class="suggest-left-item"
+           ng-click="clickBtn('成都')"
+           ng-class="{'select':curName==='成都'}">
+        成都
+      </div>
+    </div>
+    <div class="re-suggest-right">
+    </div>
+  </div>
+</div>

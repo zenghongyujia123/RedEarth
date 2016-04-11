@@ -618,6 +618,9 @@ angular.module('agilesales-web').factory('AreaOrderService', ['HttpService', fun
     },
     sureOrder: function (order) {
       return HttpService.post('/webapp/area/order/sure', {order: order});
+    },
+    getAreaReports: function (name) {
+      return HttpService.get('/webapp/area/reports', {name: name});
     }
   };
 }]);
@@ -997,6 +1000,9 @@ angular.module('agilesales-web').factory('HqOrderService', ['HttpService', funct
     },
     importHqDeliveryTime: function (order_number, time_infos) {
       return HttpService.post('/webapp/hq/order/delivery_time', {time_infos: time_infos, order_number: order_number});
+    },
+    getHqReports: function () {
+      return HttpService.get('/webapp/hq/reports', {});
     }
   };
 }]);
@@ -1093,15 +1099,30 @@ angular.module('agilesales-web').factory('UserService', ['HttpService', function
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'AreaOrderService', function ($scope, AreaOrderService) {
-  $scope.getAreaOrderList = function () {
-    AreaOrderService.getAreaOrderList().then(function (data) {
+angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'AreaOrderService', function ($scope, HqOrderService, AreaOrderService) {
+  $scope.curName = '总部';
+
+  $scope.clickBtn = function (name) {
+    $scope.curName = name;
+  };
+
+  $scope.getAreaReports = function () {
+    AreaOrderService.getAreaReports().then(function (data) {
       console.log(data);
     }, function (data) {
       console.log(data);
     });
   };
-  $scope.getAreaOrderList();
+
+  $scope.getHqReports = function (name) {
+    HqOrderService.getHqReports(name).then(function (data) {
+      console.log(data);
+    }, function (data) {
+      console.log(data);
+    });
+  };
+
+
 }]);
 /**
  * Created by zenghong on 16/1/15.
@@ -4588,6 +4609,7 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
         '产品条码',
         '品类',
         '中分类名称',
+        '系列名称',
         '销售价格',
         '晋颖成本价',
         'ABC分类',
@@ -4631,6 +4653,7 @@ angular.module('agilesales-web').controller('SuggestHqSuggestResultCtrl', ['$sco
           o.product.product_barcode,
           o.product.category,
           o.product.mid_classify,
+          o.product.series_name,
           o.product.sales_price,
           o.product.jinyi_cost,
           o.product.abc_classify,

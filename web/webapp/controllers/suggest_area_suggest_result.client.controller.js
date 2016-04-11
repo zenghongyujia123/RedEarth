@@ -96,7 +96,7 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
       }
 
       if (sale.D01_approve === 0) {
-        sale.D01_approve = sale.system_suggest_count_modify + sale.D03_approve + sale.D04_approve;
+        sale.D01_approve = sale.system_suggest_count_modify;
       }
 
       return sale.system_suggest_count;

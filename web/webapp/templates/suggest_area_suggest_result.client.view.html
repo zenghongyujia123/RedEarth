@@ -36,12 +36,12 @@
       <div class="header-col">上传订单陈列</div>
       <div class="header-col">最终审批试用装</div>
       <div class="header-col">最终审批陈列</div>
-      <div class="header-col">最终审批订货数</div>
+      <div class="header-col">最终审批大货数</div>
       <div class="header-col">总金额</div>
       <div class="header-col">审批状态</div>
     </div>
   </div>
-  <div class="re-table-body" style="min-width: 7000px;">
+  <div class="re-table-body" style="min-width: 6820px;">
     <div class="re-table-left-header" zz-float-left>
       <div ng-repeat="o in orders">
         <div class="left-col">{{$index+1}}</div>
@@ -93,7 +93,7 @@
       <div class="body-col">{{o.D03_approve}}</div>
       <div class="body-col">{{o.D04_approve}}</div>
       <div class="body-col">{{o.D01_approve}}</div>
-      <div class="body-col">{{(o.D01_approve+o.D02_approve+o.D03_approve)*o.product.sales_price}}</div>
+      <div class="body-col">{{(o.D01_approve)*o.product.sales_price}}</div>
       <div class="body-col">{{o.status}}</div>
     </div>
   </div>

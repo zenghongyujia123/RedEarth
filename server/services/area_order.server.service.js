@@ -525,7 +525,13 @@ exports.approveAreaOrders = function (user, orders, callback) {
 };
 
 exports.getAreaReports = function (user, name, callback) {
-  return callback(null, {});
+  var month = getLastMonth(1);
+  AreaSales.find({month: month, department: name}).populate('product').exec(function (err, areaOrders) {
+    if (err) {
+      return callback({err: error.system.db_error});
+    }
+    return callback(null, areaOrders);
+  });
 };
 
 

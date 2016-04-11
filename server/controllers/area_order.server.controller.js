@@ -147,7 +147,7 @@ exports.approveAreaOrders = function (req, res, next) {
 };
 
 exports.getAreaReports = function (req, res, next) {
-  areaOrderService.getAreaReports(req.user, req.body.name, function (err, result) {
+  areaOrderService.getAreaReports(req.user, req.query.name, function (err, result) {
     if (err) {
       return res.send(err);
     }

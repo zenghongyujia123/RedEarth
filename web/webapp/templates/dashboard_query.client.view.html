@@ -41,6 +41,87 @@
       </div>
     </div>
     <div class="re-suggest-right">
+      <div class="re-table" ng-if="curName==='总部'">
+        <div class="re-table-header" style="width: 3200px;min-width: 100%;">
+          <div class="re-table-row">
+            <div class="header-col">序号</div>
+            <div class="header-col">品类</div>
+            <div class="header-col">中分类名称</div>
+            <div class="header-col">系列名称</div>
+            <div class="header-col">产品名称</div>
+            <div class="header-col">产品条码</div>
+            <div class="header-col">SKU编码</div>
+            <div class="header-col">ABC分类</div>
+            <div class="header-col">上月总部销售预测</div>
+            <div class="header-col">上月系统建议订单</div>
+            <div class="header-col">上月总部订单MOQ建议数</div>
+            <div class="header-col">上月实际订货数</div>
+            <div class="header-col">上月销售</div>
+            <div class="header-col">销售差异比</div>
+            <div class="header-col">订单差异</div>
+          </div>
+        </div>
+        <div class="re-table-body" style="width: 3200px;min-width: 100%;">
+          <div class="re-table-row" ng-repeat="s in reports" ng-if="s.product">
+            <div class="body-col">{{$index+1}}</div>
+            <div class="body-col">{{s.product.category}}</div>
+            <div class="body-col">{{s.product.mid_classify}}</div>
+            <div class="body-col">{{s.product.series_name}}</div>
+            <div class="body-col">{{s.product.product_name}}</div>
+            <div class="body-col">{{s.product.product_barcode}}</div>
+            <div class="body-col">{{s.product_number}}</div>
+            <div class="body-col">{{s.product.abc_classify}}</div>
+            <div class="body-col">{{s.next_month_sales_forecast_0}}</div>
+            <div class="body-col">{{s.system_suggest_count}}</div>
+            <div class="body-col">{{s.final_system_suggest_count}}</div>
+            <div class="body-col">{{s.final_purchased_count}}</div>
+            <div class="body-col">{{s.genuine_goods}}</div>
+
+            <div class="body-col">{{getHqSaleDiff(s)}}%</div>
+            <div class="body-col">{{getHqOrderDiff(s)}}%</div>
+          </div>
+        </div>
+      </div>
+      <div class="re-table" ng-if="curName!=='总部'">
+        <div class="re-table-header" style="width: 3200px;min-width: 100%;">
+          <div class="re-table-row">
+            <div class="header-col">序号</div>
+            <div class="header-col">品类</div>
+            <div class="header-col">中分类名称</div>
+            <div class="header-col">系列名称</div>
+            <div class="header-col">产品名称</div>
+            <div class="header-col">产品条码</div>
+            <div class="header-col">SKU编码</div>
+            <div class="header-col">ABC分类</div>
+            <div class="header-col">上月地区销售预测</div>
+            <div class="header-col">上月系统建议订货数</div>
+            <div class="header-col">上月实际订货数</div>
+            <div class="header-col">上月销售</div>
+            <div class="header-col">销售差异比</div>
+            <div class="header-col">订单差异比</div>
+          </div>
+        </div>
+        <div class="re-table-body" style="width: 3200px;min-width: 100%;">
+          <div class="re-table-row" ng-repeat="s in reports" ng-if="s.product">
+            <div class="body-col">{{$index+1}}</div>
+            <div class="body-col">{{s.product.category}}</div>
+            <div class="body-col">{{s.product.mid_classify}}</div>
+            <div class="body-col">{{s.product.series_name}}</div>
+            <div class="body-col">{{s.product.product_name}}</div>
+            <div class="body-col">{{s.product.product_barcode}}</div>
+            <div class="body-col">{{s.product_number}}</div>
+            <div class="body-col">{{s.product.abc_classify}}</div>
+            <div class="body-col">{{s.next_month_sales_forecast_0}}</div>
+            <div class="body-col">{{s.system_suggest_count}}</div>
+            <div class="body-col">{{s.D01_approve}}</div>
+            <div class="body-col">{{s.last_month_sales_count_1}}</div>
+
+            <div class="body-col">{{getAreaSaleDiff(s)}}%</div>
+            <div class="body-col">{{getAreaOrderDiff(s)}}%</div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>

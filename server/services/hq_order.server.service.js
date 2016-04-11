@@ -493,5 +493,11 @@ function getLastMonth(index) {
 }
 
 exports.getHqReports = function (user, callback) {
-  return callback(null, {});
+  var month = getLastMonth(1);
+  HqSales.find({month: month}).populate('product').exec(function (err, hqSales) {
+    if (err) {
+      return callback({err: error.system.db_error});
+    }
+    return callback(null, hqSales);
+  });
 };

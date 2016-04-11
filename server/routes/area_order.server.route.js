@@ -25,4 +25,6 @@ module.exports = function (app) {
 
   app.route('/webapp/area/order/sure').post(filter.requireUser, all.area_order.sureOrder);
 
+  app.route('/webapp/area/reports').get(filter.requireUser, all.area_order.getAreaReports);
+
 };

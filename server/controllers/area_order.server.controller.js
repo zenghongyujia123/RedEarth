@@ -146,5 +146,15 @@ exports.approveAreaOrders = function (req, res, next) {
   });
 };
 
+exports.getAreaReports = function (req, res, next) {
+  areaOrderService.getAreaReports(req.user, req.body.name, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};
+
+
 
 

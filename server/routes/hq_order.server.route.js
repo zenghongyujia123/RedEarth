@@ -27,5 +27,7 @@ module.exports = function (app) {
 
   app.route('/webapp/hq/order/delivery_time').post(filter.requireUser, all.hq_order.importHqDeliveryTime);
 
+  app.route('/webapp/hq/reports').get(filter.requireUser, all.hq_order.getHqReports);
+
 
 };

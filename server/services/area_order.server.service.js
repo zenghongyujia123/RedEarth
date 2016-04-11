@@ -316,7 +316,8 @@ exports.getAreaSuggestOrder = function (user, callback) {
     category: 1,
     mid_classify: 1,
     series_name: 1,
-    product_number: 1  }).populate('product').exec(function (err, areaSales) {
+    product_number: 1
+  }).populate('product').exec(function (err, areaSales) {
     if (err || !areaSales) {
       return callback({err: error.system.db_error});
     }
@@ -506,9 +507,9 @@ exports.approveAreaOrders = function (user, orders, callback) {
         if (err || !areaSales) {
           return eachCallback();
         }
-        areaSales.D02_approve =parseInt( order.D02_approve)< 0 ? 0 : parseInt(order.D02_approve);
-        areaSales.D03_approve = parseInt( order.D03_approve)< 0 ? 0 : parseInt(order.D03_approve);
-        areaSales.D04_approve = parseInt( order.D04_approve)< 0 ? 0 : parseInt(order.D04_approve);
+        areaSales.D02_approve = parseInt(order.D02_approve) < 0 ? 0 : parseInt(order.D02_approve);
+        areaSales.D03_approve = parseInt(order.D03_approve) < 0 ? 0 : parseInt(order.D03_approve);
+        areaSales.D04_approve = parseInt(order.D04_approve) < 0 ? 0 : parseInt(order.D04_approve);
         areaSales.D01_approve = parseInt(order.D01_approve) < 0 ? 0 : parseInt(order.D01_approve);
         areaSales.status = '已审核';
         areaSales.save(function (err) {
@@ -521,6 +522,10 @@ exports.approveAreaOrders = function (user, orders, callback) {
       });
     });
   });
+};
+
+exports.getAreaReports = function (user, name, callback) {
+  return callback(null, {});
 };
 
 

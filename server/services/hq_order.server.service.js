@@ -491,3 +491,7 @@ function getLastMonth(index) {
   cur = moment(cur).format('YYYYMM');
   return cur;
 }
+
+exports.getHqReports = function (user, callback) {
+  return callback(null, {});
+};

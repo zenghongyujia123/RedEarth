@@ -146,7 +146,17 @@ exports.approveHqOrders = function (req, res, next) {
 };
 
 exports.importHqDeliveryTime = function (req, res, next) {
-  hqOrderService.importHqDeliveryTime(req.body.user,req.body.order_number, req.body.time_infos, function (err, result) {
+  hqOrderService.importHqDeliveryTime(req.body.user, req.body.order_number, req.body.time_infos, function (err, result) {
+    if (err) {
+      return res.send(err);
+    }
+    return res.send(result);
+  });
+};
+
+
+exports.getHqReports = function (req, res, next) {
+  hqOrderService.getHqReports (req.body.user, function (err, result) {
     if (err) {
       return res.send(err);
     }

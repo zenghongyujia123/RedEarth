@@ -104,7 +104,7 @@ angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'Hq
             s.system_suggest_count,
             s.final_system_suggest_count,
             s.final_purchased_count,
-            s.genuine_goods,
+            s.last_month_sales_count_1,
             $scope.getHqSaleDiff(s)+'%',
             $scope.getHqOrderDiff(s)+'%'
           ]);

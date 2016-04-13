@@ -161,22 +161,28 @@ module.exports = function (appDb) {
       default: 0
     },
     last_month_sales_count_1: {
-      type: Number
+      type: Number,
+      default: 0
     },
     last_month_sales_count_2: {
-      type: Number
+      type: Number,
+      default: 0
     },
     last_month_sales_count_3: {
-      type: Number
+      type: Number,
+      default: 0
     },
     last_month_stock_count_1: {
-      type: Number
+      type: Number,
+      default: 0
     },
     last_month_stock_count_2: {
-      type: Number
+      type: Number,
+      default: 0
     },
     last_month_stock_count_3: {
-      type: Number
+      type: Number,
+      default: 0
     }
   });
 

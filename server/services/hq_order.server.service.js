@@ -257,11 +257,12 @@ exports.hqOtherOrderImport = function (user, orders, callback) {
         }
 
         hqOrder.product_name = order.product_name;
+        hqOrder.product = product;
         hqOrder.product_barcode = order.product_barcode;
         hqOrder.category = order.category;
         hqOrder.mid_classify = order.mid_classify;
         hqOrder.sales_price = isNaN(parseFloat(order.sales_price)) ? 0 : parseFloat(order.sales_price);
-        hqOrder.jinyi_cost = isNaN(parseFloat(order.jinyi_cost)) ? 0 : parseFloat(order.jinyi_cost);
+        hqOrder.jinyi_cost = product.jinyi_cost;
         hqOrder.order_number = month + user.username + order.order_type;
         hqOrder.order_count = isNaN(parseInt(order.order_count)) ? 0 : parseInt(order.order_count);
         hqOrder.order_type = order.order_type;

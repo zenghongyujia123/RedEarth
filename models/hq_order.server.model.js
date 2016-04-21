@@ -16,6 +16,10 @@ module.exports = function (appDb) {
     month: {
       type: String
     },
+    product: {
+      type: Schema.Types.ObjectId,
+      ref: 'Product'
+    },
     product_number: {
       type: String
     },

@@ -4,10 +4,13 @@
     <div class="col col-lg-3 col-md-3 col-sm-3 col-xs-3">
     </div>
     <div class="col col-lg-3 col-md-3 col-sm-3 col-xs-3">
-      <div class="select-item" ng-class="{select:curSubmitOrder.has_Y06==='没有'}" ng-click="clickOrderStatus('没有')">没有电商订单</div>
+      <div class="select-item" ng-class="{select:curSubmitOrder.has_Y06==='没有'}" ng-click="clickOrderStatus('没有')">
+        没有电商订单
+      </div>
     </div>
     <div class="col col-lg-3 col-md-3 col-sm-3 col-xs-3">
-      <div class="select-item" ng-class="{select:curSubmitOrder.has_Y06==='有'}" ng-click="clickOrderStatus('有')">有电商订单</div>
+      <div class="select-item" ng-class="{select:curSubmitOrder.has_Y06==='有'}" ng-click="clickOrderStatus('有')">有电商订单
+      </div>
     </div>
     <div class="col col-lg-3 col-md-3 col-sm-3 col-xs-3">
     </div>
@@ -35,9 +38,11 @@
     </div>
   </div>
   <div class="re-table-body" style="width:2240px;">
-    <div ng-repeat="o in orders">
-      <div class="left-col">{{$index+1}}</div>
-      <div class="left-col" ng-if="o.product">{{o.product.product_name}}</div>
+    <div class="re-table-left-header" zz-float-left>
+      <div ng-repeat="o in orders">
+        <div class="left-col">{{$index+1}}</div>
+        <div class="left-col">{{o.product_name}}</div>
+      </div>
     </div>
     <div class="re-table-row" ng-repeat="o in orders">
       <div class="body-col">{{$index+1}}</div>

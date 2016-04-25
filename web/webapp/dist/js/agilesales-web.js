@@ -3271,7 +3271,7 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
 
     $scope.modifySystemAreaSuggestPercent = function (sale) {
       sale.system_suggest_count_modify_percent = parseInt((sale.system_suggest_count_modify - sale.system_suggest_count) * 100 / ((sale.system_suggest_count > 0) ? sale.system_suggest_count : (-sale.system_suggest_count)));
-      sale.D01_approve = sale.system_suggest_count_modify + sale.D03_approve + sale.D04_approve;
+      sale.D01_approve = sale.system_suggest_count_modify;
     };
 
     function suggestOrderSubmit() {

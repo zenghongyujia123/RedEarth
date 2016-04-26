@@ -64,6 +64,9 @@ module.exports = function (appDb) {
     has_delivery_time: {
       type: Boolean,
       default: false
+    },
+    submit_time:{
+      type:Date
     }
   });
 

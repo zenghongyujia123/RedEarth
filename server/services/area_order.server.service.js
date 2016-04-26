@@ -375,7 +375,7 @@ exports.suggestOrderSubmit = function (user, sales, callback) {
     }
 
     areaSubmitOrder.status = '未审核';
-
+    areaSubmitOrder.submit_time = new Date();
     areaSubmitOrder.order_number = month + user.username + user.number;
     areaSubmitOrder.save(function (err, saveAreaSubmitOrder) {
       if (err || !saveAreaSubmitOrder) {

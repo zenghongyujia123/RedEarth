@@ -316,6 +316,7 @@ exports.hqSuggestOrderSubmit = function (user, sales, callback) {
       return callback(null, {});
     }
     hqSubmitOrder.month = month;
+    hqSubmitOrder.submit_time = new Date();
     hqSubmitOrder.user_number = user.number;
     hqSubmitOrder.order_number = month + user.username + user.number;
     hqSubmitOrder.status = '未审核';

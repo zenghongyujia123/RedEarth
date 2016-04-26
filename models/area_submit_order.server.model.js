@@ -41,6 +41,9 @@ module.exports = function (appDb) {
     has_D04: {
       type: String,
       default: '未选择'
+    },
+    submit_time:{
+      type:Date
     }
   });
 

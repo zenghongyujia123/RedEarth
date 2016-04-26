@@ -72,4 +72,6 @@ angular.module('agilesales-web').controller('OrderQueryCtrl', ['$scope', '$state
     if ($scope.user.account_type === '澳妆供应链') {
       $scope.getHqOrderList();
     }
+    moment().locale('zh-cn');
+    $scope.moment = moment;
   }]);

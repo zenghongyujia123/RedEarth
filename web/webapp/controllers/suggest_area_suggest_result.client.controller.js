@@ -77,7 +77,7 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
         sale.next_month_sales_forecast_4 +
         sale.next_month_sales_forecast_5 +
         sale.next_month_sales_forecast_6;
-      var other_order_count = parseInt(sale.D02) + parseInt(sale.D03) + parseInt(sale.D04);
+      var other_order_count = parseInt(sale.D02);
       sale.system_suggest_count = parseInt(sale.next_month_sales_forecast_0 - (sale.last_month_stock_count + sale.last_month_onway_count - next_6_month_forecast - other_order_count - sale.safe_stock));
 
       if (sale.system_suggest_count_modify === 0) {

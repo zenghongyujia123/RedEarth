@@ -494,8 +494,7 @@ function getLastMonth(index) {
   return cur;
 }
 
-exports.getHqReports = function (user, callback) {
-  var month = getLastMonth(1);
+exports.getHqReports = function (user, month,callback) {
   HqSales.find({month: month}).populate('product').exec(function (err, hqSales) {
     if (err) {
       return callback({err: error.system.db_error});

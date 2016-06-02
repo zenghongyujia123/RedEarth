@@ -156,7 +156,7 @@ exports.importHqDeliveryTime = function (req, res, next) {
 
 
 exports.getHqReports = function (req, res, next) {
-  hqOrderService.getHqReports (req.body.user, function (err, result) {
+  hqOrderService.getHqReports (req.body.user,req.query.month, function (err, result) {
     if (err) {
       return res.send(err);
     }

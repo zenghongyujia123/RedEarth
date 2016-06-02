@@ -380,50 +380,6 @@ angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',func
 /**
  * Created by zenghong on 16/1/18.
  */
-angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
-  return {
-    restrict: 'AE',
-    templateUrl: 'directives/dialog_input/dialog_input.client.view.html',
-    replace: true,
-    scope: {},
-    link: function ($scope, $element, $attrs) {
-      $scope.info = {
-        title: '',
-        contents: [{
-          key: '请输入拜访卡名称',
-          tip: '点击输入名称',
-          value: ''
-        }],
-        color: 'blue'
-      };
-
-      $scope.show = function () {
-        $element.addClass('show');
-      };
-      $scope.hide = function () {
-        $element.removeClass('show');
-      };
-      $scope.submit = function () {
-        $element.removeClass('show');
-        if ($scope.info.callback) {
-          $scope.info.callback($scope.info);
-        }
-      };
-      $rootScope.$on('show.dialogInput', function (event, data) {
-        setTheme(data);
-        $scope.show();
-      });
-
-      function setTheme(info) {
-        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
-        $scope.info = info;
-      }
-    }
-  }
-}]);
-/**
- * Created by zenghong on 16/1/18.
- */
 angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', function ($rootScope) {
   return {
     restrict: 'AE',
@@ -478,6 +434,50 @@ angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', func
       };
       $scope.hideOptions = function (index) {
         $element.find('.ag-row-option-container').eq(index).removeClass('show');
+      }
+    }
+  }
+}]);
+/**
+ * Created by zenghong on 16/1/18.
+ */
+angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
+  return {
+    restrict: 'AE',
+    templateUrl: 'directives/dialog_input/dialog_input.client.view.html',
+    replace: true,
+    scope: {},
+    link: function ($scope, $element, $attrs) {
+      $scope.info = {
+        title: '',
+        contents: [{
+          key: '请输入拜访卡名称',
+          tip: '点击输入名称',
+          value: ''
+        }],
+        color: 'blue'
+      };
+
+      $scope.show = function () {
+        $element.addClass('show');
+      };
+      $scope.hide = function () {
+        $element.removeClass('show');
+      };
+      $scope.submit = function () {
+        $element.removeClass('show');
+        if ($scope.info.callback) {
+          $scope.info.callback($scope.info);
+        }
+      };
+      $rootScope.$on('show.dialogInput', function (event, data) {
+        setTheme(data);
+        $scope.show();
+      });
+
+      function setTheme(info) {
+        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
+        $scope.info = info;
       }
     }
   }
@@ -573,56 +573,56 @@ angular.module('agilesales-web').factory('PublicInterceptor', ['AuthService', fu
  * Created by zenghong on 16/1/21.
  */
 angular.module('agilesales-web').factory('AreaOrderService', ['HttpService', function (HttpService) {
-  return {
-    otherOrderImport: function (orders) {
-      return HttpService.post('/webapp/area/order/import', {orders: orders});
-    },
-    areaSalesStockOnwayImport: function (sales) {
-      return HttpService.post('/webapp/area/sales/import', {sales: sales});
-    },
-    getOrdersByArea: function (order_type) {
-      return HttpService.get('/webapp/area/order', {order_type: order_type});
-    },
-    getSalesByArea: function () {
-      return HttpService.get('/webapp/area/sales', {});
-    },
-    getHistorySales: function () {
-      return HttpService.get('/webapp/area/sales/history', {});
-    },
-    importsHistorySales: function (sales) {
-      return HttpService.post('/webapp/area/sales/history_import', {sales: sales});
-    },
-    getAreaSuggestOrder: function () {
-      return HttpService.get('/webapp/area/order/suggest', {});
-    },
-    suggestOrderSubmit: function (sales) {
-      return HttpService.post('/webapp/area/sales/submit', {sales: sales});
-    },
-    getAreaOrderList: function () {
-      return HttpService.get('/webapp/area/query', {});
-    },
-    getAreaOrderDetail: function (order_number) {
-      return HttpService.get('/webapp/area/order/detail', {order_number: order_number});
-    },
-    approveAreaOrder: function (order) {
-      return HttpService.post('/webapp/area/sales/approve', {order: order});
-    },
-    approveAreaOrders: function (orders) {
-      return HttpService.post('/webapp/area/sales/approve/multi', {orders: orders});
-    },
-    updateSubmitOhterOrderStatus: function (submit_order) {
-      return HttpService.post('/webapp/area/sales/submit_order/update', {submit_order: submit_order});
-    },
-    getCurrentAreaSubmitOrder: function () {
-      return HttpService.get('/webapp/area/sales/submit', {});
-    },
-    sureOrder: function (order) {
-      return HttpService.post('/webapp/area/order/sure', {order: order});
-    },
-    getAreaReports: function (name) {
-      return HttpService.get('/webapp/area/reports', {name: name});
-    }
-  };
+    return {
+        otherOrderImport: function (orders) {
+            return HttpService.post('/webapp/area/order/import', {orders: orders});
+        },
+        areaSalesStockOnwayImport: function (sales) {
+            return HttpService.post('/webapp/area/sales/import', {sales: sales});
+        },
+        getOrdersByArea: function (order_type) {
+            return HttpService.get('/webapp/area/order', {order_type: order_type});
+        },
+        getSalesByArea: function () {
+            return HttpService.get('/webapp/area/sales', {});
+        },
+        getHistorySales: function () {
+            return HttpService.get('/webapp/area/sales/history', {});
+        },
+        importsHistorySales: function (sales) {
+            return HttpService.post('/webapp/area/sales/history_import', {sales: sales});
+        },
+        getAreaSuggestOrder: function () {
+            return HttpService.get('/webapp/area/order/suggest', {});
+        },
+        suggestOrderSubmit: function (sales) {
+            return HttpService.post('/webapp/area/sales/submit', {sales: sales});
+        },
+        getAreaOrderList: function () {
+            return HttpService.get('/webapp/area/query', {});
+        },
+        getAreaOrderDetail: function (order_number) {
+            return HttpService.get('/webapp/area/order/detail', {order_number: order_number});
+        },
+        approveAreaOrder: function (order) {
+            return HttpService.post('/webapp/area/sales/approve', {order: order});
+        },
+        approveAreaOrders: function (orders) {
+            return HttpService.post('/webapp/area/sales/approve/multi', {orders: orders});
+        },
+        updateSubmitOhterOrderStatus: function (submit_order) {
+            return HttpService.post('/webapp/area/sales/submit_order/update', {submit_order: submit_order});
+        },
+        getCurrentAreaSubmitOrder: function () {
+            return HttpService.get('/webapp/area/sales/submit', {});
+        },
+        sureOrder: function (order) {
+            return HttpService.post('/webapp/area/order/sure', {order: order});
+        },
+        getAreaReports: function (month, name) {
+            return HttpService.get('/webapp/area/reports', {name: name, month: month});
+        }
+    };
 }]);
 /**
  * Created by zenghong on 16/1/21.
@@ -1001,8 +1001,8 @@ angular.module('agilesales-web').factory('HqOrderService', ['HttpService', funct
     importHqDeliveryTime: function (order_number, time_infos) {
       return HttpService.post('/webapp/hq/order/delivery_time', {time_infos: time_infos, order_number: order_number});
     },
-    getHqReports: function () {
-      return HttpService.get('/webapp/hq/reports', {});
+    getHqReports: function (month) {
+      return HttpService.get('/webapp/hq/reports', {month:month});
     }
   };
 }]);
@@ -1100,168 +1100,187 @@ angular.module('agilesales-web').factory('UserService', ['HttpService', function
  * Created by zenghong on 16/1/15.
  */
 angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'HqOrderService', 'AreaOrderService', 'ExcelReaderService',
-  function ($scope, HqOrderService, AreaOrderService, ExcelReaderService) {
-    $scope.curName = '总部';
-    $scope.reports = [];
-    $scope.clickBtn = function (name) {
-      $scope.curName = name;
-      if (name === '总部') {
-        $scope.getHqReports();
-      }
-      else {
-        $scope.getAreaReports(name);
-      }
-    };
+    function ($scope, HqOrderService, AreaOrderService, ExcelReaderService) {
+        $scope.curName = '总部';
+        $scope.reports = [];
+        $scope.monthInfo = {
+            month: getMonth(0),
+            show: false,
+            months: []
+        };
 
-    $scope.getAreaReports = function (name) {
-      AreaOrderService.getAreaReports(name).then(function (data) {
-        console.log(data);
-        if (data && !data.err) {
-          $scope.reports = data;
+        $scope.clickBtn = function (name) {
+            $scope.curName = name;
+            if (name === '总部') {
+                $scope.getHqReports();
+            }
+            else {
+                $scope.getAreaReports(name);
+            }
+        };
+
+        $scope.getAreaReports = function (name) {
+            AreaOrderService.getAreaReports( $scope.monthInfo.month, name).then(function (data) {
+                console.log(data);
+                if (data && !data.err) {
+                    $scope.reports = data;
+                }
+            }, function (data) {
+                console.log(data);
+            });
+        };
+
+        $scope.getHqReports = function (name) {
+            HqOrderService.getHqReports($scope.monthInfo.month, name).then(function (data) {
+                console.log(data);
+                if (data && !data.err) {
+                    $scope.reports = data;
+                }
+            }, function (data) {
+                console.log(data);
+            });
+        };
+
+        $scope.getHqOrderDiff = function (sale) {
+            if (sale.final_purchased_count === 0) {
+                return 0;
+            }
+            return parseInt((sale.final_purchased_count - sale.system_suggest_count) * 100 / sale.final_purchased_count);
+        };
+
+        $scope.getHqSaleDiff = function (sale) {
+            if (sale.genuine_goods === 0) {
+                return 0;
+            }
+
+            return parseInt((sale.genuine_goods - sale.next_month_sales_forecast_0) * 100 / sale.genuine_goods);
+        };
+
+        $scope.getAreaOrderDiff = function (sale) {
+            if (sale.D01_approve === 0) {
+                return 0;
+            }
+            return parseInt((sale.D01_approve - sale.system_suggest_count) * 100 / sale.D01_approve);
+        };
+
+        $scope.getAreaSaleDiff = function (sale) {
+            if (sale.last_month_sales_count_1 === 0) {
+                return 0;
+            }
+            return parseInt((sale.last_month_sales_count_1 - sale.next_month_sales_forecast_0) * 100 / sale.last_month_sales_count_1);
+        };
+
+        $scope.exportReports = function () {
+            $scope.exportExcel();
+        };
+
+        $scope.exportExcel = function () {
+            var execlReader = ExcelReaderService.getReader();
+            var rows;
+
+            if ($scope.curName === '总部') {
+                rows = [[
+                    '品类',
+                    '中分类名称',
+                    '系列名称',
+                    '产品名称',
+                    '产品条码',
+                    'SKU编码',
+                    'ABC分类',
+                    '上月总部销售预测',
+                    '上月系统建议订单',
+                    '上月总部订单MOQ建议数',
+                    '上月实际订货数',
+                    '上月销售',
+                    '销售差异比',
+                    '订单差异'
+                ]];
+                $scope.reports.forEach(function (s) {
+                    rows.push([
+                        s.product.category,
+                        s.product.mid_classify,
+                        s.product.series_name,
+                        s.product.product_name,
+                        s.product.product_barcode,
+                        s.product_number,
+                        s.product.abc_classify,
+                        s.next_month_sales_forecast_0,
+                        s.system_suggest_count,
+                        s.final_system_suggest_count,
+                        s.final_purchased_count,
+                        s.last_month_sales_count_1,
+                        $scope.getHqSaleDiff(s) + '%',
+                        $scope.getHqOrderDiff(s) + '%'
+                    ]);
+                });
+            }
+            else {
+                rows = [[
+                    '品类',
+                    '中分类名称',
+                    '系列名称',
+                    '产品名称',
+                    '产品条码',
+                    'SKU编码',
+                    'ABC分类',
+                    '上月地区销售预测',
+                    '上月系统建议订货数',
+                    '上月实际订货数',
+                    '上月销售',
+                    '销售差异比',
+                    '订单差异比'
+                ]];
+                $scope.reports.forEach(function (s) {
+                    rows.push([
+                        s.product.category,
+                        s.product.mid_classify,
+                        s.product.series_name,
+                        s.product.product_name,
+                        s.product.product_barcode,
+                        s.product_number,
+                        s.product.abc_classify,
+                        s.next_month_sales_forecast_0,
+                        s.system_suggest_count,
+                        s.D01_approve,
+                        s.last_month_sales_count_1,
+                        $scope.getAreaSaleDiff(s) + '%',
+                        $scope.getAreaOrderDiff(s) + '%'
+                    ]);
+                });
+            }
+
+            execlReader.exportExcel(rows);
+        };
+
+        $scope.clickBtn('总部');
+
+        $scope.showMonth = function () {
+            $scope.monthInfo.show = true;
+        };
+
+        $scope.hideMonth = function (month, event) {
+            event.stopPropagation();
+            $scope.monthInfo.month = month;
+            $scope.monthInfo.show = false;
+            if ($scope.curName === '总部') {
+                $scope.getHqReports();
+            }
+            else {
+                $scope.getAreaReports($scope.curName);
+            }
+        };
+
+        function initMonth() {
+            for (var i = 0; i < 12; i++) {
+                $scope.monthInfo.months.push(getMonth(-i));
+            }
         }
-      }, function (data) {
-        console.log(data);
-      });
-    };
 
-    $scope.getHqReports = function (name) {
-      HqOrderService.getHqReports(name).then(function (data) {
-        console.log(data);
-        if (data && !data.err) {
-          $scope.reports = data;
+        initMonth();
+        function getMonth(index) {
+            return moment().add(index, 'month').format('YYYYMM');
         }
-      }, function (data) {
-        console.log(data);
-      });
-    };
-
-    $scope.getHqOrderDiff = function (sale) {
-      if (sale.final_purchased_count === 0) {
-        return 0;
-      }
-      return parseInt((sale.final_purchased_count - sale.system_suggest_count) * 100 / sale.final_purchased_count);
-    };
-
-    $scope.getHqSaleDiff = function (sale) {
-      if (sale.genuine_goods === 0) {
-        return 0;
-      }
-
-      return parseInt((sale.genuine_goods - sale.next_month_sales_forecast_0) * 100 / sale.genuine_goods);
-    };
-
-    $scope.getAreaOrderDiff = function (sale) {
-      if (sale.D01_approve === 0) {
-        return 0;
-      }
-      return parseInt((sale.D01_approve - sale.system_suggest_count) * 100 / sale.D01_approve);
-    };
-
-    $scope.getAreaSaleDiff = function (sale) {
-      if (sale.last_month_sales_count_1 === 0) {
-        return 0;
-      }
-      return parseInt((sale.last_month_sales_count_1 - sale.next_month_sales_forecast_0) * 100 / sale.last_month_sales_count_1);
-    };
-
-    $scope.exportReports = function () {
-      $scope.exportExcel();
-    };
-
-    $scope.exportExcel = function () {
-      var execlReader = ExcelReaderService.getReader();
-      var rows;
-
-      if ($scope.curName === '总部') {
-        rows = [[
-          '品类',
-          '中分类名称',
-          '系列名称',
-          '产品名称',
-          '产品条码',
-          'SKU编码',
-          'ABC分类',
-          '上月总部销售预测',
-          '上月系统建议订单',
-          '上月总部订单MOQ建议数',
-          '上月实际订货数',
-          '上月销售',
-          '销售差异比',
-          '订单差异'
-        ]];
-        $scope.reports.forEach(function (s) {
-          rows.push([
-            s.product.category,
-            s.product.mid_classify,
-            s.product.series_name,
-            s.product.product_name,
-            s.product.product_barcode,
-            s.product_number,
-            s.product.abc_classify,
-            s.next_month_sales_forecast_0,
-            s.system_suggest_count,
-            s.final_system_suggest_count,
-            s.final_purchased_count,
-            s.last_month_sales_count_1,
-            $scope.getHqSaleDiff(s) + '%',
-            $scope.getHqOrderDiff(s) + '%'
-          ]);
-        });
-      }
-      else {
-        rows = [[
-          '品类',
-          '中分类名称',
-          '系列名称',
-          '产品名称',
-          '产品条码',
-          'SKU编码',
-          'ABC分类',
-          '上月地区销售预测',
-          '上月系统建议订货数',
-          '上月实际订货数',
-          '上月销售',
-          '销售差异比',
-          '订单差异比'
-        ]];
-        $scope.reports.forEach(function (s) {
-          rows.push([
-            s.product.category,
-            s.product.mid_classify,
-            s.product.series_name,
-            s.product.product_name,
-            s.product.product_barcode,
-            s.product_number,
-            s.product.abc_classify,
-            s.next_month_sales_forecast_0,
-            s.system_suggest_count,
-            s.D01_approve,
-            s.last_month_sales_count_1,
-            $scope.getAreaSaleDiff(s) + '%',
-            $scope.getAreaOrderDiff(s) + '%'
-          ]);
-        });
-      }
-
-      execlReader.exportExcel(rows);
-    };
-
-    $scope.clickBtn('总部');
-
-    $scope.monthInfo = {
-      month: '',
-      show: false
-    };
-    $scope.showMonth = function () {
-      $scope.monthInfo.show = true;
-    };
-
-    $scope.hideMonth = function (month) {
-      $scope.monthInfo.month = month;
-      $scope.monthInfo.show = false;
-    };
-
-  }]);
+    }]);
 /**
  * Created by zenghong on 16/1/15.
  */

@@ -7,17 +7,10 @@
 
     <div class="import-btn" ng-click="showMonth()">
       <div class="month-container" ng-show="monthInfo.show===true">
-        <div class="month" ng-click="hideMonth(201504,$event)">201504</div>
-        <div class="month" ng-click="hideMonth(201504,$event)">201504</div>
-        <div class="month" ng-click="hideMonth(201504,$event)">201504</div>
-        <div class="month" ng-click="hideMonth(201504,$event)">201504</div>
-        <div class="month" ng-click="hideMonth(201504,$event)">201504</div>
-        <div class="month" ng-click="hideMonth(201504,$event)">201504</div>
-        <div class="month" ng-click="hideMonth(201504,$event)">201504</div>
-        <div class="month" ng-click="hideMonth(201504,$event)">201504</div>
+        <div class="month" ng-repeat="m in monthInfo.months" ng-click="hideMonth(m,$event)">{{m}}</div>
       </div>
 
-      当前月份 选择月份</div>
+      当前月份 {{monthInfo.month||'请选择'}}</div>
     <div class="import-btn" ng-click="exportReports()">导出{{curName}}报表</div>
   </div>
   <div class="re-suggest-body">

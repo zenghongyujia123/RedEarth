@@ -524,8 +524,7 @@ exports.approveAreaOrders = function (user, orders, callback) {
   });
 };
 
-exports.getAreaReports = function (user, name, callback) {
-  var month = getLastMonth(1);
+exports.getAreaReports = function (user,month, name, callback) {
   AreaSales.find({month: month, department: name}).populate('product').exec(function (err, areaOrders) {
     if (err) {
       return callback({err: error.system.db_error});

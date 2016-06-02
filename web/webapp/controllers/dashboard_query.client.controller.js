@@ -105,8 +105,8 @@ angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'Hq
             s.final_system_suggest_count,
             s.final_purchased_count,
             s.last_month_sales_count_1,
-            $scope.getHqSaleDiff(s)+'%',
-            $scope.getHqOrderDiff(s)+'%'
+            $scope.getHqSaleDiff(s) + '%',
+            $scope.getHqOrderDiff(s) + '%'
           ]);
         });
       }
@@ -139,8 +139,8 @@ angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'Hq
             s.system_suggest_count,
             s.D01_approve,
             s.last_month_sales_count_1,
-            $scope.getAreaSaleDiff(s)+'%',
-            $scope.getAreaOrderDiff(s)+'%'
+            $scope.getAreaSaleDiff(s) + '%',
+            $scope.getAreaOrderDiff(s) + '%'
           ]);
         });
       }
@@ -149,4 +149,19 @@ angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'Hq
     };
 
     $scope.clickBtn('总部');
+
+    $scope.monthInfo = {
+      month: '',
+      show: false
+    };
+    $scope.showMonth = function () {
+      $scope.monthInfo.show = true;
+    };
+
+    $scope.hideMonth = function (month,event) {
+      event.stopPropagation()
+      $scope.monthInfo.month = month;
+      $scope.monthInfo.show = false;
+    };
+
   }]);

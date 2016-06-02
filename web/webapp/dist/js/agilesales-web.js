@@ -424,6 +424,67 @@ angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', funct
 /**
  * Created by zenghong on 16/1/18.
  */
+angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', function ($rootScope) {
+  return {
+    restrict: 'AE',
+    templateUrl: 'directives/dialog_select/dialog_select.client.view.html',
+    replace: true,
+    scope: {},
+    link: function ($scope, $element, $attrs) {
+      $scope.options = [];
+      $scope.info = {
+        title: '',
+        contents: [{
+          key: '请输入拜访卡名称',
+          value: '点击输入名称'
+        }],
+        color: 'blue'
+      };
+
+      $scope.show = function () {
+        $element.addClass('show');
+      };
+      $scope.hide = function () {
+        $element.removeClass('show');
+      };
+      $scope.submit = function () {
+        $element.removeClass('show');
+        $scope.info.callback($scope.info);
+      };
+      $scope.toggleOptions = function (index) {
+        if ($element.find('.ag-row-option-container').eq(index).hasClass('show')) {
+          $scope.hideOptions(index);
+        }
+        else {
+          $scope.showOptions(index);
+        }
+      };
+
+      $scope.selectOption = function (content, option) {
+        content.value = option;
+      };
+
+      $rootScope.$on('show.dialogSelect', function (event, data) {
+        setTheme(data);
+        $scope.show();
+      });
+      function setTheme(info) {
+        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
+        $scope.info = info;
+      }
+
+      $scope.showOptions = function (index) {
+        $element.find('.ag-row-option-container').eq(index).addClass('show');
+      };
+      $scope.hideOptions = function (index) {
+        $element.find('.ag-row-option-container').eq(index).removeClass('show');
+      }
+    }
+  }
+}]);
+/**
+ * Created by zenghong on 16/1/18.
+ */
 angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'ExcelReaderService', function ($rootScope, ExcelReaderService) {
   return {
     restrict: 'AE',
@@ -481,67 +542,6 @@ angular.module('agilesales-web').directive('agDialogUpload', ['$rootScope', 'Exc
       function setTheme(info) {
         $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
         $scope.info = info;
-      }
-    }
-  }
-}]);
-/**
- * Created by zenghong on 16/1/18.
- */
-angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', function ($rootScope) {
-  return {
-    restrict: 'AE',
-    templateUrl: 'directives/dialog_select/dialog_select.client.view.html',
-    replace: true,
-    scope: {},
-    link: function ($scope, $element, $attrs) {
-      $scope.options = [];
-      $scope.info = {
-        title: '',
-        contents: [{
-          key: '请输入拜访卡名称',
-          value: '点击输入名称'
-        }],
-        color: 'blue'
-      };
-
-      $scope.show = function () {
-        $element.addClass('show');
-      };
-      $scope.hide = function () {
-        $element.removeClass('show');
-      };
-      $scope.submit = function () {
-        $element.removeClass('show');
-        $scope.info.callback($scope.info);
-      };
-      $scope.toggleOptions = function (index) {
-        if ($element.find('.ag-row-option-container').eq(index).hasClass('show')) {
-          $scope.hideOptions(index);
-        }
-        else {
-          $scope.showOptions(index);
-        }
-      };
-
-      $scope.selectOption = function (content, option) {
-        content.value = option;
-      };
-
-      $rootScope.$on('show.dialogSelect', function (event, data) {
-        setTheme(data);
-        $scope.show();
-      });
-      function setTheme(info) {
-        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
-        $scope.info = info;
-      }
-
-      $scope.showOptions = function (index) {
-        $element.find('.ag-row-option-container').eq(index).addClass('show');
-      };
-      $scope.hideOptions = function (index) {
-        $element.find('.ag-row-option-container').eq(index).removeClass('show');
       }
     }
   }
@@ -1203,8 +1203,8 @@ angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'Hq
             s.final_system_suggest_count,
             s.final_purchased_count,
             s.last_month_sales_count_1,
-            $scope.getHqSaleDiff(s)+'%',
-            $scope.getHqOrderDiff(s)+'%'
+            $scope.getHqSaleDiff(s) + '%',
+            $scope.getHqOrderDiff(s) + '%'
           ]);
         });
       }
@@ -1237,8 +1237,8 @@ angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'Hq
             s.system_suggest_count,
             s.D01_approve,
             s.last_month_sales_count_1,
-            $scope.getAreaSaleDiff(s)+'%',
-            $scope.getAreaOrderDiff(s)+'%'
+            $scope.getAreaSaleDiff(s) + '%',
+            $scope.getAreaOrderDiff(s) + '%'
           ]);
         });
       }
@@ -1247,6 +1247,20 @@ angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'Hq
     };
 
     $scope.clickBtn('总部');
+
+    $scope.monthInfo = {
+      month: '',
+      show: false
+    };
+    $scope.showMonth = function () {
+      $scope.monthInfo.show = true;
+    };
+
+    $scope.hideMonth = function (month) {
+      $scope.monthInfo.month = month;
+      $scope.monthInfo.show = false;
+    };
+
   }]);
 /**
  * Created by zenghong on 16/1/15.
@@ -3246,7 +3260,7 @@ angular.module('agilesales-web').controller('SuggestAreaSuggestResultCtrl', ['$s
         sale.next_month_sales_forecast_4 +
         sale.next_month_sales_forecast_5 +
         sale.next_month_sales_forecast_6;
-      var other_order_count = parseInt(sale.D02) + parseInt(sale.D03) + parseInt(sale.D04);
+      var other_order_count = parseInt(sale.D02);
       sale.system_suggest_count = parseInt(sale.next_month_sales_forecast_0 - (sale.last_month_stock_count + sale.last_month_onway_count - next_6_month_forecast - other_order_count - sale.safe_stock));
 
       if (sale.system_suggest_count_modify === 0) {

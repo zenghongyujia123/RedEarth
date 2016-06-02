@@ -304,7 +304,6 @@ body {
 }
 .re-suggest-page .re-suggest-header {
   width: 100%;
-  overflow: hidden;
   padding: 10px 20px;
   height: 60px;
   line-height: 40px;
@@ -614,4 +613,32 @@ body {
   text-align: center;
   line-height: 40px;
   cursor: pointer;
+}
+.import-btn {
+  position: relative;
+}
+.import-btn:hover {
+  color: black;
+  background-color: white;
+}
+.import-btn .month-container {
+  position: absolute;
+  width: 100%;
+  left: 0px;
+  top: 100%;
+  height: 200px;
+  background-color: white;
+  border: 1px solid #333;
+  z-index: 1000;
+  overflow-y: auto;
+}
+.import-btn .month-container .month {
+  line-height: 30px;
+  border-bottom: 1px solid #333;
+  padding: 0px 20px;
+  color: black;
+}
+.import-btn .month-container .month:hover {
+  color: white;
+  background-color: #333;
 }

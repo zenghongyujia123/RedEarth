@@ -4,6 +4,9 @@
       <i class="fa fa-angle-left"></i>
       订单详情
     </span>
+    <div class="re-header-right" ng-repeat="b in importBtns" ng-click="b.clickCallback()"
+         ng-show="user.account_type==='地区总部'">{{b.text}}
+    </div>
   </div>
   <div ng-if="user.account_type==='地区总部'" class="re-child-body">
     <div class="re-table">

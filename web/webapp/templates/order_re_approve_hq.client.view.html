@@ -12,8 +12,7 @@
          ng-show="orders[0].status==='已审核'">
       导入交期
     </div>
-    <div class="re-header-right" ng-if="orders&&orders.length>0" ng-click="exportSystemSuggest()"
-         ng-show="orders[0].status==='已审核'">
+    <div class="re-header-right" ng-if="orders" ng-click="exportSystemSuggest()">
       导出建议订单
     </div>
   </div>

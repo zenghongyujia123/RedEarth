@@ -8,6 +8,9 @@
     <div class="re-header-right" ng-if="orders&&orders.length>0" ng-click="approveAreaOrders()">
       {{orders[0].status==='已审核'?'已审核':'审核'}}
     </div>
+    <div class="re-header-right" ng-repeat="b in importBtns" ng-click="b.clickCallback()">{{b.text}}
+    </div>
+
   </div>
   <div class="re-child-body">
     <div class="re-table">
@@ -82,7 +85,7 @@
           <div class="body-col">{{o.next_month_sales_forecast_4}}</div>
           <div class="body-col">{{o.next_month_sales_forecast_5}}</div>
           <div class="body-col">{{o.next_month_sales_forecast_6}}</div>
-          <div class="body-col">{{ o['D02']}}</div>
+          <div class="body-col">{{ o.D02}}</div>
           <div class="body-col">{{o.system_suggest_count}}</div>
           <div class="body-col">{{o.system_suggest_count_modify}}</div>
 

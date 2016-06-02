@@ -315,7 +315,7 @@ exports.getHistoryAreaSalesStockOnway = function (user, callback) {
         condition.department = user.department;
     }
 
-    AreaSales.find(condition).limit(400).populate('product').exec(function (err, areaSales) {
+    AreaSales.find(condition).populate('product').exec(function (err, areaSales) {
         if (err || !areaSales) {
             return callback({err: error.system.db_error});
         }

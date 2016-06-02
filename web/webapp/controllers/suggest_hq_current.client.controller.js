@@ -1,14 +1,18 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope','$state', '$rootScope', 'HqOrderService','Loading',
-  function ($scope,$state, $rootScope, HqOrderService,Loading) {
+angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope','$state', '$rootScope', 'HqOrderService','Loading','ExcelReaderService',
+  function ($scope,$state, $rootScope, HqOrderService,Loading,ExcelReaderService) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单',
       btns: [{
         text: '导入当前库存',
         clickCallback: ClickCallback
-      }]
+      },
+        {
+          text: '导出',
+          clickCallback: exportExecl
+        }]
     });
 
 
@@ -94,5 +98,32 @@ angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope','$
           console.log(stocks);
         }
       });
+    }
+
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [[
+        'SKU编码',
+        '正品',
+        '在途',
+        '近效期',
+        '次品'
+      ]];
+
+      $scope.stocks.forEach(function (o) {
+        rows.push([
+          s.product_number,
+          s.genuine_goods,
+          s.onway_goods,
+          s.validity,
+          s.ungenuine_goods
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
     }
   }]);

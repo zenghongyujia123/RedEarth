@@ -380,6 +380,50 @@ angular.module('agilesales-web').directive('agDialogConfirm', ['$rootScope',func
 /**
  * Created by zenghong on 16/1/18.
  */
+angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
+  return {
+    restrict: 'AE',
+    templateUrl: 'directives/dialog_input/dialog_input.client.view.html',
+    replace: true,
+    scope: {},
+    link: function ($scope, $element, $attrs) {
+      $scope.info = {
+        title: '',
+        contents: [{
+          key: '请输入拜访卡名称',
+          tip: '点击输入名称',
+          value: ''
+        }],
+        color: 'blue'
+      };
+
+      $scope.show = function () {
+        $element.addClass('show');
+      };
+      $scope.hide = function () {
+        $element.removeClass('show');
+      };
+      $scope.submit = function () {
+        $element.removeClass('show');
+        if ($scope.info.callback) {
+          $scope.info.callback($scope.info);
+        }
+      };
+      $rootScope.$on('show.dialogInput', function (event, data) {
+        setTheme(data);
+        $scope.show();
+      });
+
+      function setTheme(info) {
+        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
+        $scope.info = info;
+      }
+    }
+  }
+}]);
+/**
+ * Created by zenghong on 16/1/18.
+ */
 angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', function ($rootScope) {
   return {
     restrict: 'AE',
@@ -434,50 +478,6 @@ angular.module('agilesales-web').directive('agDialogSelect', ['$rootScope', func
       };
       $scope.hideOptions = function (index) {
         $element.find('.ag-row-option-container').eq(index).removeClass('show');
-      }
-    }
-  }
-}]);
-/**
- * Created by zenghong on 16/1/18.
- */
-angular.module('agilesales-web').directive('agDialogInput', ['$rootScope', function ($rootScope) {
-  return {
-    restrict: 'AE',
-    templateUrl: 'directives/dialog_input/dialog_input.client.view.html',
-    replace: true,
-    scope: {},
-    link: function ($scope, $element, $attrs) {
-      $scope.info = {
-        title: '',
-        contents: [{
-          key: '请输入拜访卡名称',
-          tip: '点击输入名称',
-          value: ''
-        }],
-        color: 'blue'
-      };
-
-      $scope.show = function () {
-        $element.addClass('show');
-      };
-      $scope.hide = function () {
-        $element.removeClass('show');
-      };
-      $scope.submit = function () {
-        $element.removeClass('show');
-        if ($scope.info.callback) {
-          $scope.info.callback($scope.info);
-        }
-      };
-      $rootScope.$on('show.dialogInput', function (event, data) {
-        setTheme(data);
-        $scope.show();
-      });
-
-      function setTheme(info) {
-        $element.find('.ag-dialog-panel').removeClass($scope.info.color).addClass(info.color);
-        $scope.info = info;
       }
     }
   }
@@ -1284,18 +1284,19 @@ angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'Hq
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HistoryDeskCtrl', ['$scope', 'ProductService', 'Loading',
-  function ($scope, ProductService, Loading) {
+angular.module('agilesales-web').controller('HistoryDeskCtrl', ['$scope', 'ProductService', 'Loading','ExcelReaderService',
+  function ($scope, ProductService, Loading,ExcelReaderService) {
     $scope.$emit('suggest.import.changed', {
       title: '历史数据',
-      btns: []
+      btns: [
+        {
+          text: '导出',
+          clickCallback: exportExecl
+        }
+      ]
     });
 
     $scope.desks = [];
-
-    function importClickCallback() {
-
-    }
 
     $scope.getDesk = function () {
       Loading.show();
@@ -1312,6 +1313,31 @@ angular.module('agilesales-web').controller('HistoryDeskCtrl', ['$scope', 'Produ
     };
     $scope.getDesk();
 
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [[
+        '所属地区',
+        '地区',
+        '柜台号',
+        '柜台名'
+      ]];
+
+      $scope.desks.forEach(function (d) {
+        rows.push([
+          d.area,
+          d.child_area,
+          d.desk_number,
+          d.desk_name
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
+    }
+
   }]);
 /**
  * Created by zenghong on 16/1/15.
@@ -1322,24 +1348,28 @@ angular.module('agilesales-web').controller('HistoryHomeCtrl', function () {
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$state', '$rootScope', 'ProductService', 'Loading',
-  function ($scope, $state, $rootScope, ProductService, Loading) {
+angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$state', '$rootScope', 'ProductService', 'Loading', 'ExcelReaderService',
+  function ($scope, $state, $rootScope, ProductService, Loading, ExcelReaderService) {
     $scope.$emit('suggest.import.changed', {
       title: '历史数据',
       btns: [
         {
           text: '导入产品资料',
           clickCallback: importClickCallback
+        },
+        {
+          text: '导出',
+          clickCallback: exportExecl
         }
       ]
     });
 
-    function clearClickCallback(){
-      ProductService.clearData().then(function(data){
+    function clearClickCallback() {
+      ProductService.clearData().then(function (data) {
         console.log(data);
         alert('ok');
         $state.go('order_history.history_product', {}, {reload: true});
-      },function(data){
+      }, function (data) {
         console.log(data);
       });
     }
@@ -1514,19 +1544,143 @@ angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$s
       });
     }
 
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [[
+        'SKU编码',
+        '产品条码',
+        'SAP CODE',
+        '产品名称',
+        '规格',
+        '品类',
+        '系列名称',
+        '中分类名称',
+        '小分类名称',
+        '销售价格',
+        '晋颖成本价',
+        '开始销售日期',
+        '停止销售日期',
+        '保质期',
+        '销售单位',
+        '工厂名称',
+        '工厂MOQ',
+        'MOQ备注',
+        '工厂交货週期',
+        '是否明星产品',
+        'TOP SKU排名',
+        'ABC分类',
+        'ABC类说明',
+        'ABC类別%',
+        '柜枱销售參考(月)',
+        '柜枱安全库存(月)',
+        '柜枱最少订量',
+        '地区销售參考(月)',
+        '地区安全库存(月)',
+        '地区修改订单超出% (需颜色提醒)',
+        '地区修改订单超出% (需备注及确认)',
+        '总部销售參考(月)',
+        '总部安全库存(月)',
+        '审批地区修改订单超出% (需颜色提醒)',
+        '审批地区修改订单超出% (需上级确认)',
+        '订量达MOQ之%必采购',
+        '是否有地区特性',
+        '地区特性加20%',
+        '是否有季節性',
+        '季節性加20%',
+        '柜枱促销活动月份',
+        '柜枱促销活动比率',
+        '计划交货数',
+        '计划交期',
+        '实际收货数',
+        '实际交期',
+        '在途数',
+        '字段1',
+        '字段2',
+        '字段3',
+        '字段4',
+        '字段5'
+      ]];
+
+      $scope.products.forEach(function (p) {
+        rows.push([
+          p.product_number,
+          p.product_barcode,
+          p.sap_code,
+          p.product_name,
+          p.specification,
+          p.category,
+          p.series_name,
+          p.mid_classify,
+          p.small_classify,
+          p.sales_price,
+          p.jinyi_cost,
+          p.start_sales_date,
+          p.end_sales_date,
+          p.expiration_date,
+          p.sales_unit,
+          p.factory_name,
+          p.factory_moq,
+          p.moq_remark,
+          p.factory_delivery_cycle,
+          p.is_star_product,
+          p.top_sku_ranking,
+          p.abc_classify,
+          p.abc_classify_explain,
+          p.abc_category,
+          p.desk_sales_reference,
+          p.desk_minimum_order_count,
+          p.desk_safe_stock,
+          p.area_sales_reference,
+          p.area_safe_stock,
+          p.area_modify_exceed,
+          p.area_modify_exceed_remark,
+          p.hq_sales_reference,
+          p.hq_safe_stock,
+          p.approval_modify_exceed,
+          p.approval_modify_exceed_remark,
+          p.order_count_exceed_moq,
+          p.is_area_speciality,
+          p.area_speciality_more,
+          p.is_season_speciality,
+          p.season_speciality_more,
+          p.desk_promotion_month,
+          p.desk_promotion_rate,
+          p.plan_delivery_count,
+          p.plan_delivery_date,
+          p.real_delivery_count,
+          p.real_delivery_date,
+          p.onway_count,
+          p.field_1,
+          p.field_2,
+          p.field_3,
+          p.field_4,
+          p.field_5
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
+    }
 
   }]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$state', '$rootScope', 'AreaOrderService', 'Loading',
-  function ($scope, $state, $rootScope, AreaOrderService, Loading) {
+angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$state', '$rootScope', 'AreaOrderService', 'Loading', 'ExcelReaderService',
+  function ($scope, $state, $rootScope, AreaOrderService, Loading, ExcelReaderService) {
     $scope.$emit('suggest.import.changed', {
       title: '历史数据',
       btns: [
         {
           text: '导入历史销售,库存',
           clickCallback: importClickCallback
+        },
+        {
+          text: '导出',
+          clickCallback: exportExecl
         }
       ]
     });
@@ -1622,24 +1776,56 @@ angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$sta
       });
     }
 
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [[
+        'SKU编码',
+        '产品名称',
+        '月份',
+        '地区',
+        '销售量',
+        '月结库存',
+        '月结在途'
+      ]];
+
+      $scope.sales.forEach(function (s) {
+        rows.push([
+          s.product_number,
+          s.product.product_name,
+          s.month,
+          s.department,
+          s.last_month_sales_count,
+          s.last_month_stock_count,
+          s.last_month_onway_count
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
+    }
+
   }]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HistoryStockCtrl', ['$scope', 'AreaOrderService','Loading',
-  function ($scope, AreaOrderService,Loading) {
+angular.module('agilesales-web').controller('HistoryStockCtrl', ['$scope', 'AreaOrderService', 'Loading', 'ExcelReaderService',
+  function ($scope, AreaOrderService, Loading, ExcelReaderService) {
     $scope.$emit('suggest.import.changed', {
       title: '历史数据',
       btns: [
         {
           text: '导入历史库存',
           clickCallback: importClickCallback
+        },
+        {
+          text: '导出',
+          clickCallback: exportExecl
         }
       ]
     });
-
-    function importClickCallback(){}
-
 
     $scope.sales = [];
 
@@ -1805,6 +1991,37 @@ angular.module('agilesales-web').controller('HistoryStockCtrl', ['$scope', 'Area
           console.log(products);
         }
       });
+    }
+
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [[
+        'SKU编码',
+        '产品名称',
+        '上月月结库存',
+        '上月月结在途',
+        '上1个月销售量',
+        '上2个月销售量',
+        '上3个月销售量'
+      ]];
+
+      $scope.sales.forEach(function (o) {
+        rows.push([
+          o.product_number,
+          o.product.product_name,
+          o.last_month_stock_count,
+          o.last_month_onway_count,
+          o.last_month_sales_count,
+          o.last_month_sales_count_2 || '未知',
+          o.last_month_sales_count_3 || '未知'
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
     }
 
   }]);
@@ -2472,108 +2689,144 @@ angular.module('agilesales-web').controller('SettingPasswordCtrl', ['$scope', 'U
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService', 'Loading',
-  function ($scope, $rootScope, $state, AreaOrderService, Loading) {
-    $scope.$emit('suggest.import.changed', {
-      title: '建议订单',
-      btns: [
-        {
-          text: '导入上月销售,库存,在途',
-          clickCallback: salesClickCallback
-        }
-      ]
-    });
+angular.module('agilesales-web').controller('SuggestAreaLastMonthCtrl', ['$scope', '$rootScope', '$state', 'AreaOrderService', 'Loading', 'ExcelReaderService',
+    function ($scope, $rootScope, $state, AreaOrderService, Loading, ExcelReaderService) {
+        $scope.$emit('suggest.import.changed', {
+            title: '建议订单',
+            btns: [
+                {
+                    text: '导入上月销售,库存,在途',
+                    clickCallback: salesClickCallback
+                },
+                {
+                    text: '导出',
+                    clickCallback: exportExecl
+                }
+            ]
+        });
 
-    $scope.sales = [];
-    $scope.getSalesByArea = function () {
-      Loading.show();
-      AreaOrderService.getSalesByArea().then(function (data) {
-        if (!data.err) {
-          $scope.sales = data;
-        }
-        Loading.hide();
-        console.log(data);
-      }, function (data) {
-        Loading.hide();
-        console.log(data);
-      });
-    };
-    $scope.getSalesByArea();
-
-    function salesClickCallback() {
-      var headers = [
-        {key: 'A1', value: 'SKU编码'},
-        {key: 'B1', value: '上月销售量'},
-        {key: 'C1', value: '上月月结库存量'},
-        {key: 'D1', value: '上月月结在途量'}
-      ];
-
-      function upload(saleses, i) {
-        AreaOrderService.areaSalesStockOnwayImport(saleses[i++])
-          .then(function (data) {
-            if (data && data.err && data.err.type === 'product_not_exist') {
-              alert(data.err.message);
-              return $state.go('order_suggest.suggest_area_last_month', {}, {reload: true});
-            }
-
-            console.log(data);
-            if (saleses[i]) {
-              upload(saleses, i);
-            }
-            else {
-              Loading.hide();
-              $state.go('order_suggest.suggest_area_last_month', {}, {reload: true});
-            }
-          }, function (err) {
-            Loading.hide();
-            console.log(err);
-          });
-      }
-
-      $scope.areaSalesStockOnwayImport = function (saleses) {
-        Loading.show();
-        var i = 0;
-        upload(saleses, i);
-      };
-
-      $rootScope.$broadcast('show.dialogUpload', {
-        title: '上传销量库存在途量',
-        contents: [{
-          key: '请选择需要上传的销量库存在途量文件',
-          value: '点击选择文件',
-          tip: '点击选择文件',
-          sheetName: '分区'
-        }],
-        color: 'blue',
-        headers: headers,
-        callback: function (data) {
-          var result = [];
-          data.forEach(function (item) {
-            result.push({
-              product_number: item['SKU编码'],
-              last_month_sales_count: item['上月销售量'],
-              last_month_stock_count: item['上月月结库存量'],
-              last_month_onway_count: item['上月月结在途量'],
+        $scope.sales = [];
+        $scope.getSalesByArea = function () {
+            Loading.show();
+            AreaOrderService.getSalesByArea().then(function (data) {
+                if (!data.err) {
+                    $scope.sales = data;
+                }
+                Loading.hide();
+                console.log(data);
+            }, function (data) {
+                Loading.hide();
+                console.log(data);
             });
-          });
-          var sales = [];
-          for (var i = 0, len = result.length; i < len; i += 100) {
-            sales.push(result.slice(i, i + 100));
-          }
-          if (sales.length > 0) {
-            $scope.areaSalesStockOnwayImport(sales);
-          }
-          console.log(sales);
-        }
-      });
-    }
+        };
+        $scope.getSalesByArea();
 
-  }]);
+        function salesClickCallback() {
+            var headers = [
+                {key: 'A1', value: 'SKU编码'},
+                {key: 'B1', value: '上月销售量'},
+                {key: 'C1', value: '上月月结库存量'},
+                {key: 'D1', value: '上月月结在途量'}
+            ];
+
+            function upload(saleses, i) {
+                AreaOrderService.areaSalesStockOnwayImport(saleses[i++])
+                    .then(function (data) {
+                        if (data && data.err && data.err.type === 'product_not_exist') {
+                            alert(data.err.message);
+                            return $state.go('order_suggest.suggest_area_last_month', {}, {reload: true});
+                        }
+
+                        console.log(data);
+                        if (saleses[i]) {
+                            upload(saleses, i);
+                        }
+                        else {
+                            Loading.hide();
+                            $state.go('order_suggest.suggest_area_last_month', {}, {reload: true});
+                        }
+                    }, function (err) {
+                        Loading.hide();
+                        console.log(err);
+                    });
+            }
+
+            $scope.areaSalesStockOnwayImport = function (saleses) {
+                Loading.show();
+                var i = 0;
+                upload(saleses, i);
+            };
+
+            $rootScope.$broadcast('show.dialogUpload', {
+                title: '上传销量库存在途量',
+                contents: [{
+                    key: '请选择需要上传的销量库存在途量文件',
+                    value: '点击选择文件',
+                    tip: '点击选择文件',
+                    sheetName: '分区'
+                }],
+                color: 'blue',
+                headers: headers,
+                callback: function (data) {
+                    var result = [];
+                    data.forEach(function (item) {
+                        result.push({
+                            product_number: item['SKU编码'],
+                            last_month_sales_count: item['上月销售量'],
+                            last_month_stock_count: item['上月月结库存量'],
+                            last_month_onway_count: item['上月月结在途量'],
+                        });
+                    });
+                    var sales = [];
+                    for (var i = 0, len = result.length; i < len; i += 100) {
+                        sales.push(result.slice(i, i + 100));
+                    }
+                    if (sales.length > 0) {
+                        $scope.areaSalesStockOnwayImport(sales);
+                    }
+                    console.log(sales);
+                }
+            });
+        }
+
+        $scope.exportExcel = function () {
+            var execlReader = ExcelReaderService.getReader();
+            var rows = [[
+                'SKU编码',
+                '产品名称',
+                '上月月结库存',
+                '上月月结在途',
+                '上1个月销售量',
+                '上2个月销售量',
+                '上3个月销售量'
+            ]];
+
+            $scope.sales.forEach(function (o) {
+                rows.push([
+                    o.product_number,
+                    o.product.product_name,
+                    o.last_month_stock_count,
+                    o.last_month_onway_count,
+                    o.last_month_sales_count,
+                    o.last_month_sales_count_2 || '未知',
+                    o.last_month_sales_count_3 || '未知'
+                ]);
+            });
+
+            execlReader.exportExcel(rows);
+        };
+
+        function exportExecl() {
+            $scope.exportExcel();
+        }
+
+
+    }]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaOtherD02Ctrl', ['$scope', '$rootScope', '$state', 'AreaOrderService', 'Loading',
-  function ($scope, $rootScope, $state, AreaOrderService, Loading) {
+angular.module('agilesales-web').controller('SuggestAreaOtherD02Ctrl', ['$scope', '$rootScope', '$state', 'AreaOrderService', 'Loading','ExcelReaderService',
+  function ($scope, $rootScope, $state, AreaOrderService, Loading,ExcelReaderService) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentAreaSubmitOrder = function () {
       AreaOrderService.getCurrentAreaSubmitOrder().then(function (data) {
@@ -2597,6 +2850,10 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD02Ctrl', ['$scope'
               clickCallback: function () {
                 orderClickCallback('D02');
               }
+            },
+            {
+              text: '导出',
+              clickCallback: exportExecl
             }
           ]
         });
@@ -2736,12 +2993,47 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD02Ctrl', ['$scope'
         }
       });
     }
+
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [[
+       '产品名称',
+       'SKU编码',
+       '产品条码',
+       '订单编码',
+       '品类',
+       '中分类名称',
+       '销售价格',
+       '订单数量',
+       '总销售价格'
+      ]];
+
+      $scope.orders.forEach(function (o) {
+        rows.push([
+          o.product_name,
+          o.product_number,
+          o.product_barcode,
+          o.order_number,
+          o.category,
+          o.mid_classify,
+          o.sales_price,
+          o.order_count,
+          o.sales_price*o.order_count
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
+    }
   }]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaOtherD03Ctrl', ['$scope', '$rootScope', '$state', 'AreaOrderService', 'Loading',
-  function ($scope, $rootScope, $state, AreaOrderService, Loading) {
+angular.module('agilesales-web').controller('SuggestAreaOtherD03Ctrl', ['$scope', '$rootScope', '$state', 'AreaOrderService', 'Loading','ExcelReaderService',
+  function ($scope, $rootScope, $state, AreaOrderService, Loading,ExcelReaderService) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentAreaSubmitOrder = function () {
       AreaOrderService.getCurrentAreaSubmitOrder().then(function (data) {
@@ -2770,6 +3062,10 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD03Ctrl', ['$scope'
               clickCallback: function () {
                 orderClickCallback('D03');
               }
+            },
+            {
+              text: '导出',
+              clickCallback: exportExecl
             }
           ]
         });
@@ -2903,175 +3199,248 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD03Ctrl', ['$scope'
         }
       });
     }
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [[
+        '产品名称',
+        'SKU编码',
+        '产品条码',
+        '订单编码',
+        '品类',
+        '中分类名称',
+        '销售价格',
+        '订单数量',
+        '总销售价格'
+      ]];
+
+      $scope.orders.forEach(function (o) {
+        rows.push([
+          o.product_name,
+          o.product_number,
+          o.product_barcode,
+          o.order_number,
+          o.category,
+          o.mid_classify,
+          o.sales_price,
+          o.order_count,
+          o.sales_price*o.order_count
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
+    }
   }]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaOtherD04Ctrl', ['$scope', '$rootScope', '$state', 'AreaOrderService', 'Loading',
-  function ($scope, $rootScope, $state, AreaOrderService, Loading) {
-    $scope.curSubmitOrder = {};
-    $scope.getCurrentAreaSubmitOrder = function () {
-      AreaOrderService.getCurrentAreaSubmitOrder().then(function (data) {
-        console.log(data);
-        if (data && !data.err) {
-          $scope.curSubmitOrder = data;
-          $scope.changeImportBtn(data.has_D04);
-        }
-      }, function (data) {
-        console.log(data);
-      });
-    };
-    $scope.getCurrentAreaSubmitOrder();
-    $scope.changeImportBtn = function (text) {
-      if (text === '有') {
-        $scope.$emit('suggest.import.changed', {
-          title: '建议订单',
-          btns: [
-            {
-              text: '上传陈列订单',
-              clickCallback: function () {
-                orderClickCallback('D04');
-              }
-            }
-          ]
-        });
-      }
-      else {
-        $scope.$emit('suggest.import.changed', {
-          title: '建议订单',
-          btns: []
-        });
-      }
-    };
-
-
-    $scope.clickOrderStatus = function (status) {
-      $scope.curSubmitOrder.has_D04 = status;
-      $scope.updateSubmitOrderStatus();
-    };
-
-    $scope.updateSubmitOrderStatus = function () {
-      AreaOrderService.updateSubmitOhterOrderStatus({
-        _id: $scope.curSubmitOrder._id,
-        has_D02: $scope.curSubmitOrder.has_D02,
-        has_D03: $scope.curSubmitOrder.has_D03,
-        has_D04: $scope.curSubmitOrder.has_D04
-      }).then(function (data) {
-        console.log(data);
-        if (data && !data.err) {
-          $scope.curSubmitOrder = data;
-          $scope.changeImportBtn(data.has_D04);
-        }
-      }, function (data) {
-        console.log(data);
-      });
-    };
-
-    $scope.orders = [];
-    $scope.getOrdersByArea = function () {
-      Loading.show();
-      AreaOrderService.getOrdersByArea('D04').then(function (data) {
-        if (!data.err) {
-          $scope.orders = data;
-        }
-        Loading.hide();
-        console.log(data);
-      }, function (data) {
-        Loading.hide();
-        console.log(data);
-      });
-    };
-    $scope.getOrdersByArea();
-
-    function orderClickCallback(orderType) {
-      var headers = [
-        {key: 'A1', value: 'SKU编码'},
-        {key: 'B1', value: '产品名称'},
-        {key: 'C1', value: '产品条码'},
-        {key: 'D1', value: '品类'},
-        {key: 'E1', value: '中分类名称'},
-        {key: 'F1', value: '销售价格'},
-        {key: 'G1', value: '订单数量'},
-        {key: 'H1', value: '总销售价格'}
-      ];
-
-      function upload(orders, i) {
-        AreaOrderService.otherOrderImport(orders[i++])
-          .then(function (data) {
-            if (data && data.err && data.err.type === 'product_not_exist') {
-              alert(data.err.message);
-              return $state.go('order_suggest.suggest_area_other_D04', {}, {reload: true});
-            }
-
-            console.log(data);
-            if (orders[i]) {
-              upload(orders, i);
+angular.module('agilesales-web').controller('SuggestAreaOtherD04Ctrl', ['$scope', '$rootScope', '$state', 'AreaOrderService', 'Loading', 'ExcelReaderService',
+    function ($scope, $rootScope, $state, AreaOrderService, Loading, ExcelReaderService) {
+        $scope.curSubmitOrder = {};
+        $scope.getCurrentAreaSubmitOrder = function () {
+            AreaOrderService.getCurrentAreaSubmitOrder().then(function (data) {
+                console.log(data);
+                if (data && !data.err) {
+                    $scope.curSubmitOrder = data;
+                    $scope.changeImportBtn(data.has_D04);
+                }
+            }, function (data) {
+                console.log(data);
+            });
+        };
+        $scope.getCurrentAreaSubmitOrder();
+        $scope.changeImportBtn = function (text) {
+            if (text === '有') {
+                $scope.$emit('suggest.import.changed', {
+                    title: '建议订单',
+                    btns: [
+                        {
+                            text: '上传陈列订单',
+                            clickCallback: function () {
+                                orderClickCallback('D04');
+                            }
+                        },
+                        {
+                            text: '导出',
+                            clickCallback: exportExecl
+                        }
+                    ]
+                });
             }
             else {
-              Loading.hide();
-              $state.go('order_suggest.suggest_area_other_D04', {}, {reload: true});
+                $scope.$emit('suggest.import.changed', {
+                    title: '建议订单',
+                    btns: []
+                });
             }
-          }, function (err) {
-            Loading.hide();
-            console.log(err);
-          });
-      }
+        };
 
-      function getContentKey(type) {
-        switch (type) {
-          case  'D02':
-            return '批发订单';
-          case  'D03':
-            return '试用订单';
-          case  'D04':
-            return '陈列订单';
-        }
-        return '';
-      }
 
-      $scope.otherOrderImport = function (orders) {
-        var i = 0;
-        Loading.show();
-        upload(orders, i);
-      };
+        $scope.clickOrderStatus = function (status) {
+            $scope.curSubmitOrder.has_D04 = status;
+            $scope.updateSubmitOrderStatus();
+        };
 
-      $rootScope.$broadcast('show.dialogUpload', {
-        title: '上传' + getContentKey(orderType),
-        contents: [{
-          key: getContentKey(orderType),
-          value: '点击选择文件',
-          tip: '点击选择文件',
-          sheetName: '地区上传其他订单页面格式'
-        }],
-        color: 'blue',
-        headers: headers,
-        callback: function (data) {
-          var result = [];
-          data.forEach(function (item) {
-            result.push({
-              product_number: item['SKU编码'],
-              product_name: item['产品名称'],
-              product_barcode: item['产品条码'],
-              category: item['品类'],
-              mid_classify: item['中分类名称'],
-              sales_price: item['销售价格'],
-              order_count: item['订单数量'],
-              order_type: orderType,
-              total_price: item['总销售价格']
+        $scope.updateSubmitOrderStatus = function () {
+            AreaOrderService.updateSubmitOhterOrderStatus({
+                _id: $scope.curSubmitOrder._id,
+                has_D02: $scope.curSubmitOrder.has_D02,
+                has_D03: $scope.curSubmitOrder.has_D03,
+                has_D04: $scope.curSubmitOrder.has_D04
+            }).then(function (data) {
+                console.log(data);
+                if (data && !data.err) {
+                    $scope.curSubmitOrder = data;
+                    $scope.changeImportBtn(data.has_D04);
+                }
+            }, function (data) {
+                console.log(data);
             });
-          });
-          var orders = [];
-          for (var i = 0, len = result.length; i < len; i += 100) {
-            orders.push(result.slice(i, i + 100));
-          }
-          if (orders.length > 0) {
-            $scope.otherOrderImport(orders);
-          }
-          console.log(orders);
+        };
+
+        $scope.orders = [];
+        $scope.getOrdersByArea = function () {
+            Loading.show();
+            AreaOrderService.getOrdersByArea('D04').then(function (data) {
+                if (!data.err) {
+                    $scope.orders = data;
+                }
+                Loading.hide();
+                console.log(data);
+            }, function (data) {
+                Loading.hide();
+                console.log(data);
+            });
+        };
+        $scope.getOrdersByArea();
+
+        function orderClickCallback(orderType) {
+            var headers = [
+                {key: 'A1', value: 'SKU编码'},
+                {key: 'B1', value: '产品名称'},
+                {key: 'C1', value: '产品条码'},
+                {key: 'D1', value: '品类'},
+                {key: 'E1', value: '中分类名称'},
+                {key: 'F1', value: '销售价格'},
+                {key: 'G1', value: '订单数量'},
+                {key: 'H1', value: '总销售价格'}
+            ];
+
+            function upload(orders, i) {
+                AreaOrderService.otherOrderImport(orders[i++])
+                    .then(function (data) {
+                        if (data && data.err && data.err.type === 'product_not_exist') {
+                            alert(data.err.message);
+                            return $state.go('order_suggest.suggest_area_other_D04', {}, {reload: true});
+                        }
+
+                        console.log(data);
+                        if (orders[i]) {
+                            upload(orders, i);
+                        }
+                        else {
+                            Loading.hide();
+                            $state.go('order_suggest.suggest_area_other_D04', {}, {reload: true});
+                        }
+                    }, function (err) {
+                        Loading.hide();
+                        console.log(err);
+                    });
+            }
+
+            function getContentKey(type) {
+                switch (type) {
+                    case  'D02':
+                        return '批发订单';
+                    case  'D03':
+                        return '试用订单';
+                    case  'D04':
+                        return '陈列订单';
+                }
+                return '';
+            }
+
+            $scope.otherOrderImport = function (orders) {
+                var i = 0;
+                Loading.show();
+                upload(orders, i);
+            };
+
+            $rootScope.$broadcast('show.dialogUpload', {
+                title: '上传' + getContentKey(orderType),
+                contents: [{
+                    key: getContentKey(orderType),
+                    value: '点击选择文件',
+                    tip: '点击选择文件',
+                    sheetName: '地区上传其他订单页面格式'
+                }],
+                color: 'blue',
+                headers: headers,
+                callback: function (data) {
+                    var result = [];
+                    data.forEach(function (item) {
+                        result.push({
+                            product_number: item['SKU编码'],
+                            product_name: item['产品名称'],
+                            product_barcode: item['产品条码'],
+                            category: item['品类'],
+                            mid_classify: item['中分类名称'],
+                            sales_price: item['销售价格'],
+                            order_count: item['订单数量'],
+                            order_type: orderType,
+                            total_price: item['总销售价格']
+                        });
+                    });
+                    var orders = [];
+                    for (var i = 0, len = result.length; i < len; i += 100) {
+                        orders.push(result.slice(i, i + 100));
+                    }
+                    if (orders.length > 0) {
+                        $scope.otherOrderImport(orders);
+                    }
+                    console.log(orders);
+                }
+            });
         }
-      });
-    }
-  }]);
+
+        $scope.exportExcel = function () {
+            var execlReader = ExcelReaderService.getReader();
+            var rows = [[
+                '产品名称',
+                'SKU编码',
+                '产品条码',
+                '订单编码',
+                '品类',
+                '中分类名称',
+                '销售价格',
+                '订单数量',
+                '总销售价格'
+            ]];
+
+            $scope.orders.forEach(function (o) {
+                rows.push([
+                    o.product_name,
+                    o.product_number,
+                    o.product_barcode,
+                    o.order_number,
+                    o.category,
+                    o.mid_classify,
+                    o.sales_price,
+                    o.order_count,
+                    o.sales_price * o.order_count
+                ]);
+            });
+
+            execlReader.exportExcel(rows);
+        };
+
+        function exportExecl() {
+            $scope.exportExcel();
+        }
+    }]);
 /**
  * Created by zenghong on 16/1/15.
  */
@@ -3475,8 +3844,8 @@ angular.module('agilesales-web').controller('SuggestHomeCtrl', ['$scope', 'AuthS
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope', '$state', '$rootScope', 'AuthService', 'HqOrderService',
-  function ($scope, $state, $rootScope, AuthService, HqOrderService) {
+angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope', '$state', '$rootScope', 'AuthService', 'HqOrderService','ExcelReaderService',
+  function ($scope, $state, $rootScope, AuthService, HqOrderService,ExcelReaderService) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentHqSubmitOrder = function () {
       HqOrderService.getCurrentHqSubmitOrder().then(function (data) {
@@ -3501,6 +3870,10 @@ angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope', '$
               clickCallback: function () {
                 orderClickCallback('Y05');
               }
+            },
+            {
+              text: '导出',
+              clickCallback: exportExecl
             }
           ]
         });
@@ -3637,18 +4010,58 @@ angular.module('agilesales-web').controller('SuggestHqAgencyCtrl', ['$scope', '$
     }
 
 
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [[
+        '产品名称',
+        'SKU编码',
+        '产品条码',
+        '品类',
+        '中分类名称',
+        '销售价格',
+        '晋颖成本价',
+        '订单号码',
+        '订单数量',
+        '晋颖总价格'
+      ]];
+
+      $scope.orders.forEach(function (o) {
+        rows.push([
+          o.product_name,
+          o.product_number,
+          o.product_barcode,
+          o.category,
+          o.mid_classify,
+          o.sales_price,
+          o.jinyi_cost,
+          o.order_number,
+          o.order_count,
+          o.jinyi_cost*o.order_count
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
+    }
   }]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope','$state', '$rootScope', 'HqOrderService','Loading',
-  function ($scope,$state, $rootScope, HqOrderService,Loading) {
+angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope','$state', '$rootScope', 'HqOrderService','Loading','ExcelReaderService',
+  function ($scope,$state, $rootScope, HqOrderService,Loading,ExcelReaderService) {
     $scope.$emit('suggest.import.changed', {
       title: '建议订单',
       btns: [{
         text: '导入当前库存',
         clickCallback: ClickCallback
-      }]
+      },
+        {
+          text: '导出',
+          clickCallback: exportExecl
+        }]
     });
 
 
@@ -3735,12 +4148,39 @@ angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope','$
         }
       });
     }
+
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [[
+        'SKU编码',
+        '正品',
+        '在途',
+        '近效期',
+        '次品'
+      ]];
+
+      $scope.stocks.forEach(function (o) {
+        rows.push([
+          s.product_number,
+          s.genuine_goods,
+          s.onway_goods,
+          s.validity,
+          s.ungenuine_goods
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
+    }
   }]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope', '$state','$rootScope', 'AuthService','HqOrderService','Loading',
-  function ($scope, $state,$rootScope, AuthService,HqOrderService,Loading) {
+angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope', '$state','$rootScope', 'AuthService','HqOrderService','Loading','ExcelReaderService',
+  function ($scope, $state,$rootScope, AuthService,HqOrderService,Loading,ExcelReaderService) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentHqSubmitOrder = function () {
       HqOrderService.getCurrentHqSubmitOrder().then(function (data) {
@@ -3764,6 +4204,10 @@ angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope',
               clickCallback: function () {
                 orderClickCallback('Y06');
               }
+            },
+            {
+              text: '导出',
+              clickCallback: exportExecl
             }
           ]
         });
@@ -3904,12 +4348,49 @@ angular.module('agilesales-web').controller('SuggestHqEcommerceCtrl', ['$scope',
         }
       });
     }
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [[
+        '产品名称',
+        'SKU编码',
+        '产品条码',
+        '品类',
+        '中分类名称',
+        '销售价格',
+        '晋颖成本价',
+        '订单号码',
+        '订单数量',
+        '晋颖总价格'
+      ]];
+
+      $scope.orders.forEach(function (o) {
+        rows.push([
+          o.product_name,
+          o.product_number,
+          o.product_barcode,
+          o.category,
+          o.mid_classify,
+          o.sales_price,
+          o.jinyi_cost,
+          o.order_number,
+          o.order_count,
+          o.jinyi_cost*o.order_count
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
+    }
+
   }]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqMaoziCtrl', ['$scope','$state', '$rootScope', 'AuthService', 'HqOrderService','Loading',
-  function ($scope, $state,$rootScope, AuthService, HqOrderService,Loading) {
+angular.module('agilesales-web').controller('SuggestHqMaoziCtrl', ['$scope','$state', '$rootScope', 'AuthService', 'HqOrderService','Loading','ExcelReaderService',
+  function ($scope, $state,$rootScope, AuthService, HqOrderService,Loading,ExcelReaderService) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentHqSubmitOrder = function () {
       HqOrderService.getCurrentHqSubmitOrder().then(function (data) {
@@ -3933,6 +4414,10 @@ angular.module('agilesales-web').controller('SuggestHqMaoziCtrl', ['$scope','$st
               clickCallback: function () {
                 orderClickCallback('Y07');
               }
+            },
+            {
+              text: '导出',
+              clickCallback: exportExecl
             }
           ]
         });
@@ -4072,12 +4557,48 @@ angular.module('agilesales-web').controller('SuggestHqMaoziCtrl', ['$scope','$st
         }
       });
     }
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [[
+        '产品名称',
+        'SKU编码',
+        '产品条码',
+        '品类',
+        '中分类名称',
+        '销售价格',
+        '晋颖成本价',
+        '订单号码',
+        '订单数量',
+        '晋颖总价格'
+      ]];
+
+      $scope.orders.forEach(function (o) {
+        rows.push([
+          o.product_name,
+          o.product_number,
+          o.product_barcode,
+          o.category,
+          o.mid_classify,
+          o.sales_price,
+          o.jinyi_cost,
+          o.order_number,
+          o.order_count,
+          o.jinyi_cost*o.order_count
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
+    }
   }]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqOtherY02Ctrl', ['$scope', '$state', '$rootScope', 'HqOrderService','Loading',
-  function ($scope, $state, $rootScope, HqOrderService,Loading) {
+angular.module('agilesales-web').controller('SuggestHqOtherY02Ctrl', ['$scope', '$state', '$rootScope', 'HqOrderService','Loading','ExcelReaderService',
+  function ($scope, $state, $rootScope, HqOrderService,Loading,ExcelReaderService) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentHqSubmitOrder = function () {
       HqOrderService.getCurrentHqSubmitOrder().then(function (data) {
@@ -4101,6 +4622,10 @@ angular.module('agilesales-web').controller('SuggestHqOtherY02Ctrl', ['$scope', 
               clickCallback: function () {
                 orderClickCallback('Y02');
               }
+            },
+            {
+              text: '导出',
+              clickCallback: exportExecl
             }
           ]
         });
@@ -4239,12 +4764,48 @@ angular.module('agilesales-web').controller('SuggestHqOtherY02Ctrl', ['$scope', 
         }
       });
     }
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [[
+        '产品名称',
+        'SKU编码',
+        '产品条码',
+        '品类',
+        '中分类名称',
+        '销售价格',
+        '晋颖成本价',
+        '订单号码',
+        '订单数量',
+        '晋颖总价格'
+      ]];
+
+      $scope.orders.forEach(function (o) {
+        rows.push([
+          o.product_name,
+          o.product_number,
+          o.product_barcode,
+          o.category,
+          o.mid_classify,
+          o.sales_price,
+          o.jinyi_cost,
+          o.order_number,
+          o.order_count,
+          o.jinyi_cost*o.order_count
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
+    }
   }]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqOtherY03Ctrl', ['$scope','$state', '$rootScope', 'HqOrderService','Loading',
-  function ($scope, $state,$rootScope, HqOrderService,Loading) {
+angular.module('agilesales-web').controller('SuggestHqOtherY03Ctrl', ['$scope','$state', '$rootScope', 'HqOrderService','Loading','ExcelReaderService',
+  function ($scope, $state,$rootScope, HqOrderService,Loading,ExcelReaderService) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentHqSubmitOrder = function () {
       HqOrderService.getCurrentHqSubmitOrder().then(function (data) {
@@ -4268,6 +4829,10 @@ angular.module('agilesales-web').controller('SuggestHqOtherY03Ctrl', ['$scope','
               clickCallback: function () {
                 orderClickCallback('Y03');
               }
+            },
+            {
+              text: '导出',
+              clickCallback: exportExecl
             }
           ]
         });
@@ -4406,13 +4971,49 @@ angular.module('agilesales-web').controller('SuggestHqOtherY03Ctrl', ['$scope','
         }
       });
     }
+
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [[
+        '产品名称',
+        'SKU编码',
+        '产品条码',
+        '品类',
+        '中分类名称',
+        '销售价格',
+        '晋颖成本价',
+        '订单号码',
+        '订单数量',
+        '晋颖总价格'
+      ]];
+
+      $scope.orders.forEach(function (o) {
+        rows.push([
+          o.product_name,
+          o.product_number,
+          o.product_barcode,
+          o.category,
+          o.mid_classify,
+          o.sales_price,
+          o.jinyi_cost,
+          o.order_number,
+          o.order_count,
+          o.jinyi_cost*o.order_count
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
+    }
   }]);
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqOtherY04Ctrl', ['$scope', '$state', '$rootScope', 'HqOrderService', 'Loading',
-  function ($scope, $state, $rootScope, HqOrderService, Loading) {
-
+angular.module('agilesales-web').controller('SuggestHqOtherY04Ctrl', ['$scope', '$state', '$rootScope', 'HqOrderService', 'Loading','ExcelReaderService',
+  function ($scope, $state, $rootScope, HqOrderService, Loading,ExcelReaderService) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentHqSubmitOrder = function () {
       HqOrderService.getCurrentHqSubmitOrder().then(function (data) {
@@ -4436,6 +5037,10 @@ angular.module('agilesales-web').controller('SuggestHqOtherY04Ctrl', ['$scope', 
               clickCallback: function () {
                 orderClickCallback('Y04');
               }
+            },
+            {
+              text: '导出',
+              clickCallback: exportExecl
             }
           ]
         });
@@ -4573,6 +5178,43 @@ angular.module('agilesales-web').controller('SuggestHqOtherY04Ctrl', ['$scope', 
           console.log(orders);
         }
       });
+    }
+
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [[
+        '产品名称',
+        'SKU编码',
+        '产品条码',
+        '品类',
+        '中分类名称',
+        '销售价格',
+        '晋颖成本价',
+        '订单号码',
+        '订单数量',
+        '晋颖总价格'
+      ]];
+
+      $scope.orders.forEach(function (o) {
+        rows.push([
+          o.product_name,
+          o.product_number,
+          o.product_barcode,
+          o.category,
+          o.mid_classify,
+          o.sales_price,
+          o.jinyi_cost,
+          o.order_number,
+          o.order_count,
+          o.jinyi_cost*o.order_count
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
     }
   }]);
 /**

@@ -1,24 +1,28 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$state', '$rootScope', 'ProductService', 'Loading',
-  function ($scope, $state, $rootScope, ProductService, Loading) {
+angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$state', '$rootScope', 'ProductService', 'Loading', 'ExcelReaderService',
+  function ($scope, $state, $rootScope, ProductService, Loading, ExcelReaderService) {
     $scope.$emit('suggest.import.changed', {
       title: '历史数据',
       btns: [
         {
           text: '导入产品资料',
           clickCallback: importClickCallback
+        },
+        {
+          text: '导出',
+          clickCallback: exportExecl
         }
       ]
     });
 
-    function clearClickCallback(){
-      ProductService.clearData().then(function(data){
+    function clearClickCallback() {
+      ProductService.clearData().then(function (data) {
         console.log(data);
         alert('ok');
         $state.go('order_history.history_product', {}, {reload: true});
-      },function(data){
+      }, function (data) {
         console.log(data);
       });
     }
@@ -193,5 +197,125 @@ angular.module('agilesales-web').controller('HistoryProductCtrl', ['$scope', '$s
       });
     }
 
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [[
+        'SKU编码',
+        '产品条码',
+        'SAP CODE',
+        '产品名称',
+        '规格',
+        '品类',
+        '系列名称',
+        '中分类名称',
+        '小分类名称',
+        '销售价格',
+        '晋颖成本价',
+        '开始销售日期',
+        '停止销售日期',
+        '保质期',
+        '销售单位',
+        '工厂名称',
+        '工厂MOQ',
+        'MOQ备注',
+        '工厂交货週期',
+        '是否明星产品',
+        'TOP SKU排名',
+        'ABC分类',
+        'ABC类说明',
+        'ABC类別%',
+        '柜枱销售參考(月)',
+        '柜枱安全库存(月)',
+        '柜枱最少订量',
+        '地区销售參考(月)',
+        '地区安全库存(月)',
+        '地区修改订单超出% (需颜色提醒)',
+        '地区修改订单超出% (需备注及确认)',
+        '总部销售參考(月)',
+        '总部安全库存(月)',
+        '审批地区修改订单超出% (需颜色提醒)',
+        '审批地区修改订单超出% (需上级确认)',
+        '订量达MOQ之%必采购',
+        '是否有地区特性',
+        '地区特性加20%',
+        '是否有季節性',
+        '季節性加20%',
+        '柜枱促销活动月份',
+        '柜枱促销活动比率',
+        '计划交货数',
+        '计划交期',
+        '实际收货数',
+        '实际交期',
+        '在途数',
+        '字段1',
+        '字段2',
+        '字段3',
+        '字段4',
+        '字段5'
+      ]];
+
+      $scope.products.forEach(function (p) {
+        rows.push([
+          p.product_number,
+          p.product_barcode,
+          p.sap_code,
+          p.product_name,
+          p.specification,
+          p.category,
+          p.series_name,
+          p.mid_classify,
+          p.small_classify,
+          p.sales_price,
+          p.jinyi_cost,
+          p.start_sales_date,
+          p.end_sales_date,
+          p.expiration_date,
+          p.sales_unit,
+          p.factory_name,
+          p.factory_moq,
+          p.moq_remark,
+          p.factory_delivery_cycle,
+          p.is_star_product,
+          p.top_sku_ranking,
+          p.abc_classify,
+          p.abc_classify_explain,
+          p.abc_category,
+          p.desk_sales_reference,
+          p.desk_minimum_order_count,
+          p.desk_safe_stock,
+          p.area_sales_reference,
+          p.area_safe_stock,
+          p.area_modify_exceed,
+          p.area_modify_exceed_remark,
+          p.hq_sales_reference,
+          p.hq_safe_stock,
+          p.approval_modify_exceed,
+          p.approval_modify_exceed_remark,
+          p.order_count_exceed_moq,
+          p.is_area_speciality,
+          p.area_speciality_more,
+          p.is_season_speciality,
+          p.season_speciality_more,
+          p.desk_promotion_month,
+          p.desk_promotion_rate,
+          p.plan_delivery_count,
+          p.plan_delivery_date,
+          p.real_delivery_count,
+          p.real_delivery_date,
+          p.onway_count,
+          p.field_1,
+          p.field_2,
+          p.field_3,
+          p.field_4,
+          p.field_5
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
+    }
 
   }]);

@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestAreaOtherD03Ctrl', ['$scope', '$rootScope', '$state', 'AreaOrderService', 'Loading',
-  function ($scope, $rootScope, $state, AreaOrderService, Loading) {
+angular.module('agilesales-web').controller('SuggestAreaOtherD03Ctrl', ['$scope', '$rootScope', '$state', 'AreaOrderService', 'Loading','ExcelReaderService',
+  function ($scope, $rootScope, $state, AreaOrderService, Loading,ExcelReaderService) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentAreaSubmitOrder = function () {
       AreaOrderService.getCurrentAreaSubmitOrder().then(function (data) {
@@ -31,6 +31,10 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD03Ctrl', ['$scope'
               clickCallback: function () {
                 orderClickCallback('D03');
               }
+            },
+            {
+              text: '导出',
+              clickCallback: exportExecl
             }
           ]
         });
@@ -163,5 +167,39 @@ angular.module('agilesales-web').controller('SuggestAreaOtherD03Ctrl', ['$scope'
           console.log(orders);
         }
       });
+    }
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [[
+        '产品名称',
+        'SKU编码',
+        '产品条码',
+        '订单编码',
+        '品类',
+        '中分类名称',
+        '销售价格',
+        '订单数量',
+        '总销售价格'
+      ]];
+
+      $scope.orders.forEach(function (o) {
+        rows.push([
+          o.product_name,
+          o.product_number,
+          o.product_barcode,
+          o.order_number,
+          o.category,
+          o.mid_classify,
+          o.sales_price,
+          o.order_count,
+          o.sales_price*o.order_count
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
     }
   }]);

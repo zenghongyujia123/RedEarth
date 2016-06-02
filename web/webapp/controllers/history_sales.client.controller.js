@@ -1,14 +1,18 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$state', '$rootScope', 'AreaOrderService', 'Loading',
-  function ($scope, $state, $rootScope, AreaOrderService, Loading) {
+angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$state', '$rootScope', 'AreaOrderService', 'Loading', 'ExcelReaderService',
+  function ($scope, $state, $rootScope, AreaOrderService, Loading, ExcelReaderService) {
     $scope.$emit('suggest.import.changed', {
       title: '历史数据',
       btns: [
         {
           text: '导入历史销售,库存',
           clickCallback: importClickCallback
+        },
+        {
+          text: '导出',
+          clickCallback: exportExecl
         }
       ]
     });
@@ -102,6 +106,37 @@ angular.module('agilesales-web').controller('HistorySalesCtrl', ['$scope', '$sta
           console.log(sales);
         }
       });
+    }
+
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [[
+        'SKU编码',
+        '产品名称',
+        '月份',
+        '地区',
+        '销售量',
+        '月结库存',
+        '月结在途'
+      ]];
+
+      $scope.sales.forEach(function (s) {
+        rows.push([
+          s.product_number,
+          s.product.product_name,
+          s.month,
+          s.department,
+          s.last_month_sales_count,
+          s.last_month_stock_count,
+          s.last_month_onway_count
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
     }
 
   }]);

@@ -1,8 +1,8 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('SuggestHqOtherY02Ctrl', ['$scope', '$state', '$rootScope', 'HqOrderService','Loading',
-  function ($scope, $state, $rootScope, HqOrderService,Loading) {
+angular.module('agilesales-web').controller('SuggestHqOtherY02Ctrl', ['$scope', '$state', '$rootScope', 'HqOrderService','Loading','ExcelReaderService',
+  function ($scope, $state, $rootScope, HqOrderService,Loading,ExcelReaderService) {
     $scope.curSubmitOrder = {};
     $scope.getCurrentHqSubmitOrder = function () {
       HqOrderService.getCurrentHqSubmitOrder().then(function (data) {
@@ -26,6 +26,10 @@ angular.module('agilesales-web').controller('SuggestHqOtherY02Ctrl', ['$scope', 
               clickCallback: function () {
                 orderClickCallback('Y02');
               }
+            },
+            {
+              text: '导出',
+              clickCallback: exportExecl
             }
           ]
         });
@@ -163,5 +167,41 @@ angular.module('agilesales-web').controller('SuggestHqOtherY02Ctrl', ['$scope', 
           console.log(orders);
         }
       });
+    }
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [[
+        '产品名称',
+        'SKU编码',
+        '产品条码',
+        '品类',
+        '中分类名称',
+        '销售价格',
+        '晋颖成本价',
+        '订单号码',
+        '订单数量',
+        '晋颖总价格'
+      ]];
+
+      $scope.orders.forEach(function (o) {
+        rows.push([
+          o.product_name,
+          o.product_number,
+          o.product_barcode,
+          o.category,
+          o.mid_classify,
+          o.sales_price,
+          o.jinyi_cost,
+          o.order_number,
+          o.order_count,
+          o.jinyi_cost*o.order_count
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
     }
   }]);

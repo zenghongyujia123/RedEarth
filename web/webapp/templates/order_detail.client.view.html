@@ -4,6 +4,9 @@
       <i class="fa fa-angle-left"></i>
       订单详情
     </span>
+    <div class="re-header-right" ng-repeat="b in importBtns" ng-click="b.clickCallback()">{{b.text}}
+    </div>
+
   </div>
   <div ng-if="user.account_type==='地区分公司'" class="re-child-body">
     <div class="re-table">
@@ -76,7 +79,7 @@
           <div class="body-col">{{o.next_month_sales_forecast_4}}</div>
           <div class="body-col">{{o.next_month_sales_forecast_5}}</div>
           <div class="body-col">{{o.next_month_sales_forecast_6}}</div>
-          <div class="body-col">{{ o['D02']}}</div>
+          <div class="body-col">{{o.D02}}</div>
           <div class="body-col">{{o.system_suggest_count}}</div>
           <input class="body-col" ng-model="o.system_suggest_count_modify">
 

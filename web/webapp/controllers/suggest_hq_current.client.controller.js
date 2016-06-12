@@ -110,7 +110,7 @@ angular.module('agilesales-web').controller('SuggestHqCurrentCtrl', ['$scope','$
         '次品'
       ]];
 
-      $scope.stocks.forEach(function (o) {
+      $scope.stocks.forEach(function (s) {
         rows.push([
           s.product_number,
           s.genuine_goods,

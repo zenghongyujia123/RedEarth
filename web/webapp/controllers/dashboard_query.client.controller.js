@@ -92,11 +92,11 @@ angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'Hq
           '产品条码',
           'SKU编码',
           'ABC分类',
-          '上月总部销售预测',
-          '上月系统建议订单',
-          '上月总部订单MOQ建议数',
-          '上月实际订货数',
-          '上月销售',
+          '总部销售预测',
+          '系统建议订单',
+          '总部订单MOQ建议数',
+          '实际订货数',
+          '销售',
           '销售差异比',
           '订单差异'
         ]];
@@ -128,10 +128,10 @@ angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'Hq
           '产品条码',
           'SKU编码',
           'ABC分类',
-          '上月地区销售预测',
-          '上月系统建议订货数',
-          '上月实际订货数',
-          '上月销售',
+          '地区销售预测',
+          '系统建议订货数',
+          '实际订货数',
+          '销售',
           '销售差异比',
           '订单差异比'
         ]];
@@ -147,7 +147,7 @@ angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'Hq
             s.next_month_sales_forecast_0,
             s.system_suggest_count,
             s.D01_approve,
-            s.last_month_sales_count_1,
+            s.last_month_sales_count_0,
             $scope.getAreaSaleDiff(s) + '%',
             $scope.getAreaOrderDiff(s) + '%'
           ]);

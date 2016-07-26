@@ -35,8 +35,9 @@ angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'Hq
     };
 
     $scope.getHqReports = function (name) {
+      var nextMonth = $scope.monthInfo.months[$scope.monthInfo.months.indexOf($scope.monthInfo.month) - 1];
 
-      HqOrderService.getHqReports($scope.monthInfo.month, name).then(function (data) {
+      HqOrderService.getHqReports($scope.monthInfo.month,nextMonth).then(function (data) {
         console.log(data);
         if (data && !data.err) {
           $scope.reports = data;

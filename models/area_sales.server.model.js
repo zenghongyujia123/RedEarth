@@ -160,6 +160,11 @@ module.exports = function (appDb) {
       type: Number,
       default: 0
     },
+    //当月销售
+    last_month_sales_count_0: {
+      type: Number,
+      default: 0
+    },
     last_month_sales_count_1: {
       type: Number,
       default: 0

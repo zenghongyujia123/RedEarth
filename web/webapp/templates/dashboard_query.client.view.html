@@ -7,7 +7,7 @@
 
     <div class="import-btn" ng-click="showMonth()">
       <div class="month-container" ng-show="monthInfo.show===true">
-        <div class="month" ng-repeat="m in monthInfo.months" ng-click="hideMonth(m,$event)">{{m}}</div>
+        <div class="month" ng-repeat="m in monthInfo.months" ng-if="$index!=0" ng-click="hideMonth(m,$event)">{{m}}</div>
       </div>
 
       当前月份 {{monthInfo.month||'请选择'}}</div>
@@ -120,7 +120,7 @@
             <div class="body-col">{{s.next_month_sales_forecast_0}}</div>
             <div class="body-col">{{s.system_suggest_count}}</div>
             <div class="body-col">{{s.D01_approve}}</div>
-            <div class="body-col">{{s.last_month_sales_count_1}}</div>
+            <div class="body-col">{{s.last_month_sales_count_0}}</div>
 
             <div class="body-col">{{getAreaSaleDiff(s)}}%</div>
             <div class="body-col">{{getAreaOrderDiff(s)}}%</div>

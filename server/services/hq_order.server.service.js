@@ -524,7 +524,7 @@ exports.getHqReports = function (user, month, nextMonth, callback) {
         {
           $group: {
             _id: '$month',
-            sales_count: {$sum: '$last_month_sales_count'}
+            sales_count: {$sum: '$last_month_sales_count_1'}
           }
         }
       ]).exec(function (err, result) {

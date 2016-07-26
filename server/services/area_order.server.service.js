@@ -547,7 +547,8 @@ exports.getAreaReports = function (user, month, nextMonth, name, callback) {
     async.each(areaOrders, function (areaOrder, eachCallback) {
       AreaSales.findOne({
         month: nextMonth,
-        department: name
+        department: name,
+        product_number: areaOrder.product_number
       }, function (err, nextArea) {
         if (nextArea) {
           areaOrder.last_month_sales_count_0 = nextArea.last_month_sales_count_1;

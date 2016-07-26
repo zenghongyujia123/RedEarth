@@ -22,7 +22,7 @@ angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'Hq
     };
 
     $scope.getAreaReports = function (name) {
-      var nextMonth = $scope.monthInfo.months[$scope.monthInfo.months.indexOf($scope.monthInfo.month)];
+      var nextMonth = $scope.monthInfo.months[$scope.monthInfo.months.indexOf($scope.monthInfo.month) + 1];
 
       AreaOrderService.getAreaReports($scope.monthInfo.month, nextMonth, name).then(function (data) {
         console.log(data);

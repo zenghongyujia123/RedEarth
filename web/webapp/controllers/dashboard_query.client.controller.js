@@ -6,7 +6,7 @@ angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'Hq
     $scope.curName = '总部';
     $scope.reports = [];
     $scope.monthInfo = {
-      month: getMonth(0),
+      month: getMonth(-1),
       show: false,
       months: []
     };

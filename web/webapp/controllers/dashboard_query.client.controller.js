@@ -55,11 +55,11 @@ angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'Hq
     };
 
     $scope.getHqSaleDiff = function (sale) {
-      if (sale.genuine_goods === 0) {
+      if (sale.last_month_sales_count_0 === 0) {
         return 0;
       }
 
-      return parseInt((sale.genuine_goods - sale.next_month_sales_forecast_0) * 100 / sale.genuine_goods);
+      return parseInt((sale.last_month_sales_count_0 - sale.next_month_sales_forecast_0) * 100 / sale.last_month_sales_count_0);
     };
 
     $scope.getAreaOrderDiff = function (sale) {
@@ -70,10 +70,10 @@ angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'Hq
     };
 
     $scope.getAreaSaleDiff = function (sale) {
-      if (sale.last_month_sales_count_1 === 0) {
+      if (sale.last_month_sales_count_0 === 0) {
         return 0;
       }
-      return parseInt((sale.last_month_sales_count_1 - sale.next_month_sales_forecast_0) * 100 / sale.last_month_sales_count_1);
+      return parseInt((sale.last_month_sales_count_0 - sale.next_month_sales_forecast_0) * 100 / sale.last_month_sales_count_0);
     };
 
     $scope.exportReports = function () {

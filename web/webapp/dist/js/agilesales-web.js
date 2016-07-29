@@ -1274,7 +1274,7 @@ angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'Hq
     };
 
     function initMonth() {
-      for (var i = 0; i < 12; i++) {
+      for (var i = 0; i < 120; i++) {
         $scope.monthInfo.months.push(getMonth(-i));
       }
     }

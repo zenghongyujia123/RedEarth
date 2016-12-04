@@ -72,6 +72,7 @@ module.exports = function () {
   // Setting the app router and static folder
   app.use('/',express.static(path.resolve('./../web/')));
   app.use('/webapp',express.static(path.resolve('./../web/webapp')));
+  app.use('/webhistory',express.static(path.resolve('./../history')));
 
   app.use(function (req, res, next) {
 

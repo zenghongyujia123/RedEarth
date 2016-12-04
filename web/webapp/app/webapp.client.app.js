@@ -30,6 +30,11 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'templates/order_history.client.view.html',
         controller: "OrderHistoryCtrl"
       })
+      .state('order_history.history_backup', {
+        url: '/history_backup',
+        templateUrl: 'templates/backup.client.view.html',
+        controller: "HistoryBackupCtrl"
+      })
       .state('order_history.history_home', {
         url: '/history_home',
         templateUrl: 'templates/history_home.client.view.html',

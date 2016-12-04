@@ -8,5 +8,6 @@ exports = _.extend(exports, {
   area_order: require('./area_order'),
   hq_order: require('./hq_order'),
   re_log: require('./re_log'),
+  history_order: require('./history_order'),
   product: require('./product')
 });

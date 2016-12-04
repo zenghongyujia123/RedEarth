@@ -75,4 +75,50 @@ module.exports = function (appDb) {
   });
 
   appDb.model('AreaOrder', AreaOrderSchema);
+
+
+  var AreaHistoryOrderSchema = new Schema({
+    object: {
+      type: String,
+      default: 'areaHistoryOrder'
+    },
+    //sku编码
+    product_number: {
+      type: String
+    },
+    product_name: {
+      type: String
+    },
+    //城市
+    department: {
+      type: String
+    },
+    //年月
+    month: {
+      type: String
+    },
+    //销售量
+    sale_count:{
+      type:Number
+    },
+    //库存量
+    stock_count:{
+      type:Number
+    },
+    //在途量
+    onway_count:{
+      type:Number
+    },
+    product: {
+      type: Schema.Types.ObjectId,
+      ref: 'Product'
+    }
+  });
+
+  AreaHistoryOrderSchema.plugin(timestamps, {
+    createdAt: 'created',
+    updatedAt: 'updated'
+  });
+
+  appDb.model('AreaHistoryOrder', AreaHistoryOrderSchema);
 };

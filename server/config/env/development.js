@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  appDb: 'mongodb://localhost/redearth-dev',
+  appDb: 'mongodb://localhost/redearth-dev2',
   loggerLevel: 'debug',
   app: {
     title: 'zhuzhuqs - Development Environment'

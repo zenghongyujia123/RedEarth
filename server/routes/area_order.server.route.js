@@ -27,4 +27,5 @@ module.exports = function (app) {
 
   app.route('/webapp/area/reports').get(filter.requireUser, all.area_order.getAreaReports);
 
+  app.route('/webapp/area/order/history/import').post(filter.requireUser, all.history_order.areaHistoryOrderImport);
 };

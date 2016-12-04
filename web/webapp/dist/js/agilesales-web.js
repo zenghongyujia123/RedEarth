@@ -32,8 +32,13 @@ angular.module('agilesales-web').config(['$stateProvider', '$urlRouterProvider',
       })
       .state('order_history.history_backup', {
         url: '/history_backup',
-        templateUrl: 'templates/backup.client.view.html',
+        templateUrl: 'templates/history_backup.client.view.html',
         controller: "HistoryBackupCtrl"
+      })
+      .state('order_history.history_hq_backup', {
+        url: '/history_hq_backup',
+        templateUrl: 'templates/history_hq_backup.client.view.html',
+        controller: "HistoryHqBackupCtrl"
       })
       .state('order_history.history_home', {
         url: '/history_home',
@@ -962,11 +967,20 @@ angular.module('agilesales-web').factory('ExcelReaderService', function () {
  * Created by zenghong on 16/1/21.
  */
 angular.module('agilesales-web').factory('HistoryOrderService', ['HttpService', function (HttpService) {
-    return {
-        areaHistoryOrderImport: function (orders) {
-            return HttpService.post('/webapp/area/order/history/import', {orders: orders});
-        }
-    };
+  return {
+    areaHistoryOrderImport: function (orders) {
+      return HttpService.post('/webapp/area/order/history/import', {orders: orders});
+    },
+    hqHistoryOrderImport: function (orders) {
+      return HttpService.post('/webapp/hq/order/history/import', {orders: orders});
+    },
+    getAreaOrderHistory: function () {
+      return HttpService.get('/webapp/area/order/history/get', {});
+    },
+    getHqOrderHistory: function () {
+      return HttpService.get('/webapp/hq/order/history/get', {});
+    }
+  };
 }]);
 /**
  * Created by zenghong on 16/2/21.
@@ -1307,10 +1321,10 @@ angular.module('agilesales-web').controller('DashboardQueryCtrl', ['$scope', 'Hq
 angular.module('agilesales-web').controller('HistoryBackupCtrl', ['$scope', '$rootScope', '$stateParams', '$state', 'AreaOrderService', 'AuthService', 'Loading', 'ExcelReaderService', 'HistoryOrderService',
   function ($scope, $rootScope, $stateParams, $state, AreaOrderService, AuthService, Loading, ExcelReaderService, HistoryOrderService) {
     $scope.$emit('suggest.import.changed', {
-      title: '4-9月历史数据',
+      title: '4-9月地区历史数据',
       btns: [
         {
-          text: '导入4-9月历史销售,库存',
+          text: '导入4-9月地区历史销售,库存',
           clickCallback: importClickCallback
         },
         {
@@ -1320,14 +1334,14 @@ angular.module('agilesales-web').controller('HistoryBackupCtrl', ['$scope', '$ro
       ]
     });
 
-    $scope.sales = [];
+    $scope.orders = [];
 
-    $scope.getHistorySales = function () {
+    $scope.getAreaOrderHistory = function () {
       Loading.show();
-      AreaOrderService.getHistorySales().then(function (data) {
+      HistoryOrderService.getAreaOrderHistory().then(function (data) {
         console.log(data);
         if (data && !data.err) {
-          $scope.sales = data;
+          $scope.orders = data;
         }
         Loading.hide();
       }, function (data) {
@@ -1336,7 +1350,7 @@ angular.module('agilesales-web').controller('HistoryBackupCtrl', ['$scope', '$ro
       });
     };
 
-    //$scope.getHistorySales();
+    $scope.getAreaOrderHistory();
     function importClickCallback() {
       var headers = [
         {key: 'A1', value: '城市'},
@@ -1393,9 +1407,9 @@ angular.module('agilesales-web').controller('HistoryBackupCtrl', ['$scope', '$ro
             p.product_number = item['SKU编码'];
             p.department = item['城市'];
             p.month = item['年月'];
-            p.sale_count = parseInt(item['上月销售量']);
-            p.stock_count = parseInt(item['上月月结库存量']);
-            p.onway_count = parseInt(item['上月月结在途量']);
+            p.sale_count = isNaN(parseInt(item['上月销售量'])) ? 0 : parseInt(item['上月销售量']);
+            p.stock_count = isNaN(parseInt(item['上月月结库存量'])) ? 0 : parseInt(item['上月月结库存量']);
+            p.onway_count = isNaN(parseInt(item['上月月结在途量'])) ? 0 : parseInt(item['上月月结在途量']);
             result.push(p);
           });
           var orders = [];
@@ -1414,24 +1428,23 @@ angular.module('agilesales-web').controller('HistoryBackupCtrl', ['$scope', '$ro
     $scope.exportExcel = function () {
       var execlReader = ExcelReaderService.getReader();
       var rows = [[
+        '城市',
+        '年月',
         'SKU编码',
-        '产品名称',
-        '月份',
-        '地区',
-        '销售量',
-        '月结库存',
-        '月结在途'
+        '上月销售量',
+        '上月月结库存量',
+        '上月月结在途量'
       ]];
 
-      $scope.sales.forEach(function (s) {
+      $scope.orders.forEach(function (s) {
         rows.push([
           s.product_number,
           s.product.product_name,
           s.month,
           s.department,
-          s.last_month_sales_count,
-          s.last_month_stock_count,
-          s.last_month_onway_count
+          s.sale_count,
+          s.stock_count,
+          s.onway_count
         ]);
       });
 
@@ -1508,6 +1521,148 @@ angular.module('agilesales-web').controller('HistoryDeskCtrl', ['$scope', 'Produ
 angular.module('agilesales-web').controller('HistoryHomeCtrl', function () {
 
 });
+/**
+ * Created by zenghong on 16/1/15.
+ */
+angular.module('agilesales-web').controller('HistoryHqBackupCtrl', ['$scope', '$rootScope', '$stateParams', '$state', 'AreaOrderService', 'AuthService', 'Loading', 'ExcelReaderService', 'HistoryOrderService',
+  function ($scope, $rootScope, $stateParams, $state, AreaOrderService, AuthService, Loading, ExcelReaderService, HistoryOrderService) {
+    $scope.$emit('suggest.import.changed', {
+      title: '4-9月地区历史数据',
+      btns: [
+        {
+          text: '导入4-9月总部数据',
+          clickCallback: importClickCallback
+        },
+        {
+          text: '导出',
+          clickCallback: exportExecl
+        }
+      ]
+    });
+
+    $scope.orders = [];
+
+    $scope.getHqOrderHistory = function () {
+      Loading.show();
+      HistoryOrderService.getHqOrderHistory().then(function (data) {
+        console.log(data);
+        if (data && !data.err) {
+          $scope.orders = data;
+        }
+        Loading.hide();
+      }, function (data) {
+        Loading.hide();
+        console.log(data);
+      });
+    };
+
+    $scope.getHqOrderHistory();
+    function importClickCallback() {
+      var headers = [
+        {key: 'A1', value: '月份年'},
+        {key: 'B1', value: 'SKU编码'},
+        {key: 'C1', value: '正品'},
+        {key: 'D1', value: '在途'},
+        {key: 'E1', value: '近效期'},
+        {key: 'F1', value: '次品'}
+      ];
+
+      function upload(sales, i) {
+        console.log(i);
+        HistoryOrderService.hqHistoryOrderImport(sales[i++])
+          .then(function (data) {
+            if (data && data.err && data.err.type === 'product_not_exist') {
+              alert(data.err.message);
+              return $state.go('order_history.history_hq_backup', {}, {reload: true});
+            }
+
+            console.log(data);
+            if (sales[i]) {
+              upload(sales, i);
+            }
+            else {
+              Loading.hide();
+              $state.go('order_history.history_hq_backup', {}, {reload: true});
+            }
+          }, function (err) {
+            Loading.hide();
+            console.log(err);
+          });
+      }
+
+      $scope.hqHistoryOrderImport = function (sales) {
+        var i = 0;
+        Loading.show();
+        upload(sales, i);
+      };
+
+      $rootScope.$broadcast('show.dialogUpload', {
+        title: '上传3-9月总部',
+        contents: [{
+          key: '请选择需要上传资料文件',
+          value: '点击选择文件',
+          tip: '点击选择文件',
+          sheetName: '数据'
+        }],
+        color: 'blue',
+        headers: headers,
+        callback: function (data) {
+          var result = [];
+          data.forEach(function (item) {
+            var p = {};
+            p.product_number = item['SKU编码'];
+            p.month = item['月份年'];
+            p.zhengpin = isNaN(parseInt(item['正品'])) ? 0 : parseInt(item['正品']);
+            p.zaitu = isNaN(parseInt(item['在途'])) ? 0 : parseInt(item['在途']);
+            p.jinxiaoqi = isNaN(parseInt(item['近效期'])) ? 0 : parseInt(item['近效期']);
+            p.cipin = isNaN(parseInt(item['次品'])) ? 0 : parseInt(item['次品']);
+            result.push(p);
+          });
+          var orders = [];
+          for (var i = 0, len = result.length; i < len; i += 50) {
+            orders.push(result.slice(i, i + 50));
+          }
+          if (orders.length > 0) {
+            $scope.hqHistoryOrderImport(orders);
+          }
+          console.log(data);
+          console.log(orders);
+        }
+      });
+    }
+
+    $scope.exportExcel = function () {
+      var execlReader = ExcelReaderService.getReader();
+      var rows = [[
+        'SKU编码',
+        '产品名称',
+        '月份',
+        '正品',
+        '在途',
+        '近效期'
+      ]];
+
+      $scope.orders.forEach(function (s) {
+        rows.push([
+          s.product_number,
+          s.product.product_name,
+          s.month,
+          s.zhengpin,
+          s.zaitu,
+          s.jinxiaoqi,
+          s.cipin
+        ]);
+      });
+
+      execlReader.exportExcel(rows);
+    };
+
+    function exportExecl() {
+      $scope.exportExcel();
+    }
+
+
+  }]);
 /**
  * Created by zenghong on 16/1/15.
  */

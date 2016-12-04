@@ -121,4 +121,55 @@ module.exports = function (appDb) {
   });
 
   appDb.model('AreaHistoryOrder', AreaHistoryOrderSchema);
+
+
+
+  var HqHistoryOrderSchema = new Schema({
+    object: {
+      type: String,
+      default: 'areaHistoryOrder'
+    },
+    //sku编码
+    product_number: {
+      type: String
+    },
+    product_name: {
+      type: String
+    },
+    //城市
+    department: {
+      type: String,
+      default:'地区总部'
+    },
+    //年月
+    month: {
+      type: String
+    },
+    //销售量
+    zhengpin:{
+      type:Number
+    },
+    //库存量
+    zaitu:{
+      type:Number
+    },
+    //在途量
+    jinxiaoqi:{
+      type:Number
+    },
+    cipin: {
+      type:Number
+    },
+    product:{
+      type: Schema.Types.ObjectId,
+      ref: 'Product'
+    }
+  });
+
+  HqHistoryOrderSchema.plugin(timestamps, {
+    createdAt: 'created',
+    updatedAt: 'updated'
+  });
+
+  appDb.model('HqHistoryOrder', HqHistoryOrderSchema);
 };

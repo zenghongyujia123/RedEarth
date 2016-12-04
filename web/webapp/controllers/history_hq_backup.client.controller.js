@@ -1,13 +1,13 @@
 /**
  * Created by zenghong on 16/1/15.
  */
-angular.module('agilesales-web').controller('HistoryBackupCtrl', ['$scope', '$rootScope', '$stateParams', '$state', 'AreaOrderService', 'AuthService', 'Loading', 'ExcelReaderService', 'HistoryOrderService',
+angular.module('agilesales-web').controller('HistoryHqBackupCtrl', ['$scope', '$rootScope', '$stateParams', '$state', 'AreaOrderService', 'AuthService', 'Loading', 'ExcelReaderService', 'HistoryOrderService',
   function ($scope, $rootScope, $stateParams, $state, AreaOrderService, AuthService, Loading, ExcelReaderService, HistoryOrderService) {
     $scope.$emit('suggest.import.changed', {
       title: '4-9月地区历史数据',
       btns: [
         {
-          text: '导入4-9月地区历史销售,库存',
+          text: '导入4-9月总部数据',
           clickCallback: importClickCallback
         },
         {
@@ -19,9 +19,9 @@ angular.module('agilesales-web').controller('HistoryBackupCtrl', ['$scope', '$ro
 
     $scope.orders = [];
 
-    $scope.getAreaOrderHistory = function () {
+    $scope.getHqOrderHistory = function () {
       Loading.show();
-      HistoryOrderService.getAreaOrderHistory().then(function (data) {
+      HistoryOrderService.getHqOrderHistory().then(function (data) {
         console.log(data);
         if (data && !data.err) {
           $scope.orders = data;
@@ -33,24 +33,24 @@ angular.module('agilesales-web').controller('HistoryBackupCtrl', ['$scope', '$ro
       });
     };
 
-    $scope.getAreaOrderHistory();
+    $scope.getHqOrderHistory();
     function importClickCallback() {
       var headers = [
-        {key: 'A1', value: '城市'},
-        {key: 'B1', value: '年月'},
-        {key: 'C1', value: 'SKU编码'},
-        {key: 'D1', value: '上月销售量'},
-        {key: 'E1', value: '上月月结库存量'},
-        {key: 'F1', value: '上月月结在途量'}
+        {key: 'A1', value: '月份年'},
+        {key: 'B1', value: 'SKU编码'},
+        {key: 'C1', value: '正品'},
+        {key: 'D1', value: '在途'},
+        {key: 'E1', value: '近效期'},
+        {key: 'F1', value: '次品'}
       ];
 
       function upload(sales, i) {
         console.log(i);
-        HistoryOrderService.areaHistoryOrderImport(sales[i++])
+        HistoryOrderService.hqHistoryOrderImport(sales[i++])
           .then(function (data) {
             if (data && data.err && data.err.type === 'product_not_exist') {
               alert(data.err.message);
-              return $state.go('order_history.history_backup', {}, {reload: true});
+              return $state.go('order_history.history_hq_backup', {}, {reload: true});
             }
 
             console.log(data);
@@ -59,7 +59,7 @@ angular.module('agilesales-web').controller('HistoryBackupCtrl', ['$scope', '$ro
             }
             else {
               Loading.hide();
-              $state.go('order_history.history_backup', {}, {reload: true});
+              $state.go('order_history.history_hq_backup', {}, {reload: true});
             }
           }, function (err) {
             Loading.hide();
@@ -67,19 +67,19 @@ angular.module('agilesales-web').controller('HistoryBackupCtrl', ['$scope', '$ro
           });
       }
 
-      $scope.areaHistoryOrderImport = function (sales) {
+      $scope.hqHistoryOrderImport = function (sales) {
         var i = 0;
         Loading.show();
         upload(sales, i);
       };
 
       $rootScope.$broadcast('show.dialogUpload', {
-        title: '上传3-9月历史销量库存在途量资料',
+        title: '上传3-9月总部',
         contents: [{
           key: '请选择需要上传资料文件',
           value: '点击选择文件',
           tip: '点击选择文件',
-          sheetName: '汇总'
+          sheetName: '数据'
         }],
         color: 'blue',
         headers: headers,
@@ -88,11 +88,11 @@ angular.module('agilesales-web').controller('HistoryBackupCtrl', ['$scope', '$ro
           data.forEach(function (item) {
             var p = {};
             p.product_number = item['SKU编码'];
-            p.department = item['城市'];
-            p.month = item['年月'];
-            p.sale_count = isNaN(parseInt(item['上月销售量'])) ? 0 : parseInt(item['上月销售量']);
-            p.stock_count = isNaN(parseInt(item['上月月结库存量'])) ? 0 : parseInt(item['上月月结库存量']);
-            p.onway_count = isNaN(parseInt(item['上月月结在途量'])) ? 0 : parseInt(item['上月月结在途量']);
+            p.month = item['月份年'];
+            p.zhengpin = isNaN(parseInt(item['正品'])) ? 0 : parseInt(item['正品']);
+            p.zaitu = isNaN(parseInt(item['在途'])) ? 0 : parseInt(item['在途']);
+            p.jinxiaoqi = isNaN(parseInt(item['近效期'])) ? 0 : parseInt(item['近效期']);
+            p.cipin = isNaN(parseInt(item['次品'])) ? 0 : parseInt(item['次品']);
             result.push(p);
           });
           var orders = [];
@@ -100,7 +100,7 @@ angular.module('agilesales-web').controller('HistoryBackupCtrl', ['$scope', '$ro
             orders.push(result.slice(i, i + 50));
           }
           if (orders.length > 0) {
-            $scope.areaHistoryOrderImport(orders);
+            $scope.hqHistoryOrderImport(orders);
           }
           console.log(data);
           console.log(orders);
@@ -111,12 +111,12 @@ angular.module('agilesales-web').controller('HistoryBackupCtrl', ['$scope', '$ro
     $scope.exportExcel = function () {
       var execlReader = ExcelReaderService.getReader();
       var rows = [[
-        '城市',
-        '年月',
         'SKU编码',
-        '上月销售量',
-        '上月月结库存量',
-        '上月月结在途量'
+        '产品名称',
+        '月份',
+        '正品',
+        '在途',
+        '近效期'
       ]];
 
       $scope.orders.forEach(function (s) {
@@ -124,10 +124,10 @@ angular.module('agilesales-web').controller('HistoryBackupCtrl', ['$scope', '$ro
           s.product_number,
           s.product.product_name,
           s.month,
-          s.department,
-          s.sale_count,
-          s.stock_count,
-          s.onway_count
+          s.zhengpin,
+          s.zaitu,
+          s.jinxiaoqi,
+          s.cipin
         ]);
       });
 

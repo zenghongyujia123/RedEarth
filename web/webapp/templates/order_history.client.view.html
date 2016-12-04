@@ -17,9 +17,15 @@
         历史销售,库存
       </div>
       <div class="suggest-left-item"
+           ng-class="{'select':location.hash==='#/order_history/history_hq_backup'}"
+           ui-sref="order_history.history_hq_backup"
+            ng-show="user.account_type=='地区总部'||user.account_type==='澳妆供应链'">
+        4-9月历史总部数据
+      </div>
+      <div class="suggest-left-item"
            ng-class="{'select':location.hash==='#/order_history/history_backup'}"
            ui-sref="order_history.history_backup">
-        4-9月历史销售,库存
+        4-9月历史地区销售,库存
       </div>
       <div class="suggest-left-item"
            ng-class="{'select':location.hash==='#/order_history/history_product'}"
